@@ -52,6 +52,15 @@
 	gap: 6px;
 }
 
+.rc-warning {
+	flex-shrink: 0;
+	padding: 2px 8px;
+	font-size: 11px;
+	color: #d35400;
+	background: #fef9e7;
+	border-bottom: 1px solid #f9d030;
+}
+
 .rc-grid {
 	display: grid;
 	gap: 4px;

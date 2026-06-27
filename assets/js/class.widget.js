@@ -5,8 +5,8 @@ class CWidgetRadarChart extends CWidget {
 	#charts          = [];
 	#data            = null;
 	#page            = 0;
-	#hide_empty      = false;   // 全アイテム欠損ホストを非表示にするトグル
-	#filtered_total  = 0;       // フィルタ後のホスト数（computeCellSize で使用）
+	#hide_empty      = false;
+	#filtered_total  = 0;
 	#effective_grid  = {columns: 1, rows: 1};
 
 	onStop() {
@@ -33,7 +33,7 @@ class CWidgetRadarChart extends CWidget {
 		}
 
 		if (!response.chart_data) {
-			this._body.textContent = 'No data available.';
+			this._body.textContent = t('No data available.');
 			return;
 		}
 
@@ -54,11 +54,12 @@ class CWidgetRadarChart extends CWidget {
 		const pages    = Math.max(1, Math.ceil(total / per_page));
 		const {columns, rows} = this.#effective_grid;
 		const size    = this._getContentsSize();
-		const toolbar = 30;  // ツールバーは常時表示
-		const gap     = 4;
-		const padding = 4;
+		const warnings = this.#data.warnings?.length ? 20 : 0;
+		const toolbar  = 30;
+		const gap      = 4;
+		const padding  = 4;
 		const w = Math.max(40, Math.floor((size.width  - padding * 2 - gap * (columns - 1)) / columns));
-		const h = Math.max(40, Math.floor((size.height - toolbar   - padding * 2 - gap * (rows - 1)) / rows));
+		const h = Math.max(40, Math.floor((size.height - toolbar - warnings - padding * 2 - gap * (rows - 1)) / rows));
 		return {width: w, height: h};
 	}
 
@@ -67,7 +68,6 @@ class CWidgetRadarChart extends CWidget {
 
 		const {hosts, indicators, grid_columns, grid_rows} = this.#data;
 
-		// ─── フィルタリング ─────────────────────────────────────────────
 		// #hide_empty が true のとき、指定アイテムが「すべて欠損」のホストを除外する
 		const total_items = indicators.length;
 		const filtered    = this.#hide_empty
@@ -91,12 +91,11 @@ class CWidgetRadarChart extends CWidget {
 		tb.className = 'rc-toolbar';
 
 		// 全欠損非表示トグルボタン
-		// 非表示中: zi-eye-off + 青色、表示中: zi-eye + デフォルト色
 		const toggle = document.createElement('button');
 		toggle.className = `btn-icon ${this.#hide_empty ? 'zi-eye-off rc-toggle-active' : 'zi-eye'}`;
 		toggle.title = this.#hide_empty
-			? 'All-missing hosts are hidden — click to show'
-			: 'Showing all hosts — click to hide all-missing hosts';
+			? t('All-missing hosts are hidden — click to show')
+			: t('Showing all hosts — click to hide all-missing hosts');
 		toggle.addEventListener('click', () => {
 			this.#hide_empty = !this.#hide_empty;
 			this.#page = 0;
@@ -111,7 +110,7 @@ class CWidgetRadarChart extends CWidget {
 
 			const prev = document.createElement('button');
 			prev.className = 'btn-icon zi-chevron-left';
-			prev.title = 'Previous page';
+			prev.title = t('Previous page');
 			prev.disabled = this.#page === 0;
 			prev.addEventListener('click', () => { this.#page--; this.#render(); });
 
@@ -120,7 +119,7 @@ class CWidgetRadarChart extends CWidget {
 
 			const next = document.createElement('button');
 			next.className = 'btn-icon zi-chevron-right';
-			next.title = 'Next page';
+			next.title = t('Next page');
 			next.disabled = this.#page >= pages - 1;
 			next.addEventListener('click', () => { this.#page++; this.#render(); });
 
@@ -129,6 +128,15 @@ class CWidgetRadarChart extends CWidget {
 		}
 
 		this._body.appendChild(tb);
+
+		// ─── 集計データ不完全警告（History limit 到達時）──────────────
+		const warnings = this.#data.warnings ?? [];
+		if (warnings.length) {
+			const warn = document.createElement('div');
+			warn.className = 'rc-warning';
+			warn.textContent = t('History data limit reached. Aggregated values may be incomplete.');
+			this._body.appendChild(warn);
+		}
 
 		// ─── グリッド構築 ──────────────────────────────────────────────
 		const count    = page_hosts.length;
@@ -166,8 +174,8 @@ class CWidgetRadarChart extends CWidget {
 			chart.getZr().on('mousemove', (e) => {
 				const n = indicators.length;
 				if (n === 0) return;
-				const cx    = chart.getWidth()  * 0.50;  // radar.center[0] = '50%'
-				const cy    = chart.getHeight() * 0.56;  // radar.center[1] = '56%'
+				const cx    = chart.getWidth()  * 0.50;
+				const cy    = chart.getHeight() * 0.56;
 				const angle = Math.atan2(e.offsetY - cy, e.offsetX - cx);
 				let minDist = Infinity;
 				let nearest = 0;
@@ -184,6 +192,13 @@ class CWidgetRadarChart extends CWidget {
 
 			chart.setOption(this.#buildOption(host, indicators, style, cell_size.width, () => hovered_axis));
 		});
+	}
+
+	// HTML特殊文字をエスケープする（tooltip に埋め込む値に適用）
+	static #escapeHtml(value) {
+		return String(value).replace(/[&<>"']/g, ch => ({
+			'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+		}[ch]));
 	}
 
 	// Unix タイムスタンプ → 'YYYY/MM/DD HH:mm:ss' 形式
@@ -231,7 +246,6 @@ class CWidgetRadarChart extends CWidget {
 		const title_color      = '#' + (style.title_color      || '333333');
 		const title_size       = style.title_size       ?? 11;
 
-		// セル幅に応じてツールチップのフォントサイズを調整
 		const tip_fs  = Math.max(10, Math.min(13, Math.floor((cell_width ?? 200) / 16)));
 		const time_fs = Math.max(9, tip_fs - 1);
 
@@ -240,7 +254,7 @@ class CWidgetRadarChart extends CWidget {
 		return {
 			backgroundColor: 'transparent',
 			title: {
-				text:      host.name,
+				text:      CWidgetRadarChart.#escapeHtml(host.name),
 				textStyle: {fontSize: title_size, color: title_color, fontWeight: 'normal'},
 				left:      'center',
 				top:       2,
@@ -257,16 +271,20 @@ class CWidgetRadarChart extends CWidget {
 					const ind   = indicators[i];
 					const val   = host.values?.[i] ?? 0;
 					const clock = host.clocks?.[i]  ?? 0;
-					const unit  = ind.units ?? '';
+					const unit  = CWidgetRadarChart.#escapeHtml(ind.units ?? '');
+					const val_e = CWidgetRadarChart.#escapeHtml(val);
 
-					const val_str = unit ? `${val} ${unit}` : `${val}`;
+					const val_str = unit ? `${val_e} ${unit}` : `${val_e}`;
 
 					let time_str = '';
 					if (clock > 0) {
-						time_str = CWidgetRadarChart.#formatTime(clock);
+						time_str = CWidgetRadarChart.#escapeHtml(CWidgetRadarChart.#formatTime(clock));
 					} else if (period_from && period_to) {
-						time_str = `${CWidgetRadarChart.#formatTime(period_from)}`
-							+ ` 〜 ${CWidgetRadarChart.#formatTime(period_to)}`;
+						time_str = CWidgetRadarChart.#escapeHtml(
+							CWidgetRadarChart.#formatTime(period_from)
+							+ ' 〜 '
+							+ CWidgetRadarChart.#formatTime(period_to)
+						);
 					}
 
 					const time_html = time_str
@@ -278,7 +296,7 @@ class CWidgetRadarChart extends CWidget {
 			},
 			radar: {
 				indicator: indicators.map((ind, i) => ({
-					name:  CWidgetRadarChart.#wrapLabel(ind.label, 8),
+					name:  CWidgetRadarChart.#wrapLabel(CWidgetRadarChart.#escapeHtml(ind.label), 8),
 					max:   ind.max_val,
 					color: (host.no_data_indices ?? []).includes(i) ? '#e53935' : undefined,
 				})),
@@ -297,7 +315,7 @@ class CWidgetRadarChart extends CWidget {
 				type: 'radar',
 				data: [{
 					value:      host.values,
-					name:       host.name,
+					name:       CWidgetRadarChart.#escapeHtml(host.name),
 					areaStyle:  {color: fill_color, opacity: fill_opacity},
 					lineStyle:  {width: line_width, color: line_color},
 					itemStyle:  {color: point_color},

@@ -2,7 +2,8 @@
 
 namespace Modules\RadarChart\Actions;
 
-use CController,
+use API,
+	CController,
 	CControllerResponseData;
 
 use Modules\RadarChart\Includes\CWidgetFieldItems;
@@ -50,8 +51,8 @@ class ItemEdit extends CController {
 				$this->setResponse(
 					(new CControllerResponseData(['main_block' => json_encode([
 						'error' => [
-							'title'    => _('Cannot save item'),
-							'messages' => [_('Item is required.')]
+							'title'    => _rc('Cannot save item'),
+							'messages' => [_rc('Item is required.')]
 						]
 					], JSON_THROW_ON_ERROR)]))->disableView()
 				);
@@ -62,8 +63,31 @@ class ItemEdit extends CController {
 				$this->setResponse(
 					(new CControllerResponseData(['main_block' => json_encode([
 						'error' => [
-							'title'    => _('Cannot save item'),
-							'messages' => [_('Max value must be a positive number.')]
+							'title'    => _rc('Cannot save item'),
+							'messages' => [_rc('Max value must be a positive number.')]
+						]
+					], JSON_THROW_ON_ERROR)]))->disableView()
+				);
+				return;
+			}
+
+			// 数値アイテム（float / unsigned int）のみ受け付ける
+			$item_data = API::Item()->get([
+				'output'   => ['value_type'],
+				'itemids'  => [$itemid],
+				'webitems' => true,
+			]);
+
+			if (!$item_data || !in_array(
+				(int) $item_data[0]['value_type'],
+				[ITEM_VALUE_TYPE_FLOAT, ITEM_VALUE_TYPE_UINT64],
+				true
+			)) {
+				$this->setResponse(
+					(new CControllerResponseData(['main_block' => json_encode([
+						'error' => [
+							'title'    => _rc('Cannot save item'),
+							'messages' => [_rc('Only numeric (float or unsigned integer) items are supported.')]
 						]
 					], JSON_THROW_ON_ERROR)]))->disableView()
 				);

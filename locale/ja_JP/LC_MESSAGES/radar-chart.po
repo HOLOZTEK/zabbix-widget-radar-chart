@@ -84,3 +84,54 @@ msgstr "アイテムは必須です。"
 
 msgid "Max value must be a positive number."
 msgstr "最大値には正の数を入力してください。"
+
+msgid "Only numeric (float or unsigned integer) items are supported."
+msgstr "数値アイテム（float または unsigned integer）のみ選択できます。"
+
+msgid "History data limit reached. Aggregated values may be incomplete."
+msgstr "ヒストリーデータの件数上限に達しました。集計値が不完全な場合があります。"
+
+msgid "Showing all hosts — click to hide all-missing hosts"
+msgstr "全ホストを表示中 — クリックで全欠損ホストを非表示"
+
+msgid "All-missing hosts are hidden — click to show"
+msgstr "全欠損ホストを非表示中 — クリックで再表示"
+
+msgid "No data available."
+msgstr "データがありません。"
+
+msgid "Previous page"
+msgstr "前のページ"
+
+msgid "Next page"
+msgstr "次のページ"
+
+msgid "Unexpected server error."
+msgstr "予期しないサーバーエラーが発生しました。"
+
+msgid "Select"
+msgstr "選択"
+
+msgid "Label"
+msgstr "ラベル"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Add"
+msgstr "追加"
+
+msgid "Item"
+msgstr "アイテム"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "(not selected)"
+msgstr "（未選択）"
+
+msgid "Edit"
+msgstr "編集"
+
+msgid "Remove"
+msgstr "削除"

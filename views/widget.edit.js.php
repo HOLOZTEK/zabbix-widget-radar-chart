@@ -48,13 +48,19 @@ window.widget_radar_chart_form = new class {
 		this.#updateButtons();
 	}
 
+	// sort_order[items][] を持つ行だけをアイテム行として返す（Addボタン行を除外）
+	#getItemRows() {
+		return [...this.#list_items.querySelectorAll('tbody tr')]
+			.filter(row => row.querySelector('[name="sort_order[items][]"]'));
+	}
+
 	#processAction(e) {
 		const target = e.target;
 		let popup;
 
 		switch (target.getAttribute('name')) {
 			case 'add':
-				this.#item_index = this.#list_items.querySelectorAll('tbody tr').length;
+				this.#item_index = this.#getItemRows().length;
 
 				popup = PopUp(
 					'widget.radar-chart.item.edit',
@@ -126,9 +132,9 @@ window.widget_radar_chart_form = new class {
 	}
 
 	#updateButtons() {
-		const rows    = this.#list_items.querySelectorAll('tbody tr').length;
-		const min     = <?= \Modules\RadarChart\Includes\CWidgetFieldItems::MIN_ITEMS ?>;
-		const max     = <?= \Modules\RadarChart\Includes\CWidgetFieldItems::MAX_ITEMS ?>;
+		const rows = this.#getItemRows().length;
+		const min  = <?= \Modules\RadarChart\Includes\CWidgetFieldItems::MIN_ITEMS ?>;
+		const max  = <?= \Modules\RadarChart\Includes\CWidgetFieldItems::MAX_ITEMS ?>;
 
 		this.#list_items.querySelectorAll('[name="remove"]').forEach(btn => {
 			btn.disabled = rows <= min;

@@ -80,3 +80,54 @@ msgstr ""
 
 msgid "Max value must be a positive number."
 msgstr ""
+
+msgid "Only numeric (float or unsigned integer) items are supported."
+msgstr ""
+
+msgid "History data limit reached. Aggregated values may be incomplete."
+msgstr ""
+
+msgid "Showing all hosts — click to hide all-missing hosts"
+msgstr ""
+
+msgid "All-missing hosts are hidden — click to show"
+msgstr ""
+
+msgid "No data available."
+msgstr ""
+
+msgid "Previous page"
+msgstr ""
+
+msgid "Next page"
+msgstr ""
+
+msgid "Unexpected server error."
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "(not selected)"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Remove"
+msgstr ""

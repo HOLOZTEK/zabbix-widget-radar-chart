@@ -48,7 +48,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		if (count($items_cfg) < CWidgetFieldItems::MIN_ITEMS) {
 			$this->setResponse(new CControllerResponseData([
 				'name'  => $widget_name,
-				'error' => _('At least 3 items must be configured.'),
+				'error' => _rc('At least 3 items must be configured.'),
 				'user'  => ['debug_mode' => $this->getDebugMode()],
 			]));
 			return;
@@ -61,7 +61,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		if (!$groupids && !$hostids && !$host_patterns) {
 			$this->setResponse(new CControllerResponseData([
 				'name'  => $widget_name,
-				'error' => _('Specify at least one host or host group.'),
+				'error' => _rc('Specify at least one host or host group.'),
 				'user'  => ['debug_mode' => $this->getDebugMode()],
 			]));
 			return;
@@ -70,27 +70,31 @@ class WidgetView extends CControllerDashboardWidgetView {
 		$host_base = ['output' => ['hostid', 'name'], 'monitored_hosts' => true];
 		$hosts_map = [];
 
-		// groupids によるホスト取得
-		if ($groupids) {
+		// [仕様：案B]
+		// groupids は host_patterns のスコープとして機能する。
+		// host_patterns が指定されている場合、groupids 単独ではホストを直接追加しない。
+		// host_patterns が指定されていない場合、groupids のホストをすべて追加する。
+		if ($groupids && !$host_patterns) {
 			foreach (API::Host()->get($host_base + ['groupids' => $groupids]) as $h) {
 				$hosts_map[(int) $h['hostid']] = $h;
 			}
 		}
 
-		// 個別 hostids によるホスト取得
+		// 個別 hostids によるホスト取得（常に追加）
 		if ($hostids) {
 			foreach (API::Host()->get($host_base + ['hostids' => $hostids]) as $h) {
 				$hosts_map[(int) $h['hostid']] = $h;
 			}
 		}
 
-		// host_patterns によるホスト取得（groupids フィルターを AND 適用）
+		// host_patterns によるホスト取得
+		// groupids が指定されていればそのグループ内でのみ絞り込む（スコープとして機能）
+		// '*' 単独はすべてのホスト（スコープ内）を意味するので name フィルターを省略する
 		if ($host_patterns) {
 			$pattern_params = $host_base;
 			if ($groupids) {
 				$pattern_params['groupids'] = $groupids;
 			}
-			// '*' 単独はすべてのホストを意味するので name フィルターを省略する
 			if (!in_array('*', $host_patterns, true)) {
 				$pattern_params['search']                 = ['name' => $host_patterns];
 				$pattern_params['searchWildcardsEnabled'] = true;
@@ -104,7 +108,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		if (!$hosts_map) {
 			$this->setResponse(new CControllerResponseData([
 				'name'  => $widget_name,
-				'error' => _('No hosts found.'),
+				'error' => _rc('No hosts found.'),
 				'user'  => ['debug_mode' => $this->getDebugMode()],
 			]));
 			return;
@@ -126,11 +130,11 @@ class WidgetView extends CControllerDashboardWidgetView {
 		foreach ($items_cfg as &$ic) {
 			$ref = $ref_by_id[$ic['itemid']] ?? null;
 			$ic['key_']       = $ref ? $ref['key_']       : '';
-			$ic['value_type'] = $ref ? (int) $ref['value_type'] : 0;
+			$ic['value_type'] = $ref ? (int) $ref['value_type'] : -1;
 		}
 		unset($ic);
 
-		// 各アイテムキーについて全ホストのアイテムを検索
+		// 各アイテムキーについて全ホストのアイテムを検索（数値アイテムのみ）
 		$key_items = [];
 		foreach ($items_cfg as $ic) {
 			if ($ic['key_'] === '') continue;
@@ -141,6 +145,9 @@ class WidgetView extends CControllerDashboardWidgetView {
 				'monitored' => true,
 			]);
 			foreach ($found as $fi) {
+				// 数値以外のアイテムはスキップ（表示しない）
+				$vt = (int) $fi['value_type'];
+				if ($vt !== ITEM_VALUE_TYPE_FLOAT && $vt !== ITEM_VALUE_TYPE_UINT64) continue;
 				$key_items[$ic['key_']][(int) $fi['hostid']] = $fi;
 			}
 		}
@@ -152,13 +159,16 @@ class WidgetView extends CControllerDashboardWidgetView {
 			if ($ic['key_'] === '') continue;
 			foreach ($key_items[$ic['key_']] ?? [] as $hid => $fi) {
 				$vt = (int) $fi['value_type'];
-				if ($vt != ITEM_VALUE_TYPE_FLOAT && $vt != ITEM_VALUE_TYPE_UINT64) continue;
 				$hist_need[$ic['key_']][$hid] = ['itemid' => (int) $fi['itemid'], 'value_type' => $vt];
 			}
 		}
 
 		// ヒストリー集計: value_type ごとにバッチ取得
-		$hist_agg = []; // [key_ => [hostid => [max, min, sum, cnt]]]
+		// limit 到達時は不完全な集計になるため警告フラグを立てる
+		$hist_agg  = []; // [key_ => [hostid => [max, min, sum, cnt]]]
+		$limit_hit = false;
+		$hist_limit = 50000;
+
 		foreach ($hist_need as $key_ => $hid_map) {
 			$vtype_iids = [];
 			$iid_hid    = [];
@@ -173,8 +183,13 @@ class WidgetView extends CControllerDashboardWidgetView {
 					'time_from' => $period_from,
 					'time_till' => $period_to,
 					'history'   => $vtype,
-					'limit'     => 50000,
+					'limit'     => $hist_limit,
 				]);
+
+				if (count($history) >= $hist_limit) {
+					$limit_hit = true;
+				}
+
 				foreach ($history as $row) {
 					$hid = $iid_hid[$row['itemid']] ?? null;
 					if ($hid === null) continue;
@@ -199,12 +214,12 @@ class WidgetView extends CControllerDashboardWidgetView {
 			$hid             = (int) $host['hostid'];
 			$values          = [];
 			$clocks          = [];  // 最新値: lastclock、集計値: 0（時間帯表示）
-			$no_data_indices = [];  // データなし or 値なし のアイテムインデックス
+			$no_data_indices = [];  // データなし / 非数値アイテムのインデックス
 
 			foreach ($items_cfg as $idx => $ic) {
-				$key_  = $ic['key_'];
-				$agg   = (int) $ic['agg_func'];
-				$fi    = $key_items[$key_][$hid] ?? null;
+				$key_ = $ic['key_'];
+				$agg  = (int) $ic['agg_func'];
+				$fi   = $key_items[$key_][$hid] ?? null;
 
 				if ($fi === null || $key_ === '') {
 					$values[]          = 0.0;
@@ -214,9 +229,9 @@ class WidgetView extends CControllerDashboardWidgetView {
 				}
 
 				if ($agg === CWidgetFieldItems::AGG_LAST) {
-					$clock     = (int) ($fi['lastclock'] ?? 0);
-					$values[]  = $clock ? round((float) $fi['lastvalue'], 4) : 0.0;
-					$clocks[]  = $clock;
+					$clock    = (int) ($fi['lastclock'] ?? 0);
+					$values[] = $clock ? round((float) $fi['lastvalue'], 4) : 0.0;
+					$clocks[] = $clock;
 					if (!$clock) $no_data_indices[] = $idx;
 				} else {
 					$agg_data = $hist_agg[$key_][$hid] ?? null;
@@ -259,6 +274,10 @@ class WidgetView extends CControllerDashboardWidgetView {
 			];
 		}
 
+		$warnings = $limit_hit
+			? [_rc('History data limit reached. Aggregated values may be incomplete.')]
+			: [];
+
 		$this->setResponse(new CControllerResponseData([
 			'name'       => $widget_name,
 			'chart_data' => [
@@ -270,6 +289,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 				'grid_rows'    => $grid_rows,
 				'total'        => count($chart_hosts),
 				'style'        => $style,
+				'warnings'     => $warnings,
 			],
 			'user' => ['debug_mode' => $this->getDebugMode()],
 		]));

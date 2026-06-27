@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}%{dist}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        0.1.0
+Version:        0.1.1
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        Proprietary
@@ -17,9 +17,11 @@ Features:
 - Flexible host selection: host groups, individual hosts, or host patterns (wildcard)
 - Integration with Tree Navigator / Topology Navigator via host group linkage
 - Per-item aggregation: latest value, max, min, or average over time period
+- Numeric items only (float and unsigned integer); non-numeric items are rejected
 - Red axis labels for items with no data
 - Hover tooltip showing value, unit, and collection time (or aggregation period)
 - Toggle button to hide hosts where all items are missing
+- Warning banner when History data limit is reached during aggregation
 - Pagination when displayed hosts exceed the grid capacity
 - Customizable style: line, point, fill, chart, and title color/size
 - Japanese and English locale support
@@ -39,6 +41,8 @@ install -d ${STAGEDIR}/locale/ja_JP/LC_MESSAGES
 install -d ${STAGEDIR}/locale/en_US/LC_MESSAGES
 install -d ${STAGEDIR}/views
 
+install -m 644 ${SRCDIR}/LICENSE                                                    ${STAGEDIR}/
+install -m 644 ${SRCDIR}/THIRD_PARTY_NOTICES.md                                     ${STAGEDIR}/
 install -m 644 ${SRCDIR}/manifest.json                                              ${STAGEDIR}/
 install -m 644 ${SRCDIR}/Module.php                                                 ${STAGEDIR}/
 install -m 644 ${SRCDIR}/Widget.php                                                 ${STAGEDIR}/
@@ -49,6 +53,7 @@ install -m 644 ${SRCDIR}/assets/js/echarts.min.js                               
 install -m 644 ${SRCDIR}/assets/js/class.widget.js                                  ${STAGEDIR}/assets/js/
 install -m 644 ${SRCDIR}/includes/CWidgetFieldItems.php                             ${STAGEDIR}/includes/
 install -m 644 ${SRCDIR}/includes/CWidgetFieldItemsView.php                         ${STAGEDIR}/includes/
+install -m 644 ${SRCDIR}/includes/helpers.php                                       ${STAGEDIR}/includes/
 install -m 644 ${SRCDIR}/includes/WidgetForm.php                                    ${STAGEDIR}/includes/
 install -m 644 ${SRCDIR}/locale/ja_JP/LC_MESSAGES/radar-chart.po                   ${STAGEDIR}/locale/ja_JP/LC_MESSAGES/
 install -m 644 ${SRCDIR}/locale/ja_JP/LC_MESSAGES/radar-chart.mo                   ${STAGEDIR}/locale/ja_JP/LC_MESSAGES/
@@ -87,6 +92,18 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Fri Jun 27 2026 claude <noreply> - 0.1.1-0
+- アイテム行数カウントバグ修正（Addボタン行を除外する#getItemRows()を追加）
+- 数値アイテム（float/uint64）のみ選択・保存を許可（UI: numeric:1、サーバー: value_type検証）
+- History集計でlimit到達時に警告バナーを表示（不完全な集計値のサイレント表示を抑止）
+- tooltipのHTML特殊文字エスケープ対応（#escapeHtml追加）
+- manifest.jsonのwidget.inにgroupidsを追加（_hostgroupid型）
+- groupids + host_patternsの仕様を案Bに変更（groupidsをスコープとして使用）
+- JS文言をgetTranslationStrings()経由に変更（t()関数で参照、.poで翻訳可能）
+- Widget.phpにinit()とbindtextdomainを追加、_rc()ヘルパー関数を新設
+- 全PHPファイルの文字列を_rc()に統一
+- LICENSE・THIRD_PARTY_NOTICES.md（ECharts Apache 2.0）を追加
+
 * Fri Jun 27 2026 claude <noreply> - 0.1.0-0
 - 初回リリース
 - グリッドレイアウト（最大6×6）で複数ホストのレーダーチャートを並列表示

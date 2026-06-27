@@ -28,21 +28,21 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 		}
 
 		$agg_labels = [
-			CWidgetFieldItems::AGG_LAST => _('Latest'),
-			CWidgetFieldItems::AGG_MAX  => _('Max'),
-			CWidgetFieldItems::AGG_MIN  => _('Min'),
-			CWidgetFieldItems::AGG_AVG  => _('Avg'),
+			CWidgetFieldItems::AGG_LAST => _rc('Latest'),
+			CWidgetFieldItems::AGG_MAX  => _rc('Max'),
+			CWidgetFieldItems::AGG_MIN  => _rc('Min'),
+			CWidgetFieldItems::AGG_AVG  => _rc('Avg'),
 		];
 
 		$view = (new CTable())
 			->setId('list_' . $this->field->getName())
 			->setHeader([
 				'',
-				(new CColHeader(_('Item')))->addStyle('width: 28%'),
-				(new CColHeader(_('Label')))->addStyle('width: 18%'),
-				(new CColHeader(_('Max value')))->addStyle('width: 13%'),
-				(new CColHeader(_('Aggregation')))->addStyle('width: 13%'),
-				_('Action'),
+				(new CColHeader(_rc('Item')))->addStyle('width: 28%'),
+				(new CColHeader(_rc('Label')))->addStyle('width: 18%'),
+				(new CColHeader(_rc('Max value')))->addStyle('width: 13%'),
+				(new CColHeader(_rc('Aggregation')))->addStyle('width: 13%'),
+				_rc('Action'),
 			]);
 
 		foreach ($items as $i => $item) {
@@ -59,17 +59,17 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 
 			$view->addRow([
 				(new CCol((new CDiv())->addClass(ZBX_STYLE_DRAG_ICON)))->addClass(ZBX_STYLE_TD_DRAG_ICON),
-				(new CDiv($item['name'] ?: _('(not selected)')))
+				(new CDiv($item['name'] ?: _rc('(not selected)')))
 					->setTitle($item['name'])
 					->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CDiv($item['label']))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CDiv($item['max_val']))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CDiv($agg_labels[$item['agg_func']] ?? ''))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CList([
-					(new CButton('edit', _('Edit')))
+					(new CButton('edit', _rc('Edit')))
 						->addClass(ZBX_STYLE_BTN_LINK)
 						->removeId(),
-					(new CButton('remove', _('Remove')))
+					(new CButton('remove', _rc('Remove')))
 						->addClass(ZBX_STYLE_BTN_LINK)
 						->setEnabled($can_remove)
 						->removeId(),
@@ -82,7 +82,7 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 
 		$view->addRow(
 			(new CCol(
-				(new CButton('add', _('Add')))
+				(new CButton('add', _rc('Add')))
 					->addClass(ZBX_STYLE_BTN_LINK)
 					->setEnabled($can_add && !$this->isDisabled())
 			))->setColSpan($view->getNumCols())

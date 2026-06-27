@@ -4,11 +4,12 @@
 	"type": "widget",
 	"name": "Radar Chart",
 	"namespace": "RadarChart",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"widget": {
 		"size": {"width": 6, "height": 5},
 		"js_class": "CWidgetRadarChart",
 		"in": {
+			"groupids": {"type": "_hostgroupid"},
 			"hostids": {"type": "_hostid"},
 			"time_period": {"type": "_timeperiod"}
 		}
