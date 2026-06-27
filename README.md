@@ -31,7 +31,7 @@
 
 - **数値アイテムのみ**: float（小数）および unsigned integer（符号なし整数）型のアイテムのみ使用できます。文字列・テキスト・ログ型は選択不可です。
 - **ホストグループとホストパターンの併用**: `Host groups` と `Host patterns` を両方指定した場合、ホストパターンの検索範囲がホストグループでスコープ限定されます（OR マージではありません）。
-- **大量データ集計の制限**: 最新値以外の集計（Max/Min/Avg）では Zabbix History API を使用するため、取得件数が上限（50,000件）に達すると集計値が不完全になる場合があります。長期間・大量ホストを対象とした集計には v0.1.1 時点で制約があります。警告バナーが表示された場合は、集計期間を短くするか対象ホスト数を減らしてください。
+- **大量データ集計の制限**: 最新値以外の集計（Max/Min/Avg）では Zabbix History API を使用するため、取得件数が上限（50,000件）に達すると集計値が不完全になる場合があります。長期間・大量ホストを対象とした集計には制約があります。警告バナーが表示された場合は、集計期間を短くするか対象ホスト数を減らしてください。
 
 ## インストール
 
@@ -39,10 +39,10 @@
 
 ```bash
 # Rocky Linux 9 (el9)
-rpm -ivh zabbix-widget-radar-chart-0.1.1.el9.noarch.rpm
+rpm -ivh zabbix-widget-radar-chart-0.1.3.el9.noarch.rpm
 
 # Rocky Linux 10 (el10)
-rpm -ivh zabbix-widget-radar-chart-0.1.1.el10.noarch.rpm
+rpm -ivh zabbix-widget-radar-chart-0.1.3.el10.noarch.rpm
 ```
 
 インストール後、Zabbix フロントエンドの **管理 → モジュール** からモジュールを有効化してください。
