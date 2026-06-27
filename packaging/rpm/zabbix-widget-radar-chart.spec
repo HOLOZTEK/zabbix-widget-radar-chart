@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}%{dist}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        0.1.2
+Version:        0.1.3
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        Proprietary
@@ -94,6 +94,10 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Sat Jun 28 2026 claude <noreply> - 0.1.3-0
+- Widget.phpのファイルスコープでrequire_onceを追加（CModuleManager::getWidgetsDefaults()がModule::init()より前にWidget::getDefaultName()を呼び出すため_rc()が未定義になるバグを修正）
+- bindtextdomainをhelpers.phpに移動（function_existsガードと一体化）
+
 * Fri Jun 27 2026 claude <noreply> - 0.1.2-0
 - _rc()の読み込みをModule::init()に移動（アクション単体実行時でも必ず利用可能）
 - helpers.phpにfunction_exists('_rc')ガードを追加

@@ -4,6 +4,8 @@ namespace Modules\RadarChart;
 
 use Zabbix\Core\CWidget;
 
+require_once __DIR__ . '/includes/helpers.php';
+
 class Widget extends CWidget {
 
 	public function getDefaultName(): string {
