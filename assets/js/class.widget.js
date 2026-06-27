@@ -254,7 +254,7 @@ class CWidgetRadarChart extends CWidget {
 		return {
 			backgroundColor: 'transparent',
 			title: {
-				text:      CWidgetRadarChart.#escapeHtml(host.name),
+				text:      host.name,
 				textStyle: {fontSize: title_size, color: title_color, fontWeight: 'normal'},
 				left:      'center',
 				top:       2,
@@ -271,6 +271,7 @@ class CWidgetRadarChart extends CWidget {
 					const ind   = indicators[i];
 					const val   = host.values?.[i] ?? 0;
 					const clock = host.clocks?.[i]  ?? 0;
+					// tooltip は HTML で描画されるためエスケープ必須
 					const unit  = CWidgetRadarChart.#escapeHtml(ind.units ?? '');
 					const val_e = CWidgetRadarChart.#escapeHtml(val);
 
@@ -296,7 +297,7 @@ class CWidgetRadarChart extends CWidget {
 			},
 			radar: {
 				indicator: indicators.map((ind, i) => ({
-					name:  CWidgetRadarChart.#wrapLabel(CWidgetRadarChart.#escapeHtml(ind.label), 8),
+					name:  CWidgetRadarChart.#wrapLabel(ind.label, 8),
 					max:   ind.max_val,
 					color: (host.no_data_indices ?? []).includes(i) ? '#e53935' : undefined,
 				})),
@@ -315,7 +316,7 @@ class CWidgetRadarChart extends CWidget {
 				type: 'radar',
 				data: [{
 					value:      host.values,
-					name:       CWidgetRadarChart.#escapeHtml(host.name),
+					name:       host.name,
 					areaStyle:  {color: fill_color, opacity: fill_opacity},
 					lineStyle:  {width: line_width, color: line_color},
 					itemStyle:  {color: point_color},

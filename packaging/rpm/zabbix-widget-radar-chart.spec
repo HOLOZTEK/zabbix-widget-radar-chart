@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}%{dist}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        0.1.1
+Version:        0.1.2
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        Proprietary
@@ -42,6 +42,8 @@ install -d ${STAGEDIR}/locale/en_US/LC_MESSAGES
 install -d ${STAGEDIR}/views
 
 install -m 644 ${SRCDIR}/LICENSE                                                    ${STAGEDIR}/
+install -m 644 ${SRCDIR}/NOTICE                                                     ${STAGEDIR}/
+install -m 644 ${SRCDIR}/README.md                                                  ${STAGEDIR}/
 install -m 644 ${SRCDIR}/THIRD_PARTY_NOTICES.md                                     ${STAGEDIR}/
 install -m 644 ${SRCDIR}/manifest.json                                              ${STAGEDIR}/
 install -m 644 ${SRCDIR}/Module.php                                                 ${STAGEDIR}/
@@ -92,6 +94,14 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Fri Jun 27 2026 claude <noreply> - 0.1.2-0
+- _rc()の読み込みをModule::init()に移動（アクション単体実行時でも必ず利用可能）
+- helpers.phpにfunction_exists('_rc')ガードを追加
+- NOTICEファイルを追加（ECharts / ZRender ASFポリシー準拠）
+- READMEをv0.1.1向けに更新（RPMバージョン修正・数値アイテム制約・groupidsスコープ・History上限・RPMビルド手順追加）
+- RPM specにREADME.mdとNOTICEを追加
+- HTMLエスケープをtooltip埋め込みHTML文字列のみに限定（title.text・軸名・系列名は生文字列）
+
 * Fri Jun 27 2026 claude <noreply> - 0.1.1-0
 - アイテム行数カウントバグ修正（Addボタン行を除外する#getItemRows()を追加）
 - 数値アイテム（float/uint64）のみ選択・保存を許可（UI: numeric:1、サーバー: value_type検証）
