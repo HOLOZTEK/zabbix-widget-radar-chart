@@ -1,0 +1,81 @@
+/* 設定画面スタイルセクション */
+.rc-style-block {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.rc-style-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.rc-style-label {
+	display: inline-block;
+	min-width: 4.5em;
+	font-size: 13px;
+}
+
+.rc-style-row input[type="text"] {
+	width: 48px !important;
+}
+
+/* _contents div に flex column を設定（_body は display:contents のため toolbar/grid が直接の flex 子になる） */
+.dashboard-widget-radar-chart {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.rc-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-shrink: 0;
+	padding: 4px 8px;
+	font-size: 12px;
+}
+
+.rc-toolbar .btn-icon {
+	font-size: 18px;
+	line-height: 18px;
+}
+
+.rc-toggle-active {
+	color: #1f93ff !important;
+}
+
+.rc-paging {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.rc-grid {
+	display: grid;
+	gap: 4px;
+	padding: 4px;
+	flex: 1;
+	min-height: 0;
+}
+
+.rc-cell {
+	position: relative;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	overflow: hidden;
+	background: #fff;
+	min-height: 0;
+}
+
+.rc-nodata {
+	position: absolute;
+	bottom: 4px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 10px;
+	color: #e53935;
+	pointer-events: none;
+}

@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Radar Chart"
+msgstr ""
+
+msgid "Grid"
+msgstr ""
+
+msgid "columns ×"
+msgstr ""
+
+msgid "rows"
+msgstr ""
+
+msgid "Style"
+msgstr ""
+
+msgid "Line"
+msgstr ""
+
+msgid "Point"
+msgstr ""
+
+msgid "Fill"
+msgstr ""
+
+msgid "Chart"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Aggregation"
+msgstr ""
+
+msgid "Latest"
+msgstr ""
+
+msgid "Max"
+msgstr ""
+
+msgid "Min"
+msgstr ""
+
+msgid "Avg"
+msgstr ""
+
+msgid "Max value"
+msgstr ""
+
+msgid "Select item..."
+msgstr ""
+
+msgid "defaults to item name"
+msgstr ""
+
+msgid "Update item"
+msgstr ""
+
+msgid "New item"
+msgstr ""
+
+msgid "At least 3 items must be configured."
+msgstr ""
+
+msgid "Specify at least one host or host group."
+msgstr ""
+
+msgid "No hosts found."
+msgstr ""
+
+msgid "Cannot save item"
+msgstr ""
+
+msgid "Item is required."
+msgstr ""
+
+msgid "Max value must be a positive number."
+msgstr ""

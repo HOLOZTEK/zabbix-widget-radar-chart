@@ -1,0 +1,86 @@
+# Japanese translations for Radar Chart widget
+# Copyright (C) 2026
+msgid ""
+msgstr ""
+"Project-Id-Version: zabbix-widget-radar-chart 0.1.0\n"
+"Language: ja_JP\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Radar Chart"
+msgstr "レーダーチャート"
+
+msgid "Grid"
+msgstr "グリッド"
+
+msgid "columns ×"
+msgstr "列 ×"
+
+msgid "rows"
+msgstr "行"
+
+msgid "Style"
+msgstr "スタイル"
+
+msgid "Line"
+msgstr "線"
+
+msgid "Point"
+msgstr "点"
+
+msgid "Fill"
+msgstr "面"
+
+msgid "Chart"
+msgstr "チャート"
+
+msgid "Title"
+msgstr "タイトル"
+
+msgid "Aggregation"
+msgstr "集計方法"
+
+msgid "Latest"
+msgstr "最新値"
+
+msgid "Max"
+msgstr "最大"
+
+msgid "Min"
+msgstr "最小"
+
+msgid "Avg"
+msgstr "平均"
+
+msgid "Max value"
+msgstr "最大値"
+
+msgid "Select item..."
+msgstr "アイテムを選択..."
+
+msgid "defaults to item name"
+msgstr "未指定時はアイテム名を使用"
+
+msgid "Update item"
+msgstr "アイテムの更新"
+
+msgid "New item"
+msgstr "アイテムの追加"
+
+msgid "At least 3 items must be configured."
+msgstr "アイテムを3つ以上設定してください。"
+
+msgid "Specify at least one host or host group."
+msgstr "ホストまたはホストグループを指定してください。"
+
+msgid "No hosts found."
+msgstr "ホストが見つかりません。"
+
+msgid "Cannot save item"
+msgstr "アイテムを保存できません"
+
+msgid "Item is required."
+msgstr "アイテムは必須です。"
+
+msgid "Max value must be a positive number."
+msgstr "最大値には正の数を入力してください。"

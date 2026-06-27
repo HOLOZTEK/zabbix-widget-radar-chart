@@ -1,0 +1,28 @@
+{
+	"manifest_version": 2.0,
+	"id": "radar-chart",
+	"type": "widget",
+	"name": "Radar Chart",
+	"namespace": "RadarChart",
+	"version": "0.1.0",
+	"widget": {
+		"size": {"width": 6, "height": 5},
+		"js_class": "CWidgetRadarChart",
+		"in": {
+			"hostids": {"type": "_hostid"},
+			"time_period": {"type": "_timeperiod"}
+		}
+	},
+	"actions": {
+		"widget.radar-chart.view": {"class": "WidgetView"},
+		"widget.radar-chart.item.edit": {
+			"class": "ItemEdit",
+			"view": "item.edit",
+			"layout": "layout.json"
+		}
+	},
+	"assets": {
+		"js": ["echarts.min.js", "class.widget.js"],
+		"css": ["widget.css"]
+	}
+}
