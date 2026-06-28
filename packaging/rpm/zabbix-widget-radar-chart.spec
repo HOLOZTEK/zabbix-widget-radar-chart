@@ -97,12 +97,14 @@ fi
 * Sat Jun 28 2026 claude <noreply> - 0.1.3-0
 - Widget.phpのファイルスコープでrequire_onceを追加（CModuleManager::getWidgetsDefaults()がModule::init()より前にWidget::getDefaultName()を呼び出すため_rc()が未定義になるバグを修正）
 - bindtextdomainをhelpers.phpに移動（function_existsガードと一体化）
+- README.mdのRPMインストール例バージョンを0.1.3に更新
+- locale ja_JP / en_US の Project-Id-Version を0.1.3に更新
 
 * Fri Jun 27 2026 claude <noreply> - 0.1.2-0
 - _rc()の読み込みをModule::init()に移動（アクション単体実行時でも必ず利用可能）
 - helpers.phpにfunction_exists('_rc')ガードを追加
 - NOTICEファイルを追加（ECharts / ZRender ASFポリシー準拠）
-- READMEをv0.1.1向けに更新（RPMバージョン修正・数値アイテム制約・groupidsスコープ・History上限・RPMビルド手順追加）
+- READMEを最新化（RPMバージョン修正・数値アイテム制約・groupidsスコープ・History上限・RPMビルド手順追加）
 - RPM specにREADME.mdとNOTICEを追加
 - HTMLエスケープをtooltip埋め込みHTML文字列のみに限定（title.text・軸名・系列名は生文字列）
 
