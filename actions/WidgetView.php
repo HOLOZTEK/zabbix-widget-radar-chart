@@ -118,58 +118,68 @@ class WidgetView extends CControllerDashboardWidgetView {
 		$hosts    = array_values($hosts_map);
 		$all_hids = array_column($hosts, 'hostid');
 
-		// 参照アイテムのキー・value_type・単位を取得
+		// 参照アイテムの名前・value_type・単位を取得
+		// マッチングはアイテム名（テンプレート・ホストの所属は無視）を基準に行う
 		$ref_itemids = array_column($items_cfg, 'itemid');
 		$ref_items   = API::Item()->get([
-			'output'  => ['itemid', 'key_', 'value_type', 'units'],
+			'output'  => ['itemid', 'name', 'value_type', 'units'],
 			'itemids' => $ref_itemids,
 		]);
 		$ref_by_id = array_column($ref_items, null, 'itemid');
 
-		// アイテム設定にキーと value_type を付加
+		// アイテム設定にマッチング用アイテム名と value_type を付加
 		foreach ($items_cfg as &$ic) {
 			$ref = $ref_by_id[$ic['itemid']] ?? null;
-			$ic['key_']       = $ref ? $ref['key_']       : '';
+			$ic['item_name']  = $ref ? $ref['name']            : '';
 			$ic['value_type'] = $ref ? (int) $ref['value_type'] : -1;
 		}
 		unset($ic);
 
-		// 各アイテムキーについて全ホストのアイテムを検索（数値アイテムのみ）
-		$key_items = [];
+		// 各アイテム名について全ホストのアイテムを検索（数値アイテムのみ）。
+		// 同一ホスト内でアイテム名が重複する場合はアイテムIDが若番の方を採用する
+		// （itemid昇順で取得し、ホストごとに最初の1件のみ採用することで実現）。
+		$name_items = [];
 		foreach ($items_cfg as $ic) {
-			if ($ic['key_'] === '') continue;
+			$item_name = $ic['item_name'];
+			if ($item_name === '' || isset($name_items[$item_name])) continue;
+
 			$found = API::Item()->get([
-				'output'    => ['itemid', 'hostid', 'key_', 'lastvalue', 'lastclock', 'value_type'],
+				'output'    => ['itemid', 'hostid', 'name', 'lastvalue', 'lastclock', 'value_type'],
 				'hostids'   => $all_hids,
-				'filter'    => ['key_' => $ic['key_']],
+				'filter'    => ['name' => $item_name],
 				'monitored' => true,
+				'sortfield' => 'itemid',
+				'sortorder' => ZBX_SORT_UP,
 			]);
 			foreach ($found as $fi) {
 				// 数値以外のアイテムはスキップ（表示しない）
 				$vt = (int) $fi['value_type'];
 				if ($vt !== ITEM_VALUE_TYPE_FLOAT && $vt !== ITEM_VALUE_TYPE_UINT64) continue;
-				$key_items[$ic['key_']][(int) $fi['hostid']] = $fi;
+
+				$hid = (int) $fi['hostid'];
+				if (isset($name_items[$item_name][$hid])) continue;
+				$name_items[$item_name][$hid] = $fi;
 			}
 		}
 
 		// value_type ごとにヒストリー集計が必要なアイテムを収集
-		$hist_need = []; // [key_ => [hostid => [itemid, value_type]]]
+		$hist_need = []; // [item_name => [hostid => [itemid, value_type]]]
 		foreach ($items_cfg as $ic) {
 			if ($ic['agg_func'] == CWidgetFieldItems::AGG_LAST) continue;
-			if ($ic['key_'] === '') continue;
-			foreach ($key_items[$ic['key_']] ?? [] as $hid => $fi) {
+			if ($ic['item_name'] === '') continue;
+			foreach ($name_items[$ic['item_name']] ?? [] as $hid => $fi) {
 				$vt = (int) $fi['value_type'];
-				$hist_need[$ic['key_']][$hid] = ['itemid' => (int) $fi['itemid'], 'value_type' => $vt];
+				$hist_need[$ic['item_name']][$hid] = ['itemid' => (int) $fi['itemid'], 'value_type' => $vt];
 			}
 		}
 
 		// ヒストリー集計: value_type ごとにバッチ取得
 		// limit 到達時は不完全な集計になるため警告フラグを立てる
-		$hist_agg  = []; // [key_ => [hostid => [max, min, sum, cnt]]]
+		$hist_agg  = []; // [item_name => [hostid => [max, min, sum, cnt]]]
 		$limit_hit = false;
 		$hist_limit = 50000;
 
-		foreach ($hist_need as $key_ => $hid_map) {
+		foreach ($hist_need as $item_name => $hid_map) {
 			$vtype_iids = [];
 			$iid_hid    = [];
 			foreach ($hid_map as $hid => $info) {
@@ -194,10 +204,10 @@ class WidgetView extends CControllerDashboardWidgetView {
 					$hid = $iid_hid[$row['itemid']] ?? null;
 					if ($hid === null) continue;
 					$v = (float) $row['value'];
-					if (!isset($hist_agg[$key_][$hid])) {
-						$hist_agg[$key_][$hid] = ['max' => $v, 'min' => $v, 'sum' => $v, 'cnt' => 1];
+					if (!isset($hist_agg[$item_name][$hid])) {
+						$hist_agg[$item_name][$hid] = ['max' => $v, 'min' => $v, 'sum' => $v, 'cnt' => 1];
 					} else {
-						$a = &$hist_agg[$key_][$hid];
+						$a = &$hist_agg[$item_name][$hid];
 						if ($v > $a['max']) $a['max'] = $v;
 						if ($v < $a['min']) $a['min'] = $v;
 						$a['sum'] += $v;
@@ -217,11 +227,11 @@ class WidgetView extends CControllerDashboardWidgetView {
 			$no_data_indices = [];  // データなし / 非数値アイテムのインデックス
 
 			foreach ($items_cfg as $idx => $ic) {
-				$key_ = $ic['key_'];
-				$agg  = (int) $ic['agg_func'];
-				$fi   = $key_items[$key_][$hid] ?? null;
+				$item_name = $ic['item_name'];
+				$agg       = (int) $ic['agg_func'];
+				$fi        = $name_items[$item_name][$hid] ?? null;
 
-				if ($fi === null || $key_ === '') {
+				if ($fi === null || $item_name === '') {
 					$values[]          = 0.0;
 					$clocks[]          = 0;
 					$no_data_indices[] = $idx;
@@ -234,7 +244,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 					$clocks[] = $clock;
 					if (!$clock) $no_data_indices[] = $idx;
 				} else {
-					$agg_data = $hist_agg[$key_][$hid] ?? null;
+					$agg_data = $hist_agg[$item_name][$hid] ?? null;
 					$clocks[] = 0;  // 集計値は時間帯で表示
 					if ($agg_data === null) {
 						$values[]          = 0.0;
@@ -267,7 +277,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		foreach ($items_cfg as $ic) {
 			$ref = $ref_by_id[$ic['itemid']] ?? null;
 			$indicators[] = [
-				'label'   => $ic['label'] ?: ($ic['name'] ?: $ic['key_']),
+				'label'   => $ic['label'] ?: ($ic['name'] ?: $ic['item_name']),
 				'max_val' => (float) ($ic['max_val'] ?: 100),
 				'units'   => $ref ? (string) $ref['units'] : '',
 				'agg'     => (int) $ic['agg_func'],

@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}%{dist}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        0.1.3
+Version:        0.1.4
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        Proprietary
@@ -94,6 +94,11 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Sun Jul 12 2026 claude <noreply> - 0.1.4-0
+- アイテムのマッチングロジックをキー（key_）基準からアイテム名（name）基準に変更
+  （テンプレート・ホストの所属を無視し、アイテム名でのみマッチング）
+- 同一ホスト内でアイテム名が重複する場合はアイテムIDが若番の方を採用
+
 * Sat Jun 28 2026 claude <noreply> - 0.1.3-0
 - Widget.phpのファイルスコープでrequire_onceを追加（CModuleManager::getWidgetsDefaults()がModule::init()より前にWidget::getDefaultName()を呼び出すため_rc()が未定義になるバグを修正）
 - bindtextdomainをhelpers.phpに移動（function_existsガードと一体化）

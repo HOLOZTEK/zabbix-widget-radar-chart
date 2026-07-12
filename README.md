@@ -39,10 +39,10 @@
 
 ```bash
 # Rocky Linux 9 (el9)
-rpm -ivh zabbix-widget-radar-chart-0.1.3.el9.noarch.rpm
+rpm -ivh zabbix-widget-radar-chart-0.1.4.el9.noarch.rpm
 
 # Rocky Linux 10 (el10)
-rpm -ivh zabbix-widget-radar-chart-0.1.3.el10.noarch.rpm
+rpm -ivh zabbix-widget-radar-chart-0.1.4.el10.noarch.rpm
 ```
 
 インストール後、Zabbix フロントエンドの **管理 → モジュール** からモジュールを有効化してください。
