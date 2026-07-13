@@ -104,6 +104,8 @@ fi
   2時間以上はTrend（value_max/value_min/value_avg+numによる加重平均）を優先して使用。
   Trendにデータが存在しないアイテム/ホストの組み合わせはHistoryへ自動フォールバック
 - README.mdを更新（Latestの仕様変更・Max/Min/AvgのHistory/Trend自動切替について明記）
+- レーダー軸ホバー検出をECharts内部座標系ベースに修正（ツールチップの値が別軸のものと
+  入れ替わる不具合を解消。中心座標・各軸角度の自前推測をやめ、ECharts内部の実座標を使用）
 - Giteaコードレビュー（issue #1）対応
 
 * Sun Jul 12 2026 claude <noreply> - 0.1.4-0
