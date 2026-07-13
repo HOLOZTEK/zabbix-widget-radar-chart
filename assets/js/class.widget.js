@@ -168,23 +168,32 @@ class CWidgetRadarChart extends CWidget {
 			// ─── 最近傍軸トラッキング ──────────────────────────────────
 			// ECharts レーダーチャートは tooltip trigger:'item' が系列全体で発火するため、
 			// マウス座標からレーダー中心への角度で最近傍軸インデックスを特定する。
-			// startAngle=90（デフォルト）+ 時計回り → 軸 i の画面角 = -π/2 + i*2π/n
+			//
+			// 以前は中心座標(cx,cy)・軸角度ともに自前で推測していたが、コンテナのアスペクト比や
+			// タイトル有無によって ECharts が実際に描画する中心と一致しない場合があり、軸の取り違え
+			// （ツールチップの値が別の軸のものになる）が発生していた。ECharts の RadarCoordinateSystem
+			// が内部で保持する実際の cx/cy と各軸の angle（radar.coordinateSystem.getIndicatorAxes()）
+			// をそのまま使い、pointToData() と同じ角度規約（画面Y反転）で最近傍軸を求めることで、
+			// 描画結果と完全に一致させる。
 			let hovered_axis = -1;
 
 			chart.getZr().on('mousemove', (e) => {
-				const n = indicators.length;
-				if (n === 0) return;
-				const cx    = chart.getWidth()  * 0.50;
-				const cy    = chart.getHeight() * 0.56;
-				const angle = Math.atan2(e.offsetY - cy, e.offsetX - cx);
+				const coord = chart.getModel().getComponent('radar')?.coordinateSystem;
+				const axes  = coord?.getIndicatorAxes?.() ?? [];
+				if (!coord || axes.length === 0) { hovered_axis = -1; return; }
+
+				const dx = e.offsetX - coord.cx;
+				const dy = e.offsetY - coord.cy;
+				if (dx === 0 && dy === 0) { hovered_axis = -1; return; }
+
+				const angle = Math.atan2(-dy, dx);
 				let minDist = Infinity;
-				let nearest = 0;
-				for (let i = 0; i < n; i++) {
-					const a = -Math.PI / 2 + i * 2 * Math.PI / n;
-					let d = Math.abs(angle - a);
+				let nearest = -1;
+				axes.forEach((axis, i) => {
+					let d = Math.abs(angle - axis.angle);
 					if (d > Math.PI) d = 2 * Math.PI - d;
 					if (d < minDist) { minDist = d; nearest = i; }
-				}
+				});
 				hovered_axis = nearest;
 			});
 
