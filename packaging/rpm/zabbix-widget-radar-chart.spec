@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}%{dist}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        0.1.4
+Version:        0.1.5
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        Proprietary
@@ -16,7 +16,10 @@ Features:
 - Grid layout (up to 6x6) for displaying multiple hosts simultaneously
 - Flexible host selection: host groups, individual hosts, or host patterns (wildcard)
 - Integration with Tree Navigator / Topology Navigator via host group linkage
-- Per-item aggregation: latest value, max, min, or average over time period
+- Per-item aggregation: latest value (within the dashboard time period), max, min,
+  or average over time period; Max/Min/Avg automatically switch between History
+  (under 2 hours) and Trend (2 hours or more, falling back to History per item/host
+  when Trend data is absent)
 - Numeric items only (float and unsigned integer); non-numeric items are rejected
 - Red axis labels for items with no data
 - Hover tooltip showing value, unit, and collection time (or aggregation period)
@@ -94,6 +97,15 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Mon Jul 13 2026 claude <noreply> - 0.1.5-0
+- Latest（最新値）を lastvalue ベースの現在値ではなく、ダッシュボード指定期間内の最新
+  History 値に変更（period_from〜period_to内で最も新しい値を採用）
+- Max/Min/Avg集計を指定期間に応じてHistory/Trendへ自動切替: 期間が2時間未満はHistory、
+  2時間以上はTrend（value_max/value_min/value_avg+numによる加重平均）を優先して使用。
+  Trendにデータが存在しないアイテム/ホストの組み合わせはHistoryへ自動フォールバック
+- README.mdを更新（Latestの仕様変更・Max/Min/AvgのHistory/Trend自動切替について明記）
+- Giteaコードレビュー（issue #1）対応
+
 * Sun Jul 12 2026 claude <noreply> - 0.1.4-0
 - アイテムのマッチングロジックをキー（key_）基準からアイテム名（name）基準に変更
   （テンプレート・ホストの所属を無視し、アイテム名でのみマッチング）

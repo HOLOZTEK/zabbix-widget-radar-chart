@@ -144,7 +144,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 			if ($item_name === '' || isset($name_items[$item_name])) continue;
 
 			$found = API::Item()->get([
-				'output'    => ['itemid', 'hostid', 'name', 'lastvalue', 'lastclock', 'value_type'],
+				'output'    => ['itemid', 'hostid', 'name', 'value_type'],
 				'hostids'   => $all_hids,
 				'filter'    => ['name' => $item_name],
 				'monitored' => true,
@@ -162,24 +162,24 @@ class WidgetView extends CControllerDashboardWidgetView {
 			}
 		}
 
-		// value_type ごとにヒストリー集計が必要なアイテムを収集
-		$hist_need = []; // [item_name => [hostid => [itemid, value_type]]]
+		$limit_hit  = false;
+		$hist_limit = 50000;
+
+		// Latest（AGG_LAST）はダッシュボード指定期間内の最新値を使う（現在値=lastvalueではない）。
+		// value_type ごとにバッチ取得し、clock降順の結果を先勝ちで拾うことでitemidごとの
+		// 「期間内最新」を1回のHistory.getで得る（グローバルなclock降順ソートは各itemid部分列内でも
+		// 降順を保つため、先に現れた行がそのitemidの最新値になる）。
+		$last_need = []; // [item_name => [hostid => [itemid, value_type]]]
 		foreach ($items_cfg as $ic) {
-			if ($ic['agg_func'] == CWidgetFieldItems::AGG_LAST) continue;
+			if ($ic['agg_func'] != CWidgetFieldItems::AGG_LAST) continue;
 			if ($ic['item_name'] === '') continue;
 			foreach ($name_items[$ic['item_name']] ?? [] as $hid => $fi) {
-				$vt = (int) $fi['value_type'];
-				$hist_need[$ic['item_name']][$hid] = ['itemid' => (int) $fi['itemid'], 'value_type' => $vt];
+				$last_need[$ic['item_name']][$hid] = ['itemid' => (int) $fi['itemid'], 'value_type' => (int) $fi['value_type']];
 			}
 		}
 
-		// ヒストリー集計: value_type ごとにバッチ取得
-		// limit 到達時は不完全な集計になるため警告フラグを立てる
-		$hist_agg  = []; // [item_name => [hostid => [max, min, sum, cnt]]]
-		$limit_hit = false;
-		$hist_limit = 50000;
-
-		foreach ($hist_need as $item_name => $hid_map) {
+		$last_result = []; // [item_name => [hostid => ['value'=>, 'clock'=>]]]
+		foreach ($last_need as $item_name => $hid_map) {
 			$vtype_iids = [];
 			$iid_hid    = [];
 			foreach ($hid_map as $hid => $info) {
@@ -188,11 +188,13 @@ class WidgetView extends CControllerDashboardWidgetView {
 			}
 			foreach ($vtype_iids as $vtype => $iids) {
 				$history = API::History()->get([
-					'output'    => ['itemid', 'value'],
+					'output'    => ['itemid', 'clock', 'value'],
 					'itemids'   => $iids,
 					'time_from' => $period_from,
 					'time_till' => $period_to,
 					'history'   => $vtype,
+					'sortfield' => 'clock',
+					'sortorder' => ZBX_SORT_DOWN,
 					'limit'     => $hist_limit,
 				]);
 
@@ -203,16 +205,142 @@ class WidgetView extends CControllerDashboardWidgetView {
 				foreach ($history as $row) {
 					$hid = $iid_hid[$row['itemid']] ?? null;
 					if ($hid === null) continue;
-					$v = (float) $row['value'];
-					if (!isset($hist_agg[$item_name][$hid])) {
-						$hist_agg[$item_name][$hid] = ['max' => $v, 'min' => $v, 'sum' => $v, 'cnt' => 1];
+					if (isset($last_result[$item_name][$hid])) continue; // 既により新しい値を採用済み
+					$last_result[$item_name][$hid] = [
+						'value' => (float) $row['value'],
+						'clock' => (int) $row['clock'],
+					];
+				}
+			}
+		}
+
+		// value_type ごとに Max/Min/Avg 集計が必要なアイテムを収集
+		$hist_need = []; // [item_name => [hostid => [itemid, value_type]]]
+		foreach ($items_cfg as $ic) {
+			if ($ic['agg_func'] == CWidgetFieldItems::AGG_LAST) continue;
+			if ($ic['item_name'] === '') continue;
+			foreach ($name_items[$ic['item_name']] ?? [] as $hid => $fi) {
+				$vt = (int) $fi['value_type'];
+				$hist_need[$ic['item_name']][$hid] = ['itemid' => (int) $fi['itemid'], 'value_type' => $vt];
+			}
+		}
+
+		// Max/Min/Avg 集計: 指定期間が2時間未満はHistory、2時間以上はTrendを優先して使う
+		// （Trendにデータが無いitemidはHistoryにフォールバック）。
+		// limit 到達時は不完全な集計になるため警告フラグを立てる（Historyのみ対象、
+		// Trendは期間中の行数が少ないため実質上限に達しない）。
+		$agg_result = []; // [item_name => [hostid => [max, min, avg]]]
+		$period_duration = $period_to - $period_from;
+		$use_trend = $period_duration >= 2 * SEC_PER_HOUR;
+
+		if ($hist_need) {
+			// itemid -> [item_name, hostid] 逆引き（トレンド結果の突合用）
+			$iid_lookup = [];
+			foreach ($hist_need as $item_name => $hid_map) {
+				foreach ($hid_map as $hid => $info) {
+					$iid_lookup[$info['itemid']] = [$item_name, $hid];
+				}
+			}
+
+			$trend_seen = []; // itemid => true（トレンドデータが1件以上存在した）
+
+			if ($use_trend) {
+				$trend_acc = []; // itemid => [max, min, sum, numsum]
+
+				foreach (API::Trend()->get([
+					'output'    => ['itemid', 'num', 'value_min', 'value_max', 'value_avg'],
+					'itemids'   => array_keys($iid_lookup),
+					'time_from' => $period_from,
+					'time_till' => $period_to,
+				]) as $row) {
+					$iid  = (int) $row['itemid'];
+					$num  = (int) $row['num'];
+					$vmax = (float) $row['value_max'];
+					$vmin = (float) $row['value_min'];
+					$vavg = (float) $row['value_avg'];
+
+					if (!isset($trend_acc[$iid])) {
+						$trend_acc[$iid] = ['max' => $vmax, 'min' => $vmin, 'sum' => $vavg * $num, 'numsum' => $num];
 					} else {
-						$a = &$hist_agg[$item_name][$hid];
-						if ($v > $a['max']) $a['max'] = $v;
-						if ($v < $a['min']) $a['min'] = $v;
-						$a['sum'] += $v;
-						$a['cnt']++;
+						$a = &$trend_acc[$iid];
+						if ($vmax > $a['max']) $a['max'] = $vmax;
+						if ($vmin < $a['min']) $a['min'] = $vmin;
+						$a['sum']    += $vavg * $num;
+						$a['numsum'] += $num;
 						unset($a);
+					}
+					$trend_seen[$iid] = true;
+				}
+
+				foreach ($trend_acc as $iid => $a) {
+					[$item_name, $hid] = $iid_lookup[$iid];
+					$agg_result[$item_name][$hid] = [
+						'max' => $a['max'],
+						'min' => $a['min'],
+						'avg' => $a['numsum'] > 0 ? $a['sum'] / $a['numsum'] : 0.0,
+					];
+				}
+			}
+
+			// トレンド未使用（2時間未満）、またはトレンドにデータが無かったアイテムはHistoryで集計
+			$hist_fallback_need = [];
+			foreach ($hist_need as $item_name => $hid_map) {
+				foreach ($hid_map as $hid => $info) {
+					if (!isset($trend_seen[$info['itemid']])) {
+						$hist_fallback_need[$item_name][$hid] = $info;
+					}
+				}
+			}
+
+			if ($hist_fallback_need) {
+				$hist_agg = []; // [item_name => [hostid => [max, min, sum, cnt]]]
+
+				foreach ($hist_fallback_need as $item_name => $hid_map) {
+					$vtype_iids = [];
+					$iid_hid    = [];
+					foreach ($hid_map as $hid => $info) {
+						$vtype_iids[$info['value_type']][] = $info['itemid'];
+						$iid_hid[$info['itemid']] = $hid;
+					}
+					foreach ($vtype_iids as $vtype => $iids) {
+						$history = API::History()->get([
+							'output'    => ['itemid', 'value'],
+							'itemids'   => $iids,
+							'time_from' => $period_from,
+							'time_till' => $period_to,
+							'history'   => $vtype,
+							'limit'     => $hist_limit,
+						]);
+
+						if (count($history) >= $hist_limit) {
+							$limit_hit = true;
+						}
+
+						foreach ($history as $row) {
+							$hid = $iid_hid[$row['itemid']] ?? null;
+							if ($hid === null) continue;
+							$v = (float) $row['value'];
+							if (!isset($hist_agg[$item_name][$hid])) {
+								$hist_agg[$item_name][$hid] = ['max' => $v, 'min' => $v, 'sum' => $v, 'cnt' => 1];
+							} else {
+								$a = &$hist_agg[$item_name][$hid];
+								if ($v > $a['max']) $a['max'] = $v;
+								if ($v < $a['min']) $a['min'] = $v;
+								$a['sum'] += $v;
+								$a['cnt']++;
+								unset($a);
+							}
+						}
+					}
+				}
+
+				foreach ($hist_agg as $item_name => $hid_map) {
+					foreach ($hid_map as $hid => $a) {
+						$agg_result[$item_name][$hid] = [
+							'max' => $a['max'],
+							'min' => $a['min'],
+							'avg' => $a['sum'] / $a['cnt'],
+						];
 					}
 				}
 			}
@@ -223,7 +351,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		foreach ($hosts as $host) {
 			$hid             = (int) $host['hostid'];
 			$values          = [];
-			$clocks          = [];  // 最新値: lastclock、集計値: 0（時間帯表示）
+			$clocks          = [];  // 期間内最新値: その値のclock、集計値: 0（時間帯表示）
 			$no_data_indices = [];  // データなし / 非数値アイテムのインデックス
 
 			foreach ($items_cfg as $idx => $ic) {
@@ -239,12 +367,17 @@ class WidgetView extends CControllerDashboardWidgetView {
 				}
 
 				if ($agg === CWidgetFieldItems::AGG_LAST) {
-					$clock    = (int) ($fi['lastclock'] ?? 0);
-					$values[] = $clock ? round((float) $fi['lastvalue'], 4) : 0.0;
-					$clocks[] = $clock;
-					if (!$clock) $no_data_indices[] = $idx;
+					$last = $last_result[$item_name][$hid] ?? null;
+					if ($last === null) {
+						$values[]          = 0.0;
+						$clocks[]          = 0;
+						$no_data_indices[] = $idx;
+					} else {
+						$values[] = round($last['value'], 4);
+						$clocks[] = $last['clock'];
+					}
 				} else {
-					$agg_data = $hist_agg[$item_name][$hid] ?? null;
+					$agg_data = $agg_result[$item_name][$hid] ?? null;
 					$clocks[] = 0;  // 集計値は時間帯で表示
 					if ($agg_data === null) {
 						$values[]          = 0.0;
@@ -254,7 +387,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 							match ($agg) {
 								CWidgetFieldItems::AGG_MAX => $agg_data['max'],
 								CWidgetFieldItems::AGG_MIN => $agg_data['min'],
-								CWidgetFieldItems::AGG_AVG => $agg_data['sum'] / $agg_data['cnt'],
+								CWidgetFieldItems::AGG_AVG => $agg_data['avg'],
 								default                    => 0.0,
 							},
 							4

@@ -4,7 +4,7 @@
 	"type": "widget",
 	"name": "Radar Chart",
 	"namespace": "RadarChart",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"widget": {
 		"size": {"width": 6, "height": 5},
 		"js_class": "CWidgetRadarChart",
