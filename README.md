@@ -42,11 +42,7 @@
 ### RPM パッケージ（推奨）
 
 ```bash
-# Rocky Linux 9 (el9)
-rpm -ivh zabbix-widget-radar-chart-0.1.5.el9.noarch.rpm
-
-# Rocky Linux 10 (el10)
-rpm -ivh zabbix-widget-radar-chart-0.1.5.el10.noarch.rpm
+rpm -ivh zabbix-widget-radar-chart-1.0.0.noarch.rpm
 ```
 
 インストール後、Zabbix フロントエンドの **管理 → モジュール** からモジュールを有効化してください。
@@ -87,10 +83,11 @@ rpmbuild -bb ~/rpmbuild/SPECS/zabbix-widget-radar-chart.spec
 | Style | 線・点・面・チャート・タイトルの色とサイズ |
 | Time period | 集計期間（ダッシュボードの時間軸と連動） |
 
-## ライセンス
+## License
 
-商用ライセンス（詳細は LICENSE ファイルを参照）
+This project is licensed under the MIT License.
 
-無断の再配布を禁じます。
+Copyright (c) 2026 ttake-55
+HOLOZTEK by ttake-55
 
-このソフトウェアは Apache ECharts（Apache License 2.0）を同梱しています。詳細は NOTICE および THIRD_PARTY_NOTICES.md を参照してください。
+This software bundles Apache ECharts (Apache License 2.0). See NOTICE and THIRD_PARTY_NOTICES.md for details.

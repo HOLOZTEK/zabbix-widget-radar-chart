@@ -1,9 +1,9 @@
-%define _rpmfilename %%{NAME}-%%{VERSION}%{dist}.%%{ARCH}.rpm
+%define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        0.1.5
+Version:        1.0.0
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
-License:        Proprietary
+License:        MIT
 BuildArch:      noarch
 Requires:       php >= 8.3
 Requires:       php-fpm >= 8.3
@@ -97,6 +97,14 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Mon Aug 10 2026 claude <noreply> - 1.0.0-0
+- 無償公開に向けたリリース。機能変更なし。反映内容:
+  1. ライセンスをProprietaryからMITへ変更
+  2. RPMをel9/el10個別ビルドから単一noarchファイルに統一（_rpmfilenameから
+     %%{dist}を除去）。BuildArch: noarchでコンパイル済みバイナリを含まない
+     ため、170/171どちらでビルドしても同一内容
+  3. Debianパッケージング(.deb)をdebian/配下に追加
+
 * Mon Jul 13 2026 claude <noreply> - 0.1.5-0
 - Latest（最新値）を lastvalue ベースの現在値ではなく、ダッシュボード指定期間内の最新
   History 値に変更（period_from〜period_to内で最も新しい値を採用）

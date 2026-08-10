@@ -1,0 +1,13 @@
+Source: zabbix-widget-radar-chart
+Section: web
+Priority: optional
+Maintainer: claude <noreply@example.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+
+Package: zabbix-widget-radar-chart
+Architecture: all
+Depends: ${misc:Depends}
+Description: Radar Chart widget for Zabbix dashboard
+ Zabbix dashboard widget that visualizes multiple host item values
+ as radar charts arranged in a grid layout.
