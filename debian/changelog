@@ -1,3 +1,17 @@
+zabbix-widget-radar-chart (1.0.1) unstable; urgency=medium
+
+  * コードレビュー指摘対応（4点）: モジュール識別子（id/namespace/action/
+    js_class）にHOLOZTEKプレフィックスを付与し他モジュールとの衝突リスクを
+    回避。グローバル関数_rc()を_holoztek_rc()へ、gettextドメインを
+    holoztek-radar-chartへ（.po/.moファイル名も追随）、JSグローバル
+    window.widget_radar_chart_form / window.rc_item_editをholoztek
+    プレフィックス化、CSSの.dashboard-widget-radar-chartを
+    .dashboard-widget-holoztek_radar_chartへ変更。RPMのLICENSE同梱を
+    %license/%{_licensedir}経由の標準的な方式に変更。パッケージ名・
+    モジュールディレクトリ名(radar-chart)は互換性維持のため据え置き。
+
+ -- claude <noreply@example.com>  Mon, 10 Aug 2026 17:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.0) unstable; urgency=medium
 
   * 無償公開に向けたリリース。機能変更なし。ライセンスをMITに変更し、

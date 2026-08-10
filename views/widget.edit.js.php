@@ -1,6 +1,6 @@
 <?php declare(strict_types = 0); ?>
 
-window.widget_radar_chart_form = new class {
+window.holoztek_radar_chart_form = new class {
 
 	#form;
 	#list_items;
@@ -63,7 +63,7 @@ window.widget_radar_chart_form = new class {
 				this.#item_index = this.#getItemRows().length;
 
 				popup = PopUp(
-					'widget.radar-chart.item.edit',
+					'widget.holoztek_radar_chart.item.edit',
 					{},
 					{dialogueid: 'rc-item-edit-overlay', dialogue_class: 'modal-popup-generic'}
 				).$dialogue[0];
@@ -79,7 +79,7 @@ window.widget_radar_chart_form = new class {
 				const item = fields.items?.[this.#item_index] ?? {};
 
 				popup = PopUp(
-					'widget.radar-chart.item.edit',
+					'widget.holoztek_radar_chart.item.edit',
 					{...item, edit: 1},
 					{dialogueid: 'rc-item-edit-overlay', dialogue_class: 'modal-popup-generic'}
 				).$dialogue[0];
@@ -133,8 +133,8 @@ window.widget_radar_chart_form = new class {
 
 	#updateButtons() {
 		const rows = this.#getItemRows().length;
-		const min  = <?= \Modules\RadarChart\Includes\CWidgetFieldItems::MIN_ITEMS ?>;
-		const max  = <?= \Modules\RadarChart\Includes\CWidgetFieldItems::MAX_ITEMS ?>;
+		const min  = <?= \Modules\HoloztekRadarChart\Includes\CWidgetFieldItems::MIN_ITEMS ?>;
+		const max  = <?= \Modules\HoloztekRadarChart\Includes\CWidgetFieldItems::MAX_ITEMS ?>;
 
 		this.#list_items.querySelectorAll('[name="remove"]').forEach(btn => {
 			btn.disabled = rows <= min;

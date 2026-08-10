@@ -1,6 +1,6 @@
 <?php declare(strict_types = 0);
 
-namespace Modules\RadarChart\Includes;
+namespace Modules\HoloztekRadarChart\Includes;
 
 use CWidgetsData;
 

@@ -1,6 +1,6 @@
 'use strict';
 
-class CWidgetRadarChart extends CWidget {
+class CWidgetHoloztekRadarChart extends CWidget {
 
 	#charts          = [];
 	#data            = null;
@@ -281,19 +281,19 @@ class CWidgetRadarChart extends CWidget {
 					const val   = host.values?.[i] ?? 0;
 					const clock = host.clocks?.[i]  ?? 0;
 					// tooltip は HTML で描画されるためエスケープ必須
-					const unit  = CWidgetRadarChart.#escapeHtml(ind.units ?? '');
-					const val_e = CWidgetRadarChart.#escapeHtml(val);
+					const unit  = CWidgetHoloztekRadarChart.#escapeHtml(ind.units ?? '');
+					const val_e = CWidgetHoloztekRadarChart.#escapeHtml(val);
 
 					const val_str = unit ? `${val_e} ${unit}` : `${val_e}`;
 
 					let time_str = '';
 					if (clock > 0) {
-						time_str = CWidgetRadarChart.#escapeHtml(CWidgetRadarChart.#formatTime(clock));
+						time_str = CWidgetHoloztekRadarChart.#escapeHtml(CWidgetHoloztekRadarChart.#formatTime(clock));
 					} else if (period_from && period_to) {
-						time_str = CWidgetRadarChart.#escapeHtml(
-							CWidgetRadarChart.#formatTime(period_from)
+						time_str = CWidgetHoloztekRadarChart.#escapeHtml(
+							CWidgetHoloztekRadarChart.#formatTime(period_from)
 							+ ' 〜 '
-							+ CWidgetRadarChart.#formatTime(period_to)
+							+ CWidgetHoloztekRadarChart.#formatTime(period_to)
 						);
 					}
 
@@ -306,7 +306,7 @@ class CWidgetRadarChart extends CWidget {
 			},
 			radar: {
 				indicator: indicators.map((ind, i) => ({
-					name:  CWidgetRadarChart.#wrapLabel(ind.label, 8),
+					name:  CWidgetHoloztekRadarChart.#wrapLabel(ind.label, 8),
 					max:   ind.max_val,
 					color: (host.no_data_indices ?? []).includes(i) ? '#e53935' : undefined,
 				})),

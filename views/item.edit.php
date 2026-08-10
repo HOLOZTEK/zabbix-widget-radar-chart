@@ -5,7 +5,7 @@
  * @var array $data
  */
 
-use Modules\RadarChart\Includes\CWidgetFieldItems;
+use Modules\HoloztekRadarChart\Includes\CWidgetFieldItems;
 
 $form = (new CForm())
 	->setId('rc_item_edit_form')
@@ -21,10 +21,10 @@ if ($data['edit']) {
 $form->addItem((new CSubmitButton())->addClass(ZBX_STYLE_FORM_SUBMIT_HIDDEN));
 
 $agg_options = [
-	CWidgetFieldItems::AGG_LAST => _rc('Latest'),
-	CWidgetFieldItems::AGG_MAX  => _rc('Max'),
-	CWidgetFieldItems::AGG_MIN  => _rc('Min'),
-	CWidgetFieldItems::AGG_AVG  => _rc('Avg'),
+	CWidgetFieldItems::AGG_LAST => _holoztek_rc('Latest'),
+	CWidgetFieldItems::AGG_MAX  => _holoztek_rc('Max'),
+	CWidgetFieldItems::AGG_MIN  => _holoztek_rc('Min'),
+	CWidgetFieldItems::AGG_AVG  => _holoztek_rc('Avg'),
 ];
 
 $agg_select = (new CSelect('agg_func'))
@@ -38,14 +38,14 @@ foreach ($agg_options as $val => $label) {
 $form->addItem(
 	(new CFormGrid())
 		->addItem([
-			(new CLabel(_rc('Item'), 'rc_item_name'))->setAsteriskMark(),
+			(new CLabel(_holoztek_rc('Item'), 'rc_item_name'))->setAsteriskMark(),
 			new CFormField(
 				(new CDiv([
 					(new CTextBox('name', $data['name'], true))
 						->setId('rc_item_name')
 						->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH)
-						->setAttribute('placeholder', _rc('Select item...')),
-					(new CButton('rc_item_select', _rc('Select')))
+						->setAttribute('placeholder', _holoztek_rc('Select item...')),
+					(new CButton('rc_item_select', _holoztek_rc('Select')))
 						->addClass(ZBX_STYLE_BTN_GREY)
 						->removeId(),
 					(new CInput('hidden', 'itemid', $data['itemid']))->setId('rc_itemid'),
@@ -53,16 +53,16 @@ $form->addItem(
 			),
 		])
 		->addItem([
-			new CLabel(_rc('Label'), 'rc_label'),
+			new CLabel(_holoztek_rc('Label'), 'rc_label'),
 			new CFormField(
 				(new CTextBox('label', $data['label']))
 					->setId('rc_label')
 					->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH)
-					->setAttribute('placeholder', _rc('defaults to item name'))
+					->setAttribute('placeholder', _holoztek_rc('defaults to item name'))
 			),
 		])
 		->addItem([
-			(new CLabel(_rc('Max value'), 'rc_max_val'))->setAsteriskMark(),
+			(new CLabel(_holoztek_rc('Max value'), 'rc_max_val'))->setAsteriskMark(),
 			new CFormField(
 				(new CTextBox('max_val', $data['max_val']))
 					->setId('rc_max_val')
@@ -71,11 +71,11 @@ $form->addItem(
 			),
 		])
 		->addItem([
-			new CLabel(_rc('Aggregation'), 'rc_agg_func'),
+			new CLabel(_holoztek_rc('Aggregation'), 'rc_agg_func'),
 			new CFormField($agg_select),
 		])
 )->addItem(
-	(new CScriptTag('rc_item_edit.init(' . json_encode([
+	(new CScriptTag('holoztek_rc_item_edit.init(' . json_encode([
 		'form_id'  => 'rc_item_edit_form',
 		'itemid'   => $data['itemid'],
 		'item_name'=> $data['name'],
@@ -83,13 +83,13 @@ $form->addItem(
 );
 
 $output = [
-	'header'        => $data['edit'] ? _rc('Update item') : _rc('New item'),
+	'header'        => $data['edit'] ? _holoztek_rc('Update item') : _holoztek_rc('New item'),
 	'body'          => $form->toString(),
 	'buttons'       => [[
-		'title'    => $data['edit'] ? _rc('Update') : _rc('Add'),
+		'title'    => $data['edit'] ? _holoztek_rc('Update') : _holoztek_rc('Add'),
 		'keepOpen' => true,
 		'isSubmit' => true,
-		'action'   => 'rc_item_edit.submit()',
+		'action'   => 'holoztek_rc_item_edit.submit()',
 	]],
 	'script_inline' => $this->readJsFile('item.edit.js.php', null, ''),
 ];

@@ -42,7 +42,7 @@
 ### RPM パッケージ（推奨）
 
 ```bash
-rpm -ivh zabbix-widget-radar-chart-1.0.0.noarch.rpm
+rpm -ivh zabbix-widget-radar-chart-1.0.1.noarch.rpm
 ```
 
 インストール後、Zabbix フロントエンドの **管理 → モジュール** からモジュールを有効化してください。
@@ -62,10 +62,10 @@ cp -r zabbix-widget-radar-chart ~/rpmbuild/SOURCES/
 cp zabbix-widget-radar-chart/packaging/rpm/zabbix-widget-radar-chart.spec ~/rpmbuild/SPECS/
 
 # .mo ファイルのコンパイル（msgfmt が必要）
-msgfmt ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/ja_JP/LC_MESSAGES/radar-chart.po \
-  -o ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/ja_JP/LC_MESSAGES/radar-chart.mo
-msgfmt ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/en_US/LC_MESSAGES/radar-chart.po \
-  -o ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/en_US/LC_MESSAGES/radar-chart.mo
+msgfmt ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/ja_JP/LC_MESSAGES/holoztek-radar-chart.po \
+  -o ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/ja_JP/LC_MESSAGES/holoztek-radar-chart.mo
+msgfmt ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/en_US/LC_MESSAGES/holoztek-radar-chart.po \
+  -o ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/en_US/LC_MESSAGES/holoztek-radar-chart.mo
 
 # RPM ビルド
 rpmbuild -bb ~/rpmbuild/SPECS/zabbix-widget-radar-chart.spec
@@ -82,6 +82,43 @@ rpmbuild -bb ~/rpmbuild/SPECS/zabbix-widget-radar-chart.spec
 | Grid | グリッド列数 × 行数（1〜6） |
 | Style | 線・点・面・チャート・タイトルの色とサイズ |
 | Time period | 集計期間（ダッシュボードの時間軸と連動） |
+
+## 旧ID（radar-chart）からのアップグレード手順
+
+v1.0.1 で、Zabbix モジュールの内部識別子（`manifest.json` の `id`）が
+`radar-chart` から `holoztek_radar_chart` へ変更されました。この変更は
+他ベンダーのモジュールとの名前衝突を避けるためのもので、v1.0.0 以前から
+アップグレードする場合は以下の手順が必要です（v1.0.1 以降からのアップグレード
+では不要です）。
+
+1. **パッケージの更新**（RPM/DEB を新バージョンで上書きインストール、または
+   ファイルを直接配置）。モジュール配置ディレクトリ名自体は互換性維持のため
+   `radar-chart` のまま変更されていません。
+2. **モジュールの再スキャンと再有効化**: Zabbix 管理画面 → 管理 → モジュール
+   で「今すぐスキャン」を実行し、新しい ID（`holoztek_radar_chart`）の
+   モジュールを検出させたうえで有効化します。旧 ID（`radar-chart`）の
+   モジュールが一覧に残っている場合は無効化（または削除）してください。
+3. **既存ダッシュボードのウィジェット type を更新**: 旧 ID で配置済みの
+   ウィジェットは、Zabbix API で `type` フィールドのみを書き換えることで
+   移行できます。`widgetid` ・設定フィールド（`fields`）・`reference` は
+   変更不要です。
+   ```php
+   // 例: dashboard.get で対象ダッシュボードを取得後、
+   // type が 'radar-chart' のウィジェットのみ書き換えて dashboard.update
+   foreach ($dashboard['pages'] as &$page) {
+       foreach ($page['widgets'] as &$widget) {
+           if ($widget['type'] === 'radar-chart') {
+               $widget['type'] = 'holoztek_radar_chart';
+           }
+       }
+   }
+   ```
+   同様のロジックを `dashboard.update` の呼び出し前に適用してください。
+4. **テンプレートダッシュボードも移行対象に含める**: 通常のダッシュボードに
+   加え、ホストテンプレートに含まれるテンプレートダッシュボード
+   （`templatedashboard.get` / `templatedashboard.update`）にも同じ手順を
+   適用してください。テンプレート側の移行漏れがあると、そのテンプレートを
+   使うホストの表示のみ旧 ID のまま残ってしまいます。
 
 ## License
 

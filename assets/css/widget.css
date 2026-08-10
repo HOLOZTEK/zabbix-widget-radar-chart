@@ -22,7 +22,7 @@
 }
 
 /* _contents div に flex column を設定（_body は display:contents のため toolbar/grid が直接の flex 子になる） */
-.dashboard-widget-radar-chart {
+.dashboard-widget-holoztek_radar_chart {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;

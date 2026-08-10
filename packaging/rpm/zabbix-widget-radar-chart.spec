@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.0
+Version:        1.0.1
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -35,6 +35,10 @@ Features:
 %install
 SRCDIR=%{_sourcedir}/zabbix-widget-radar-chart
 STAGEDIR=%{buildroot}/usr/share/zabbix-widget-radar-chart
+LICENSEDIR=%{buildroot}%{_licensedir}/%{name}
+
+install -d ${LICENSEDIR}
+install -m 644 ${SRCDIR}/LICENSE                                                ${LICENSEDIR}/
 
 install -d ${STAGEDIR}/actions
 install -d ${STAGEDIR}/assets/css
@@ -60,10 +64,10 @@ install -m 644 ${SRCDIR}/includes/CWidgetFieldItems.php                         
 install -m 644 ${SRCDIR}/includes/CWidgetFieldItemsView.php                         ${STAGEDIR}/includes/
 install -m 644 ${SRCDIR}/includes/helpers.php                                       ${STAGEDIR}/includes/
 install -m 644 ${SRCDIR}/includes/WidgetForm.php                                    ${STAGEDIR}/includes/
-install -m 644 ${SRCDIR}/locale/ja_JP/LC_MESSAGES/radar-chart.po                   ${STAGEDIR}/locale/ja_JP/LC_MESSAGES/
-install -m 644 ${SRCDIR}/locale/ja_JP/LC_MESSAGES/radar-chart.mo                   ${STAGEDIR}/locale/ja_JP/LC_MESSAGES/
-install -m 644 ${SRCDIR}/locale/en_US/LC_MESSAGES/radar-chart.po                   ${STAGEDIR}/locale/en_US/LC_MESSAGES/
-install -m 644 ${SRCDIR}/locale/en_US/LC_MESSAGES/radar-chart.mo                   ${STAGEDIR}/locale/en_US/LC_MESSAGES/
+install -m 644 ${SRCDIR}/locale/ja_JP/LC_MESSAGES/holoztek-radar-chart.po          ${STAGEDIR}/locale/ja_JP/LC_MESSAGES/
+install -m 644 ${SRCDIR}/locale/ja_JP/LC_MESSAGES/holoztek-radar-chart.mo          ${STAGEDIR}/locale/ja_JP/LC_MESSAGES/
+install -m 644 ${SRCDIR}/locale/en_US/LC_MESSAGES/holoztek-radar-chart.po          ${STAGEDIR}/locale/en_US/LC_MESSAGES/
+install -m 644 ${SRCDIR}/locale/en_US/LC_MESSAGES/holoztek-radar-chart.mo          ${STAGEDIR}/locale/en_US/LC_MESSAGES/
 install -m 644 ${SRCDIR}/views/item.edit.js.php                                     ${STAGEDIR}/views/
 install -m 644 ${SRCDIR}/views/item.edit.php                                        ${STAGEDIR}/views/
 install -m 644 ${SRCDIR}/views/widget.edit.js.php                                   ${STAGEDIR}/views/
@@ -71,6 +75,7 @@ install -m 644 ${SRCDIR}/views/widget.edit.php                                  
 install -m 644 ${SRCDIR}/views/widget.view.php                                      ${STAGEDIR}/views/
 
 %files
+%license %{_licensedir}/%{name}/LICENSE
 /usr/share/zabbix-widget-radar-chart/
 
 %post
@@ -97,6 +102,27 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Mon Aug 10 2026 claude <noreply> - 1.0.1-0
+- コードレビュー指摘対応: モジュール識別子（id/namespace/action/js_class）に
+  HOLOZTEKプレフィックスを付与し、他ベンダーモジュールとの将来的な衝突を回避
+  （manifest.jsonの id を holoztek_radar_chart、namespace を
+  HoloztekRadarChart、js_class を CWidgetHoloztekRadarChart、action を
+  widget.holoztek_radar_chart.view / .item.edit へ変更。author/description
+  も追加）。パッケージ名・モジュールディレクトリ名(radar-chart)は互換性
+  維持のため据え置き
+- グローバル関数_rc()を_holoztek_rc()へリネーム（function_existsガードは
+  維持）。gettextドメインをradar-chartからholoztek-radar-chartへ変更
+  （.po/.moファイル名も追随）
+- JSグローバルwindow.widget_radar_chart_form / window.rc_item_editを
+  それぞれwindow.holoztek_radar_chart_form / window.holoztek_rc_item_edit
+  へ変更し他モジュールとの識別子衝突リスクを解消
+- CSSの.dashboard-widget-radar-chartを.dashboard-widget-holoztek_radar_chart
+  へ変更（Zabbixコアがmanifest.idから自動導出するクラス名に追随）
+- RPMのLICENSE同梱を標準化: %license / %{_licensedir}経由でのインストールに
+  変更（従来はステージング先に生ファイルとして同梱するのみで、rpm標準の
+  ライセンスディレクトリには配置されていなかった）
+- README.mdに旧ID(radar-chart)からのアップグレード手順を追加
+
 * Mon Aug 10 2026 claude <noreply> - 1.0.0-0
 - 無償公開に向けたリリース。機能変更なし。反映内容:
   1. ライセンスをProprietaryからMITへ変更

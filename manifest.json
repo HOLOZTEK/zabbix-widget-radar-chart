@@ -1,13 +1,15 @@
 {
 	"manifest_version": 2.0,
-	"id": "radar-chart",
+	"id": "holoztek_radar_chart",
 	"type": "widget",
 	"name": "Radar Chart",
-	"namespace": "RadarChart",
-	"version": "1.0.0",
+	"namespace": "HoloztekRadarChart",
+	"author": "HOLOZTEK",
+	"description": "Zabbix dashboard widget that visualizes multiple host item values as radar charts arranged in a grid layout.",
+	"version": "1.0.1",
 	"widget": {
 		"size": {"width": 6, "height": 5},
-		"js_class": "CWidgetRadarChart",
+		"js_class": "CWidgetHoloztekRadarChart",
 		"in": {
 			"groupids": {"type": "_hostgroupid"},
 			"hostids": {"type": "_hostid"},
@@ -15,8 +17,8 @@
 		}
 	},
 	"actions": {
-		"widget.radar-chart.view": {"class": "WidgetView"},
-		"widget.radar-chart.item.edit": {
+		"widget.holoztek_radar_chart.view": {"class": "WidgetView"},
+		"widget.holoztek_radar_chart.item.edit": {
 			"class": "ItemEdit",
 			"view": "item.edit",
 			"layout": "layout.json"

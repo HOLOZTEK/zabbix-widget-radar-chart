@@ -1,6 +1,6 @@
 <?php declare(strict_types = 0);
 
-namespace Modules\RadarChart\Includes;
+namespace Modules\HoloztekRadarChart\Includes;
 
 use CButton,
 	CCol,
@@ -28,21 +28,21 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 		}
 
 		$agg_labels = [
-			CWidgetFieldItems::AGG_LAST => _rc('Latest'),
-			CWidgetFieldItems::AGG_MAX  => _rc('Max'),
-			CWidgetFieldItems::AGG_MIN  => _rc('Min'),
-			CWidgetFieldItems::AGG_AVG  => _rc('Avg'),
+			CWidgetFieldItems::AGG_LAST => _holoztek_rc('Latest'),
+			CWidgetFieldItems::AGG_MAX  => _holoztek_rc('Max'),
+			CWidgetFieldItems::AGG_MIN  => _holoztek_rc('Min'),
+			CWidgetFieldItems::AGG_AVG  => _holoztek_rc('Avg'),
 		];
 
 		$view = (new CTable())
 			->setId('list_' . $this->field->getName())
 			->setHeader([
 				'',
-				(new CColHeader(_rc('Item')))->addStyle('width: 28%'),
-				(new CColHeader(_rc('Label')))->addStyle('width: 18%'),
-				(new CColHeader(_rc('Max value')))->addStyle('width: 13%'),
-				(new CColHeader(_rc('Aggregation')))->addStyle('width: 13%'),
-				_rc('Action'),
+				(new CColHeader(_holoztek_rc('Item')))->addStyle('width: 28%'),
+				(new CColHeader(_holoztek_rc('Label')))->addStyle('width: 18%'),
+				(new CColHeader(_holoztek_rc('Max value')))->addStyle('width: 13%'),
+				(new CColHeader(_holoztek_rc('Aggregation')))->addStyle('width: 13%'),
+				_holoztek_rc('Action'),
 			]);
 
 		foreach ($items as $i => $item) {
@@ -59,17 +59,17 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 
 			$view->addRow([
 				(new CCol((new CDiv())->addClass(ZBX_STYLE_DRAG_ICON)))->addClass(ZBX_STYLE_TD_DRAG_ICON),
-				(new CDiv($item['name'] ?: _rc('(not selected)')))
+				(new CDiv($item['name'] ?: _holoztek_rc('(not selected)')))
 					->setTitle($item['name'])
 					->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CDiv($item['label']))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CDiv($item['max_val']))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CDiv($agg_labels[$item['agg_func']] ?? ''))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CList([
-					(new CButton('edit', _rc('Edit')))
+					(new CButton('edit', _holoztek_rc('Edit')))
 						->addClass(ZBX_STYLE_BTN_LINK)
 						->removeId(),
-					(new CButton('remove', _rc('Remove')))
+					(new CButton('remove', _holoztek_rc('Remove')))
 						->addClass(ZBX_STYLE_BTN_LINK)
 						->setEnabled($can_remove)
 						->removeId(),
@@ -82,7 +82,7 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 
 		$view->addRow(
 			(new CCol(
-				(new CButton('add', _rc('Add')))
+				(new CButton('add', _holoztek_rc('Add')))
 					->addClass(ZBX_STYLE_BTN_LINK)
 					->setEnabled($can_add && !$this->isDisabled())
 			))->setColSpan($view->getNumCols())

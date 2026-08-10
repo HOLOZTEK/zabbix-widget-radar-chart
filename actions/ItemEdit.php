@@ -1,12 +1,12 @@
 <?php declare(strict_types = 0);
 
-namespace Modules\RadarChart\Actions;
+namespace Modules\HoloztekRadarChart\Actions;
 
 use API,
 	CController,
 	CControllerResponseData;
 
-use Modules\RadarChart\Includes\CWidgetFieldItems;
+use Modules\HoloztekRadarChart\Includes\CWidgetFieldItems;
 
 class ItemEdit extends CController {
 
@@ -51,8 +51,8 @@ class ItemEdit extends CController {
 				$this->setResponse(
 					(new CControllerResponseData(['main_block' => json_encode([
 						'error' => [
-							'title'    => _rc('Cannot save item'),
-							'messages' => [_rc('Item is required.')]
+							'title'    => _holoztek_rc('Cannot save item'),
+							'messages' => [_holoztek_rc('Item is required.')]
 						]
 					], JSON_THROW_ON_ERROR)]))->disableView()
 				);
@@ -63,8 +63,8 @@ class ItemEdit extends CController {
 				$this->setResponse(
 					(new CControllerResponseData(['main_block' => json_encode([
 						'error' => [
-							'title'    => _rc('Cannot save item'),
-							'messages' => [_rc('Max value must be a positive number.')]
+							'title'    => _holoztek_rc('Cannot save item'),
+							'messages' => [_holoztek_rc('Max value must be a positive number.')]
 						]
 					], JSON_THROW_ON_ERROR)]))->disableView()
 				);
@@ -86,8 +86,8 @@ class ItemEdit extends CController {
 				$this->setResponse(
 					(new CControllerResponseData(['main_block' => json_encode([
 						'error' => [
-							'title'    => _rc('Cannot save item'),
-							'messages' => [_rc('Only numeric (float or unsigned integer) items are supported.')]
+							'title'    => _holoztek_rc('Cannot save item'),
+							'messages' => [_holoztek_rc('Only numeric (float or unsigned integer) items are supported.')]
 						]
 					], JSON_THROW_ON_ERROR)]))->disableView()
 				);

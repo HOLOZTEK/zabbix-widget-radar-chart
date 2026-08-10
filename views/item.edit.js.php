@@ -1,6 +1,6 @@
 <?php declare(strict_types = 0); ?>
 
-window.rc_item_edit = new class {
+window.holoztek_rc_item_edit = new class {
 
 	#overlay;
 	#dialogue;
@@ -85,7 +85,7 @@ window.rc_item_edit = new class {
 				}
 
 				const title    = exception?.error?.title;
-				const messages = exception?.error?.messages ?? [<?= json_encode(_rc('Unexpected server error.')) ?>];
+				const messages = exception?.error?.messages ?? [<?= json_encode(_holoztek_rc('Unexpected server error.')) ?>];
 
 				this.#form.parentNode.insertBefore(makeMessageBox('bad', messages, title)[0], this.#form);
 			})

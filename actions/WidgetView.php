@@ -1,12 +1,12 @@
 <?php declare(strict_types = 0);
 
-namespace Modules\RadarChart\Actions;
+namespace Modules\HoloztekRadarChart\Actions;
 
 use API;
 use CControllerDashboardWidgetView;
 use CControllerResponseData;
 
-use Modules\RadarChart\Includes\CWidgetFieldItems;
+use Modules\HoloztekRadarChart\Includes\CWidgetFieldItems;
 
 class WidgetView extends CControllerDashboardWidgetView {
 
@@ -48,7 +48,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		if (count($items_cfg) < CWidgetFieldItems::MIN_ITEMS) {
 			$this->setResponse(new CControllerResponseData([
 				'name'  => $widget_name,
-				'error' => _rc('At least 3 items must be configured.'),
+				'error' => _holoztek_rc('At least 3 items must be configured.'),
 				'user'  => ['debug_mode' => $this->getDebugMode()],
 			]));
 			return;
@@ -61,7 +61,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		if (!$groupids && !$hostids && !$host_patterns) {
 			$this->setResponse(new CControllerResponseData([
 				'name'  => $widget_name,
-				'error' => _rc('Specify at least one host or host group.'),
+				'error' => _holoztek_rc('Specify at least one host or host group.'),
 				'user'  => ['debug_mode' => $this->getDebugMode()],
 			]));
 			return;
@@ -108,7 +108,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		if (!$hosts_map) {
 			$this->setResponse(new CControllerResponseData([
 				'name'  => $widget_name,
-				'error' => _rc('No hosts found.'),
+				'error' => _holoztek_rc('No hosts found.'),
 				'user'  => ['debug_mode' => $this->getDebugMode()],
 			]));
 			return;
@@ -418,7 +418,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		}
 
 		$warnings = $limit_hit
-			? [_rc('History data limit reached. Aggregated values may be incomplete.')]
+			? [_holoztek_rc('History data limit reached. Aggregated values may be incomplete.')]
 			: [];
 
 		$this->setResponse(new CControllerResponseData([

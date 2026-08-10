@@ -1,6 +1,6 @@
 <?php declare(strict_types = 0);
 
-namespace Modules\RadarChart;
+namespace Modules\HoloztekRadarChart;
 
 use Zabbix\Core\CModule;
 
