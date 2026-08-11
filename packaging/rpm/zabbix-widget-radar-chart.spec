@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.3
+Version:        1.0.4
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -125,6 +125,27 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Tue Aug 11 2026 claude <noreply> - 1.0.4-0
+- コードレビュー issue #3 対応（6件）。
+  【高】Latest値取得がvalue_type単位のバッチ取得(limit=50000)だったため、
+  他itemidの履歴が多いと期間内に存在する別itemidの最新値が上限外に
+  押し出され欠落しうる不具合を修正。itemid単位でlimit=1の個別取得に変更
+  （actions/WidgetView.php）。
+  item編集モーダルのsubmitイベントリスナーにevent.preventDefault()が
+  無く、ネイティブフォーム送信とfetch送信が競合しうる不具合を修正
+  （views/item.edit.js.php）。
+  スクリプトタグ埋め込みのjson_encode呼び出しにJSON_HEX_TAG/HEX_AMP/
+  HEX_APOS/HEX_QUOTを追加し、アイテム名に</script>等が含まれる場合の
+  スクリプト崩壊リスクに対応（views/item.edit.php、item.edit.js.php。
+  API応答本体のjson_encodeは対象外）。
+  README.mdの手動インストール例を旧パス(modules/radar-chart)から
+  holoztek_radar_chartへ修正し、Zabbix 7/8のmodules・ui/modules
+  パス差異の注記を追加。
+  旧ID(radar-chart)からのアップグレード手順の説明を、実装（author不明の
+  旧ディレクトリは自動削除せず警告のみ）と一致するよう修正。
+  debian/controlにphp(>=8.3)の依存を追加（190/191はApache mod_php運用で
+  php-fpm未使用のためphp-fpmの依存は付与しない）。
+
 * Tue Aug 11 2026 claude <noreply> - 1.0.3-0
 - 【高】v1.0.2で追加した旧ディレクトリ自動削除の安全確認ロジックが
   不十分だった不具合を修正。旧ロジックはauthor欄が空の場合も無条件で

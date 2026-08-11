@@ -79,7 +79,7 @@ $form->addItem(
 		'form_id'  => 'rc_item_edit_form',
 		'itemid'   => $data['itemid'],
 		'item_name'=> $data['name'],
-	], JSON_THROW_ON_ERROR) . ');'))->setOnDocumentReady()
+	], JSON_THROW_ON_ERROR | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ');'))->setOnDocumentReady()
 );
 
 $output = [

@@ -180,35 +180,25 @@ class WidgetView extends CControllerDashboardWidgetView {
 
 		$last_result = []; // [item_name => [hostid => ['value'=>, 'clock'=>]]]
 		foreach ($last_need as $item_name => $hid_map) {
-			$vtype_iids = [];
-			$iid_hid    = [];
 			foreach ($hid_map as $hid => $info) {
-				$vtype_iids[$info['value_type']][] = $info['itemid'];
-				$iid_hid[$info['itemid']] = $hid;
-			}
-			foreach ($vtype_iids as $vtype => $iids) {
+				// itemid 単位で limit=1 取得する。他 itemid の履歴量に関わらず、
+				// この itemid の期間内最新値だけを確実に取得するため
+				// （他 itemid の大量履歴に押し出されて欠落することを防ぐ）。
 				$history = API::History()->get([
 					'output'    => ['itemid', 'clock', 'value'],
-					'itemids'   => $iids,
+					'itemids'   => [$info['itemid']],
 					'time_from' => $period_from,
 					'time_till' => $period_to,
-					'history'   => $vtype,
+					'history'   => $info['value_type'],
 					'sortfield' => 'clock',
 					'sortorder' => ZBX_SORT_DOWN,
-					'limit'     => $hist_limit,
+					'limit'     => 1,
 				]);
 
-				if (count($history) >= $hist_limit) {
-					$limit_hit = true;
-				}
-
-				foreach ($history as $row) {
-					$hid = $iid_hid[$row['itemid']] ?? null;
-					if ($hid === null) continue;
-					if (isset($last_result[$item_name][$hid])) continue; // 既により新しい値を採用済み
+				if ($history) {
 					$last_result[$item_name][$hid] = [
-						'value' => (float) $row['value'],
-						'clock' => (int) $row['clock'],
+						'value' => (float) $history[0]['value'],
+						'clock' => (int) $history[0]['clock'],
 					];
 				}
 			}

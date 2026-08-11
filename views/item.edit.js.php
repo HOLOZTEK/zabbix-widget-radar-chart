@@ -13,7 +13,10 @@ window.holoztek_rc_item_edit = new class {
 
 		this.#form.removeAttribute('style');
 		this.#overlay.recoverFocus();
-		this.#form.addEventListener('submit', () => this.submit());
+		this.#form.addEventListener('submit', (e) => {
+			e.preventDefault();
+			this.submit();
+		});
 
 		// アイテム選択ボタン
 		this.#dialogue.querySelector('[name="rc_item_select"]')
@@ -85,7 +88,7 @@ window.holoztek_rc_item_edit = new class {
 				}
 
 				const title    = exception?.error?.title;
-				const messages = exception?.error?.messages ?? [<?= json_encode(_holoztek_rc('Unexpected server error.')) ?>];
+				const messages = exception?.error?.messages ?? [<?= json_encode(_holoztek_rc('Unexpected server error.'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>];
 
 				this.#form.parentNode.insertBefore(makeMessageBox('bad', messages, title)[0], this.#form);
 			})

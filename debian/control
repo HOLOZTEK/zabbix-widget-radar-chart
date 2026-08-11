@@ -7,7 +7,7 @@ Standards-Version: 4.6.2
 
 Package: zabbix-widget-radar-chart
 Architecture: all
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, php (>= 2:8.3~)
 Description: Radar Chart widget for Zabbix dashboard
  Zabbix dashboard widget that visualizes multiple host item values
  as radar charts arranged in a grid layout.
