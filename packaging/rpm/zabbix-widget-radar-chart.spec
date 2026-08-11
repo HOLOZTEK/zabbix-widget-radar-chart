@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.1
+Version:        1.0.2
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -89,19 +89,56 @@ else
 fi
 
 SRCSTAGE=/usr/share/zabbix-widget-radar-chart
-MODDIR=${ZBXMODDIR}/radar-chart
+MODDIR=${ZBXMODDIR}/holoztek_radar_chart
+OLDMODDIR=${ZBXMODDIR}/radar-chart
 
+# 自パッケージ専有のディレクトリなので無条件で置き換える
 rm -rf "${MODDIR}"
 mkdir -p "${MODDIR}"
 cp -rp "${SRCSTAGE}/." "${MODDIR}/"
 
+# v1.0.1以前は modules/radar-chart という汎用的すぎる名前を使っていたため、
+# 別ベンダーのモジュールが同名ディレクトリを先に使っている可能性がある。
+# 中身がこのパッケージ由来（HOLOZTEK製 radar-chart）と確認できた場合のみ
+# 旧ディレクトリを削除する（無条件rm -rfは行わない）。
+if [ -f "${OLDMODDIR}/manifest.json" ]; then
+    ID_OK=0
+    if grep -Eq '"id"[[:space:]]*:[[:space:]]*"(radar-chart|holoztek_radar_chart)"' "${OLDMODDIR}/manifest.json"; then
+        ID_OK=1
+    fi
+    AUTHOR_VAL=$(grep -Eo '"author"[[:space:]]*:[[:space:]]*"[^"]*"' "${OLDMODDIR}/manifest.json" | sed -E 's/.*:[[:space:]]*"([^"]*)"/\1/')
+    AUTHOR_OK=0
+    if [ -z "${AUTHOR_VAL}" ] || [ "${AUTHOR_VAL}" = "HOLOZTEK" ]; then
+        AUTHOR_OK=1
+    fi
+    if [ "${ID_OK}" -eq 1 ] && [ "${AUTHOR_OK}" -eq 1 ]; then
+        rm -rf "${OLDMODDIR}"
+    else
+        echo "Warning: ${OLDMODDIR} exists but does not look like a HOLOZTEK radar-chart install. Leaving it in place; please check and remove it manually if appropriate." >&2
+    fi
+fi
+
 %preun
 if [ $1 -eq 0 ]; then
-    rm -rf /usr/share/zabbix/ui/modules/radar-chart 2>/dev/null || true
-    rm -rf /usr/share/zabbix/modules/radar-chart 2>/dev/null || true
+    rm -rf /usr/share/zabbix/ui/modules/holoztek_radar_chart 2>/dev/null || true
+    rm -rf /usr/share/zabbix/modules/holoztek_radar_chart 2>/dev/null || true
 fi
 
 %changelog
+* Tue Aug 11 2026 claude <noreply> - 1.0.2-0
+- 【高】モジュール配置ディレクトリ(modules/radar-chart)が汎用的すぎる名前で
+  他ベンダーモジュールとのファイルシステム上の衝突リスクが残っていた不具合を
+  修正。配置先を modules/holoztek_radar_chart へ変更（manifest.idは既に
+  holoztek_radar_chartのためdashboard widget typeの再変更は不要）。%post/
+  %preunのMODDIRを新パスへ変更し、旧ディレクトリ(modules/radar-chart)は
+  無条件rm -rfせず、manifest.jsonのid（radar-chartまたはholoztek_radar_chart）
+  とauthor（未設定または"HOLOZTEK"）を確認した上でHOLOZTEK由来と判定できた
+  場合のみ削除する安全確認ロジックを追加（DEB側debian/postinst・prermも
+  同様に修正）。tree-navigator v1.4.9で同種の不具合を修正した際に同じ脆弱な
+  パターンがradar-chartにも残っていることが判明したため対応
+- scripts/check-version-consistency.sh を追加し、manifest.json/RPM spec/
+  debian/changelogのバージョン一致をリリース前に検査可能に
+
 * Mon Aug 10 2026 claude <noreply> - 1.0.1-0
 - コードレビュー指摘対応: モジュール識別子（id/namespace/action/js_class）に
   HOLOZTEKプレフィックスを付与し、他ベンダーモジュールとの将来的な衝突を回避

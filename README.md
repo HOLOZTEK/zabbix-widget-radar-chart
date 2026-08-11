@@ -42,7 +42,7 @@
 ### RPM パッケージ（推奨）
 
 ```bash
-rpm -ivh zabbix-widget-radar-chart-1.0.1.noarch.rpm
+rpm -ivh zabbix-widget-radar-chart-1.0.2.noarch.rpm
 ```
 
 インストール後、Zabbix フロントエンドの **管理 → モジュール** からモジュールを有効化してください。
@@ -92,8 +92,13 @@ v1.0.1 で、Zabbix モジュールの内部識別子（`manifest.json` の `id`
 では不要です）。
 
 1. **パッケージの更新**（RPM/DEB を新バージョンで上書きインストール、または
-   ファイルを直接配置）。モジュール配置ディレクトリ名自体は互換性維持のため
-   `radar-chart` のまま変更されていません。
+   ファイルを直接配置）。v1.0.2 以降、モジュール配置ディレクトリ名も
+   `radar-chart` から `holoztek_radar_chart` へ変更されています
+   （他ベンダーのモジュールとのファイルシステム上の衝突を避けるため）。
+   RPM/DEB パッケージはインストール時に旧ディレクトリの中身が本パッケージ
+   由来であることを確認した上で自動的に移行・削除します。手動インストール
+   の場合は `/usr/share/zabbix/modules/radar-chart` を新しい
+   `holoztek_radar_chart` ディレクトリへ手動で移行してください。
 2. **モジュールの再スキャンと再有効化**: Zabbix 管理画面 → 管理 → モジュール
    で「今すぐスキャン」を実行し、新しい ID（`holoztek_radar_chart`）の
    モジュールを検出させたうえで有効化します。旧 ID（`radar-chart`）の

@@ -1,3 +1,14 @@
+zabbix-widget-radar-chart (1.0.2) unstable; urgency=medium
+
+  * 【高】モジュール配置ディレクトリ(modules/radar-chart)が汎用的すぎる名前で
+    他ベンダーモジュールとのファイルシステム上の衝突リスクが残っていた不具合を
+    修正。配置先をmodules/holoztek_radar_chartへ変更し、旧ディレクトリは
+    manifest.jsonのid/authorを確認しHOLOZTEK由来と判定できた場合のみ削除する
+    安全確認ロジックをpostinst/prermに追加（tree-navigator v1.4.9と同種の
+    修正）。scripts/check-version-consistency.shを追加。
+
+ -- claude <noreply@example.com>  Tue, 11 Aug 2026 09:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.1) unstable; urgency=medium
 
   * コードレビュー指摘対応（4点）: モジュール識別子（id/namespace/action/

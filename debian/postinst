@@ -13,11 +13,34 @@ case "$1" in
         fi
 
         SRCSTAGE=/usr/share/zabbix-widget-radar-chart
-        MODDIR=${ZBXMODDIR}/radar-chart
+        MODDIR=${ZBXMODDIR}/holoztek_radar_chart
+        OLDMODDIR=${ZBXMODDIR}/radar-chart
 
+        # 自パッケージ専有のディレクトリなので無条件で置き換える
         rm -rf "${MODDIR}"
         mkdir -p "${MODDIR}"
         cp -rp "${SRCSTAGE}/." "${MODDIR}/"
+
+        # v1.0.1以前は modules/radar-chart という汎用的すぎる名前を使っていたため、
+        # 別ベンダーのモジュールが同名ディレクトリを先に使っている可能性がある。
+        # 中身がこのパッケージ由来（HOLOZTEK製 radar-chart）と確認できた場合のみ
+        # 旧ディレクトリを削除する（無条件rm -rfは行わない）。
+        if [ -f "${OLDMODDIR}/manifest.json" ]; then
+            ID_OK=0
+            if grep -Eq '"id"[[:space:]]*:[[:space:]]*"(radar-chart|holoztek_radar_chart)"' "${OLDMODDIR}/manifest.json"; then
+                ID_OK=1
+            fi
+            AUTHOR_VAL=$(grep -Eo '"author"[[:space:]]*:[[:space:]]*"[^"]*"' "${OLDMODDIR}/manifest.json" | sed -E 's/.*:[[:space:]]*"([^"]*)"/\1/')
+            AUTHOR_OK=0
+            if [ -z "${AUTHOR_VAL}" ] || [ "${AUTHOR_VAL}" = "HOLOZTEK" ]; then
+                AUTHOR_OK=1
+            fi
+            if [ "${ID_OK}" -eq 1 ] && [ "${AUTHOR_OK}" -eq 1 ]; then
+                rm -rf "${OLDMODDIR}"
+            else
+                echo "Warning: ${OLDMODDIR} exists but does not look like a HOLOZTEK radar-chart install. Leaving it in place; please check and remove it manually if appropriate." >&2
+            fi
+        fi
         ;;
 esac
 

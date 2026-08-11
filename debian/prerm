@@ -3,8 +3,8 @@ set -e
 
 case "$1" in
     remove)
-        rm -rf /usr/share/zabbix/ui/modules/radar-chart 2>/dev/null || true
-        rm -rf /usr/share/zabbix/modules/radar-chart 2>/dev/null || true
+        rm -rf /usr/share/zabbix/ui/modules/holoztek_radar_chart 2>/dev/null || true
+        rm -rf /usr/share/zabbix/modules/holoztek_radar_chart 2>/dev/null || true
         ;;
 esac
 
