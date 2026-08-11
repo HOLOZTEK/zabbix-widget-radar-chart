@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.2
+Version:        1.0.3
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -99,22 +99,22 @@ cp -rp "${SRCSTAGE}/." "${MODDIR}/"
 
 # v1.0.1以前は modules/radar-chart という汎用的すぎる名前を使っていたため、
 # 別ベンダーのモジュールが同名ディレクトリを先に使っている可能性がある。
-# 中身がこのパッケージ由来（HOLOZTEK製 radar-chart）と確認できた場合のみ
-# 旧ディレクトリを削除する（無条件rm -rfは行わない）。
+# 自動削除は「author が HOLOZTEK と明記されている」または「id が既に
+# holoztek_radar_chart（新形式、当パッケージ以外が書く可能性は実質無い）」
+# の場合のみに限定する。旧形式id(radar-chart)かつauthor欄なしのケース
+# （v1.0.0のHOLOZTEK製と、authorを書いていない別ベンダー製が区別不能）は
+# 自動削除せず警告のみとし、手動確認・削除を促す。
 if [ -f "${OLDMODDIR}/manifest.json" ]; then
-    ID_OK=0
-    if grep -Eq '"id"[[:space:]]*:[[:space:]]*"(radar-chart|holoztek_radar_chart)"' "${OLDMODDIR}/manifest.json"; then
-        ID_OK=1
+    ID_VAL=$(grep -Eo '"id"[[:space:]]*:[[:space:]]*"[^"]*"' "${OLDMODDIR}/manifest.json" | head -1 | sed -E 's/.*:[[:space:]]*"([^"]*)"/\1/')
+    AUTHOR_VAL=$(grep -Eo '"author"[[:space:]]*:[[:space:]]*"[^"]*"' "${OLDMODDIR}/manifest.json" | head -1 | sed -E 's/.*:[[:space:]]*"([^"]*)"/\1/')
+    AUTO_OK=0
+    if [ "${AUTHOR_VAL}" = "HOLOZTEK" ] || [ "${ID_VAL}" = "holoztek_radar_chart" ]; then
+        AUTO_OK=1
     fi
-    AUTHOR_VAL=$(grep -Eo '"author"[[:space:]]*:[[:space:]]*"[^"]*"' "${OLDMODDIR}/manifest.json" | sed -E 's/.*:[[:space:]]*"([^"]*)"/\1/')
-    AUTHOR_OK=0
-    if [ -z "${AUTHOR_VAL}" ] || [ "${AUTHOR_VAL}" = "HOLOZTEK" ]; then
-        AUTHOR_OK=1
-    fi
-    if [ "${ID_OK}" -eq 1 ] && [ "${AUTHOR_OK}" -eq 1 ]; then
+    if [ "${AUTO_OK}" -eq 1 ]; then
         rm -rf "${OLDMODDIR}"
     else
-        echo "Warning: ${OLDMODDIR} exists but does not look like a HOLOZTEK radar-chart install. Leaving it in place; please check and remove it manually if appropriate." >&2
+        echo "Warning: ${OLDMODDIR} exists (id=${ID_VAL:-unknown}, author=${AUTHOR_VAL:-unset}) but could not be confirmed as a HOLOZTEK radar-chart install. Leaving it in place; please verify manually (e.g. namespace=RadarChart, js_class=CWidgetRadarChart indicates the old HOLOZTEK v1.0.0 install) and remove it yourself if appropriate. It may instead belong to a different vendor's module." >&2
     fi
 fi
 
@@ -125,6 +125,17 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Tue Aug 11 2026 claude <noreply> - 1.0.3-0
+- 【高】v1.0.2で追加した旧ディレクトリ自動削除の安全確認ロジックが
+  不十分だった不具合を修正。旧ロジックはauthor欄が空の場合も無条件で
+  HOLOZTEK由来と判定していたため、authorを書いていない別ベンダーの
+  radar-chartモジュール（旧id: radar-chart）を誤って削除しうる状態
+  だった。修正後は「author=="HOLOZTEK"」または「id==holoztek_radar_chart
+  （新形式、自パッケージ以外が書く可能性は実質無い）」の場合のみ
+  自動削除し、旧id・author空欄のケース（v1.0.0のHOLOZTEK製自身と
+  区別不能）は自動削除せず警告のみとして手動確認・削除を促す方式に
+  変更（%post。tree-navigator v1.4.10と同種の修正）。
+
 * Tue Aug 11 2026 claude <noreply> - 1.0.2-0
 - 【高】モジュール配置ディレクトリ(modules/radar-chart)が汎用的すぎる名前で
   他ベンダーモジュールとのファイルシステム上の衝突リスクが残っていた不具合を

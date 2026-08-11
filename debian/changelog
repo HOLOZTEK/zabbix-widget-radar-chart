@@ -1,3 +1,16 @@
+zabbix-widget-radar-chart (1.0.3) unstable; urgency=medium
+
+  * 【高】v1.0.2で追加した旧ディレクトリ自動削除の安全確認ロジックが
+    不十分だった不具合を修正。author欄が空の場合を無条件でHOLOZTEK由来と
+    判定していたため、authorを書いていない別ベンダーのradar-chart
+    モジュール（旧id: radar-chart）を誤って削除しうる状態だった。
+    author=="HOLOZTEK" または id=="holoztek_radar_chart"（新形式）の
+    場合のみ自動削除し、旧id・author空欄のケースは自動削除せず警告のみ
+    として手動確認・削除を促す方式に変更（postinst。tree-navigator
+    v1.4.10と同種の修正）。
+
+ -- claude <noreply@example.com>  Tue, 11 Aug 2026 09:30:00 +0000
+
 zabbix-widget-radar-chart (1.0.2) unstable; urgency=medium
 
   * 【高】モジュール配置ディレクトリ(modules/radar-chart)が汎用的すぎる名前で

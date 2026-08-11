@@ -42,7 +42,7 @@
 ### RPM パッケージ（推奨）
 
 ```bash
-rpm -ivh zabbix-widget-radar-chart-1.0.2.noarch.rpm
+rpm -ivh zabbix-widget-radar-chart-1.0.3.noarch.rpm
 ```
 
 インストール後、Zabbix フロントエンドの **管理 → モジュール** からモジュールを有効化してください。
