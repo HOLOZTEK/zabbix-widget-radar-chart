@@ -50,7 +50,9 @@ rpm -ivh zabbix-widget-radar-chart-1.0.3.noarch.rpm
 ### 手動インストール
 
 ```bash
-cp -r zabbix-widget-radar-chart /usr/share/zabbix/modules/radar-chart
+# Zabbix 7.x の場合: /usr/share/zabbix/modules/
+# Zabbix 8.x の場合: /usr/share/zabbix/ui/modules/
+cp -r zabbix-widget-radar-chart /usr/share/zabbix/modules/holoztek_radar_chart
 ```
 
 ## RPM ビルド手順
@@ -95,10 +97,19 @@ v1.0.1 で、Zabbix モジュールの内部識別子（`manifest.json` の `id`
    ファイルを直接配置）。v1.0.2 以降、モジュール配置ディレクトリ名も
    `radar-chart` から `holoztek_radar_chart` へ変更されています
    （他ベンダーのモジュールとのファイルシステム上の衝突を避けるため）。
-   RPM/DEB パッケージはインストール時に旧ディレクトリの中身が本パッケージ
-   由来であることを確認した上で自動的に移行・削除します。手動インストール
-   の場合は `/usr/share/zabbix/modules/radar-chart` を新しい
-   `holoztek_radar_chart` ディレクトリへ手動で移行してください。
+   RPM/DEB パッケージはインストール時に旧ディレクトリ（`radar-chart`）の
+   `manifest.json` を確認し、`author` が `HOLOZTEK` と明記されているか、
+   `id` が既に新形式（`holoztek_radar_chart`）である場合に限り、本パッケージ
+   由来と判断して自動的に削除します。v1.0.0 時点の `manifest.json` には
+   `author` が記載されていないため、v1.0.0 から直接アップグレードした場合は
+   この条件に該当せず、旧ディレクトリは自動削除されずに警告ログを出力した
+   うえでそのまま残ります（`author` 欄なしの旧ディレクトリは、他ベンダーの
+   同名モジュールである可能性と区別できないための安全策です）。この場合は
+   `namespace` が `RadarChart`・`js_class` が `CWidgetRadarChart` であること
+   を確認したうえで、`/usr/share/zabbix/modules/radar-chart`（または
+   `ui/modules/radar-chart`）を手動で削除してください。手動インストールの
+   場合も同様に、旧ディレクトリを新しい `holoztek_radar_chart` ディレクトリ
+   へ手動で移行してください。
 2. **モジュールの再スキャンと再有効化**: Zabbix 管理画面 → 管理 → モジュール
    で「今すぐスキャン」を実行し、新しい ID（`holoztek_radar_chart`）の
    モジュールを検出させたうえで有効化します。旧 ID（`radar-chart`）の

@@ -1,3 +1,16 @@
+zabbix-widget-radar-chart (1.0.4) unstable; urgency=medium
+
+  * コードレビュー issue #3 対応（6件）: Latest値取得をitemid単位の
+    limit=1取得に変更し期間内最新値の欠落を修正（actions/WidgetView.php）。
+    item編集モーダルのsubmitイベントにevent.preventDefault()を追加し
+    二重送信を防止。スクリプト埋め込みjson_encodeにJSON_HEX_*フラグを
+    追加しXSSリスクに対応。README.mdの手動インストール例・アップグレード
+    手順説明を実装と整合させて修正。debian/controlにphp(>=8.3)の依存を
+    追加（190/191はApache mod_php運用でphp-fpm未使用のためphp-fpmの
+    依存は付与しない）。
+
+ -- claude <noreply@example.com>  Tue, 11 Aug 2026 13:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.3) unstable; urgency=medium
 
   * 【高】v1.0.2で追加した旧ディレクトリ自動削除の安全確認ロジックが
