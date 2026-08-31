@@ -88,6 +88,9 @@ msgstr ""
 msgid "History data limit reached. Aggregated values may be incomplete."
 msgstr ""
 
+msgid "Large number of target hosts for Latest values. Dashboard rendering may be slow; narrow the host selection or use Max/Min/Avg aggregation."
+msgstr ""
+
 msgid "Showing all hosts — click to hide all-missing hosts"
 msgstr ""
 

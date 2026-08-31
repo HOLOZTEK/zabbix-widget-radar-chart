@@ -24,10 +24,10 @@
 | 項目 | 要件 |
 |------|------|
 | Zabbix | 7.0 以上 |
-| PHP | **8.3 以上**（8.0 系では PHP エンジンの既知バグにより SIGSEGV が発生します） |
+| PHP | **8.1 以上**（8.0 系では PHP エンジンの既知バグにより SIGSEGV が発生します） |
 | OS | Rocky Linux 9 / Rocky Linux 10（その他 RHEL 系 Linux） |
 
-> **注意**: PHP 8.0.x はダッシュボード描画時に複数ウィジェットのフォーム処理が並行実行される際、PHP エンジン内で SIGSEGV（セグメンテーション違反）が発生し、PHP-FPM ワーカーがクラッシュすることが確認されています。PHP 8.3 以上へのアップグレードで解消されます。
+> **注意**: PHP 8.0.x はダッシュボード描画時に複数ウィジェットのフォーム処理が並行実行される際、PHP エンジン内で SIGSEGV（セグメンテーション違反）が発生し、PHP-FPM ワーカーがクラッシュすることが確認されています。PHP 8.1 以上へのアップグレードで解消されます（実証済みの再現条件は 8.0.x のみ）。
 
 ## 制約事項
 
@@ -36,23 +36,30 @@
 - **最新値は「現在値」ではない**: Latest（最新値）は lastvalue ではなく、ダッシュボードで指定した期間内の最新の History 値です。過去の期間を指定した場合、その期間の終端に最も近い値が表示されます。
 - **Max/Min/Avg の集計元は期間により自動切替**: 指定期間が **2時間未満** の場合は History から、**2時間以上** の場合は Trend（`value_max`/`value_min`/`value_avg`+`num` による加重平均）から集計します。Trend にデータが存在しないアイテム・ホストの組み合わせは History に自動フォールバックします。Trend 使用時は Zabbix の trend 粒度（通常1時間単位）に基づく値になるため、瞬間的な変動は平滑化されます。
 - **大量データ集計の制限**: History 集計（2時間未満の期間、または Trend フォールバック時）では、取得件数が上限（50,000件）に達すると集計値が不完全になる場合があります。長期間・大量ホストを対象とした集計には制約があります。警告バナーが表示された場合は、集計期間を短くするか対象ホスト数を減らしてください（Trend 集計自体はデータ量が少ないためこの上限には通常到達しません）。
+- **Latest（最新値）と対象ホスト数**: Latest は itemid ごとに期間内最新値を個別取得（`History.get` を `limit=1` で1回ずつ）するため、正確性と引き換えに API 呼び出し回数が「対象ホスト数 × Latest 集計を指定した軸数」に比例して増えます。ホストグループや `*` パターンで数百〜数千ホストを対象にすると、ダッシュボード描画が遅くなる場合があります。目安値（既定500）を超えると警告バナーを表示します。対象ホストを絞り込むか、対象アイテムの集計方法を Max/Min/Avg（value_type 単位でバッチ取得）へ変更すると高速になります。
 
 ## インストール
 
 ### RPM パッケージ（推奨）
 
 ```bash
-rpm -ivh zabbix-widget-radar-chart-1.0.3.noarch.rpm
+rpm -ivh zabbix-widget-radar-chart-<version>.noarch.rpm
 ```
+
+RPM は `php` と `php-fpm`（いずれも 8.1 以上）を要求します（RHEL 系は Zabbix フロントエンドを PHP-FPM で運用するため）。Debian パッケージ（`.deb`）は `php (>= 2:8.1~)` のみを要求します（対象の Ubuntu 環境は Apache mod_php 運用で php-fpm を使用しないため）。
 
 インストール後、Zabbix フロントエンドの **管理 → モジュール** からモジュールを有効化してください。
 
 ### 手動インストール
 
+Zabbix のバージョンによってモジュール配置ディレクトリが異なります。
+
 ```bash
-# Zabbix 7.x の場合: /usr/share/zabbix/modules/
-# Zabbix 8.x の場合: /usr/share/zabbix/ui/modules/
+# Zabbix 7.x
 cp -r zabbix-widget-radar-chart /usr/share/zabbix/modules/holoztek_radar_chart
+
+# Zabbix 8.x
+cp -r zabbix-widget-radar-chart /usr/share/zabbix/ui/modules/holoztek_radar_chart
 ```
 
 ## RPM ビルド手順

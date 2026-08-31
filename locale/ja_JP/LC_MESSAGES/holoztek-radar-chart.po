@@ -91,6 +91,9 @@ msgstr "数値アイテム（float または unsigned integer）のみ選択で�
 msgid "History data limit reached. Aggregated values may be incomplete."
 msgstr "ヒストリーデータの件数上限に達しました。集計値が不完全な場合があります。"
 
+msgid "Large number of target hosts for Latest values. Dashboard rendering may be slow; narrow the host selection or use Max/Min/Avg aggregation."
+msgstr "最新値の対象ホストが多すぎます。ダッシュボードの描画が遅くなる場合があります。対象ホストを絞り込むか、集計方法を最大/最小/平均に変更してください。"
+
 msgid "Showing all hosts — click to hide all-missing hosts"
 msgstr "全ホストを表示中 — クリックで全欠損ホストを非表示"
 

@@ -129,12 +129,14 @@ class CWidgetHoloztekRadarChart extends CWidget {
 
 		this._body.appendChild(tb);
 
-		// ─── 集計データ不完全警告（History limit 到達時）──────────────
+		// ─── サーバー警告（History limit 到達／対象ホスト過多 など）────
+		// 文言はサーバー側で _holoztek_rc() 済み。複数種類ありうるので実文字列をそのまま表示する
+		// （以前は1種類目のみを前提に t() でハードコードしており、2種類目が誤表示になっていた）。
 		const warnings = this.#data.warnings ?? [];
 		if (warnings.length) {
 			const warn = document.createElement('div');
 			warn.className = 'rc-warning';
-			warn.textContent = t('History data limit reached. Aggregated values may be incomplete.');
+			warn.textContent = warnings.join('  /  ');
 			this._body.appendChild(warn);
 		}
 
