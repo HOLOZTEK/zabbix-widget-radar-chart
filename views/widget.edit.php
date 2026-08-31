@@ -64,6 +64,21 @@ use Modules\HoloztekRadarChart\Includes\CWidgetFieldItemsView;
 			]))->addClass('rc-style-block')
 		)
 	])
+	->addItem([
+		new CLabel(_holoztek_rc('Data limits')),
+		new CFormField(
+			(new CDiv([
+				(new CDiv([
+					(new CTag('span', true, _holoztek_rc('History rows')))->addClass('rc-style-label'),
+					(new CNumericBox('hist_limit', $data['fields']['hist_limit']->getValue(), 7)),
+				]))->addClass('rc-style-row'),
+				(new CDiv([
+					(new CTag('span', true, _holoztek_rc('Latest fetch warning')))->addClass('rc-style-label'),
+					(new CNumericBox('latest_warn_threshold', $data['fields']['latest_warn_threshold']->getValue(), 6)),
+				]))->addClass('rc-style-row'),
+			]))->addClass('rc-style-block')
+		)
+	])
 	->addField(
 		new CWidgetFieldTimePeriodView($data['fields']['time_period'])
 	)

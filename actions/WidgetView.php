@@ -163,7 +163,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		}
 
 		$limit_hit  = false;
-		$hist_limit = 50000;
+		$hist_limit = max(1000, (int) ($fields['hist_limit'] ?? 50000));
 
 		// Latest（AGG_LAST）はダッシュボード指定期間内の最新値を使う（現在値=lastvalueではない）。
 		// 取得は下のループで itemid 単位に sortfield=clock / sortorder=DESC / limit=1 の
@@ -417,7 +417,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 			if ((int) $ic['agg_func'] === CWidgetFieldItems::AGG_LAST) $latest_axis_count++;
 		}
 		$latest_fetch_ops            = $latest_axis_count * count($all_hids);
-		$latest_fetch_warn_threshold = 500;
+		$latest_fetch_warn_threshold = max(10, (int) ($fields['latest_warn_threshold'] ?? 500));
 
 		$warnings = [];
 		if ($limit_hit) {

@@ -79,6 +79,14 @@ class WidgetForm extends CWidgetForm {
 				(new CWidgetFieldIntegerBox('title_size', _('Title size'), 8, 24))->setDefault(11)
 			)
 			->addField(
+				(new CWidgetFieldIntegerBox('hist_limit', _('History data limit'), 1000, 1000000))
+					->setDefault(50000)
+			)
+			->addField(
+				(new CWidgetFieldIntegerBox('latest_warn_threshold', _('Latest fetch warning threshold'), 10, 100000))
+					->setDefault(500)
+			)
+			->addField(
 				(new CWidgetFieldTimePeriod('time_period', _('Time period')))
 					->setDefault([
 						CWidgetField::FOREIGN_REFERENCE_KEY => CWidgetField::createTypedReference(
