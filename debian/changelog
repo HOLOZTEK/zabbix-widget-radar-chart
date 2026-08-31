@@ -11,7 +11,7 @@ zabbix-widget-radar-chart (1.0.5) unstable; urgency=medium
     8.0.x のみ）。php-fpm 依存は引き続き RPM 側のみ（190/191 は Apache
     mod_php 運用のため .deb は php のみ要求）。
 
- -- claude <noreply@example.com>  Sun, 31 Aug 2026 12:00:00 +0000
+ -- claude <noreply@example.com>  Mon, 31 Aug 2026 12:00:00 +0000
 
 zabbix-widget-radar-chart (1.0.4) unstable; urgency=medium
 
