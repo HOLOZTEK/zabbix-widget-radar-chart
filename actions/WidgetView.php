@@ -166,9 +166,12 @@ class WidgetView extends CControllerDashboardWidgetView {
 		$hist_limit = 50000;
 
 		// Latest（AGG_LAST）はダッシュボード指定期間内の最新値を使う（現在値=lastvalueではない）。
-		// value_type ごとにバッチ取得し、clock降順の結果を先勝ちで拾うことでitemidごとの
-		// 「期間内最新」を1回のHistory.getで得る（グローバルなclock降順ソートは各itemid部分列内でも
-		// 降順を保つため、先に現れた行がそのitemidの最新値になる）。
+		// 取得は下のループで itemid 単位に sortfield=clock / sortorder=DESC / limit=1 の
+		// 個別 History.get を行う。value_type 単位でまとめて limit=N のバッチ取得にすると、
+		// 履歴量の多い別 itemid の行に押し出されて期間内最新値が欠落しうるため（v1.0.4 issue #3）、
+		// 正確性を優先して個別取得にしている。代償として API 呼び出し回数が
+		// 「対象ホスト数 × Latest 軸数」に比例するので、対象ホストが多い場合は
+		// doAction 末尾の $latest_fetch_ops 判定で描画遅延の警告を出す（issue #6）。
 		$last_need = []; // [item_name => [hostid => [itemid, value_type]]]
 		foreach ($items_cfg as $ic) {
 			if ($ic['agg_func'] != CWidgetFieldItems::AGG_LAST) continue;
@@ -407,9 +410,22 @@ class WidgetView extends CControllerDashboardWidgetView {
 			];
 		}
 
-		$warnings = $limit_hit
-			? [_holoztek_rc('History data limit reached. Aggregated values may be incomplete.')]
-			: [];
+		// Latest（個別 History.get）は「対象ホスト数 × Latest 軸数」に比例して API 呼び出しが
+		// 増える。正確性維持のため個別取得は変えず、閾値を超えたら描画遅延を警告する（issue #6）。
+		$latest_axis_count = 0;
+		foreach ($items_cfg as $ic) {
+			if ((int) $ic['agg_func'] === CWidgetFieldItems::AGG_LAST) $latest_axis_count++;
+		}
+		$latest_fetch_ops            = $latest_axis_count * count($all_hids);
+		$latest_fetch_warn_threshold = 500;
+
+		$warnings = [];
+		if ($limit_hit) {
+			$warnings[] = _holoztek_rc('History data limit reached. Aggregated values may be incomplete.');
+		}
+		if ($latest_fetch_ops > $latest_fetch_warn_threshold) {
+			$warnings[] = _holoztek_rc('Large number of target hosts for Latest values. Dashboard rendering may be slow; narrow the host selection or use Max/Min/Avg aggregation.');
+		}
 
 		$this->setResponse(new CControllerResponseData([
 			'name'       => $widget_name,

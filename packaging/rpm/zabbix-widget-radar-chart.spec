@@ -1,12 +1,12 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.4
+Version:        1.0.5
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
 BuildArch:      noarch
-Requires:       php >= 8.3
-Requires:       php-fpm >= 8.3
+Requires:       php >= 8.1
+Requires:       php-fpm >= 8.1
 
 %description
 Zabbix dashboard widget that visualizes multiple host item values
@@ -125,6 +125,21 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Sun Aug 31 2026 claude <noreply> - 1.0.5-0
+- コードレビュー issue #6 対応（5件）。
+  README.md の RPM インストール例を 1.0.3 固定から <version> プレースホルダへ。
+  README.md の手動インストール例を Zabbix 7.x / 8.x で別コマンドに分割。
+  actions/WidgetView.php の Latest 取得コメントを実装（itemid 単位 limit=1 の
+  個別取得）と整合させ、正確性と API 呼び出し回数のトレードオフを明記。
+  Latest の個別取得は「対象ホスト数 × Latest 軸数」に比例するため、閾値
+  （既定500）超過時に描画遅延の警告バナーを表示（正確性を損なうバッチ取得へは
+  戻さない）。あわせて警告文言をハードコードしていた JS 側の不具合（2種類目の
+  警告が誤表示になる）を修正し、サーバー生成の実文字列をそのまま表示するよう変更。
+  PHP 依存を 8.3 以上から 8.1 以上へ引き下げ（SIGSEGV の実証再現条件は 8.0.x
+  のみ。公開ステージングの PHP 8.1 依存とも整合）。php-fpm 依存は RPM 側のみ
+  維持（RHEL 系は PHP-FPM 運用。Debian パッケージは Apache mod_php 運用のため
+  php のみ要求）。
+
 * Tue Aug 11 2026 claude <noreply> - 1.0.4-0
 - コードレビュー issue #3 対応（6件）。
   【高】Latest値取得がvalue_type単位のバッチ取得(limit=50000)だったため、

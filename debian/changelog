@@ -1,3 +1,18 @@
+zabbix-widget-radar-chart (1.0.5) unstable; urgency=medium
+
+  * コードレビュー issue #6 対応（5件）: README.md の RPM インストール例を
+    <version> プレースホルダ化。手動インストール例を Zabbix 7.x / 8.x で
+    別コマンドに分割。actions/WidgetView.php の Latest 取得コメントを実装
+    （itemid 単位 limit=1 の個別取得）と整合させ、トレードオフを明記。
+    Latest 個別取得は「対象ホスト数 × Latest 軸数」に比例するため、閾値
+    （既定500）超過時に描画遅延の警告バナーを表示（正確性を損なうバッチ
+    取得へは戻さない）。警告文言をハードコードしていた JS 側の不具合を修正。
+    PHP 依存を 8.3 以上から 8.1 以上へ引き下げ（SIGSEGV の実証再現条件は
+    8.0.x のみ）。php-fpm 依存は引き続き RPM 側のみ（190/191 は Apache
+    mod_php 運用のため .deb は php のみ要求）。
+
+ -- claude <noreply@example.com>  Sun, 31 Aug 2026 12:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.4) unstable; urgency=medium
 
   * コードレビュー issue #3 対応（6件）: Latest値取得をitemid単位の
