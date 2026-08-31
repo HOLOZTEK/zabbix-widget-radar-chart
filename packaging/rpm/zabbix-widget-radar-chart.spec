@@ -125,7 +125,7 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
-* Sun Aug 31 2026 claude <noreply> - 1.0.5-0
+* Mon Aug 31 2026 claude <noreply> - 1.0.5-0
 - コードレビュー issue #6 対応（5件）。
   README.md の RPM インストール例を 1.0.3 固定から <version> プレースホルダへ。
   README.md の手動インストール例を Zabbix 7.x / 8.x で別コマンドに分割。
