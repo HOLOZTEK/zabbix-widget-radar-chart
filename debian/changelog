@@ -1,3 +1,16 @@
+zabbix-widget-radar-chart (1.0.6) unstable; urgency=medium
+
+  * History 集計の取得件数上限（従来ハードコード 50,000）と Latest 個別取得の
+    描画遅延警告閾値（従来ハードコード 500）をウィジェット設定画面から変更
+    できるようにした。includes/WidgetForm.php に IntegerBox フィールド
+    hist_limit（1,000〜1,000,000・既定 50,000）と latest_warn_threshold
+    （10〜100,000・既定 500）を追加。views/widget.edit.php に「Data limits」
+    セクションを追加。actions/WidgetView.php は両値をフィールドから読み、
+    未設定時は従来の既定値へフォールバック。locale ja_JP に訳を追加。
+    README.md を更新。
+
+ -- claude <noreply@example.com>  Tue, 01 Sep 2026 12:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.5) unstable; urgency=medium
 
   * コードレビュー issue #6 対応（5件）: README.md の RPM インストール例を
