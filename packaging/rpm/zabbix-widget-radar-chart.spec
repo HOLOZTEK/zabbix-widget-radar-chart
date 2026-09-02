@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.6
+Version:        1.0.7
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -20,6 +20,9 @@ Features:
   or average over time period; Max/Min/Avg automatically switch between History
   (under 2 hours) and Trend (2 hours or more, falling back to History per item/host
   when Trend data is absent)
+- Per-item axis scale (min/max normalization with 0-100% clipping) and optional
+  axis direction reversal; reversal affects the plotted position only, while
+  tooltip value, unit, aggregate and timestamp always use the real value
 - Numeric items only (float and unsigned integer); non-numeric items are rejected
 - Red axis labels for items with no data
 - Hover tooltip showing value, unit, and collection time (or aggregation period)
@@ -127,6 +130,28 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Wed Sep 02 2026 claude <noreply> - 1.0.7-0
+- リリース前の機能改善3点。
+  1. アイテムごとに最小値を設定可能にした（従来は最大値のみ）。描画位置を
+     (value - min) / (max - min) で 0〜1 に正規化し、範囲外は 0/1 にクリップ
+     する。min >= max は保存不可。負数レンジ（例 -100〜-30）も設定可能。
+     max の「正の数」制約は撤去。既存設定は min=0 補完で従来と同じ描画。
+  2. アイテムごとに軸方向（通常／反転）を選択可能にした。反転は
+     1 - ((value - min) / (max - min)) として「min→外周 / max→中心」に描画する。
+     反転するのはチャート上の描画位置のみで、ツールチップの値・単位・集計結果・
+     収集時刻は実値のまま。既存設定は direction=通常 補完。
+  3. 最終ページでホスト数がグリッドに満たない場合もセルサイズを固定した
+     （従来は残りチャートが空き領域まで拡大していた）。#effective_grid を常に
+     設定グリッド（列×行）に固定し、余りは空トラックとして残す。ページ切替で
+     チャートサイズ・軸ラベル位置・タイトルサイズが変化しない。
+  includes/CWidgetFieldItems.php にフィールド min_val（文字列）・direction
+  （int 0/1）を追加。views/item.edit.php に Min value 入力欄・Direction 選択を
+  追加。一覧テーブルは Max value 列を Range 列（min – max）へ置換し Direction
+  列を追加。actions/WidgetView.php は indicators に min_val/direction を付与。
+  正規化・反転・クリップは assets/js/class.widget.js 側で実施し、各軸 indicator
+  を min:0/max:1 に統一。locale ja_JP に Min value/Range/Direction/Normal/
+  Reversed とエラー文言を追加（en_US は msgid フォールバック）。README 更新。
+
 * Tue Sep 01 2026 claude <noreply> - 1.0.6-0
 - History 集計の取得件数上限（従来ハードコード 50,000）と、Latest 個別取得の
   描画遅延警告の閾値（従来ハードコード 500）をウィジェット設定画面から変更

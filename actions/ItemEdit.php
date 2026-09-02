@@ -16,13 +16,15 @@ class ItemEdit extends CController {
 
 	protected function checkInput(): bool {
 		$fields = [
-			'itemid'   => 'int32',
-			'name'     => 'string',
-			'label'    => 'string',
-			'max_val'  => 'string',
-			'agg_func' => 'in 0,1,2,3',
-			'edit'     => 'in 1',
-			'update'   => 'in 1',
+			'itemid'    => 'int32',
+			'name'      => 'string',
+			'label'     => 'string',
+			'min_val'   => 'string',
+			'max_val'   => 'string',
+			'direction' => 'in 0,1',
+			'agg_func'  => 'in 0,1,2,3',
+			'edit'      => 'in 1',
+			'update'    => 'in 1',
 		];
 
 		$ret = $this->validateInput($fields);
@@ -45,7 +47,13 @@ class ItemEdit extends CController {
 	protected function doAction(): void {
 		if ($this->hasInput('update')) {
 			$itemid  = (int) $this->getInput('itemid', 0);
+			$min_val = trim($this->getInput('min_val', ''));
 			$max_val = trim($this->getInput('max_val', ''));
+
+			// 最小値の空欄は 0 として扱う（旧設定・未入力互換）
+			if ($min_val === '') {
+				$min_val = '0';
+			}
 
 			if ($itemid <= 0) {
 				$this->setResponse(
@@ -59,12 +67,23 @@ class ItemEdit extends CController {
 				return;
 			}
 
-			if ($max_val === '' || !is_numeric($max_val) || (float) $max_val <= 0) {
+			$num_error = null;
+			if ($max_val === '' || !is_numeric($max_val)) {
+				$num_error = _holoztek_rc('Max value must be a number.');
+			}
+			elseif (!is_numeric($min_val)) {
+				$num_error = _holoztek_rc('Min value must be a number.');
+			}
+			elseif ((float) $min_val >= (float) $max_val) {
+				$num_error = _holoztek_rc('Minimum value must be less than maximum value.');
+			}
+
+			if ($num_error !== null) {
 				$this->setResponse(
 					(new CControllerResponseData(['main_block' => json_encode([
 						'error' => [
 							'title'    => _holoztek_rc('Cannot save item'),
-							'messages' => [_holoztek_rc('Max value must be a positive number.')]
+							'messages' => [$num_error]
 						]
 					], JSON_THROW_ON_ERROR)]))->disableView()
 				);
@@ -96,26 +115,30 @@ class ItemEdit extends CController {
 
 			$this->setResponse(
 				(new CControllerResponseData(['main_block' => json_encode([
-					'itemid'   => $itemid,
-					'name'     => $this->getInput('name', ''),
-					'label'    => $this->getInput('label', ''),
-					'max_val'  => $max_val,
-					'agg_func' => (int) $this->getInput('agg_func', CWidgetFieldItems::AGG_LAST),
-					'edit'     => $this->hasInput('edit') ? 1 : null,
+					'itemid'    => $itemid,
+					'name'      => $this->getInput('name', ''),
+					'label'     => $this->getInput('label', ''),
+					'min_val'   => $min_val,
+					'max_val'   => $max_val,
+					'direction' => (int) $this->getInput('direction', CWidgetFieldItems::DIR_NORMAL),
+					'agg_func'  => (int) $this->getInput('agg_func', CWidgetFieldItems::AGG_LAST),
+					'edit'      => $this->hasInput('edit') ? 1 : null,
 				], JSON_THROW_ON_ERROR)]))->disableView()
 			);
 			return;
 		}
 
 		$this->setResponse(new CControllerResponseData([
-			'action'   => $this->getAction(),
-			'itemid'   => (int) $this->getInput('itemid', 0),
-			'name'     => $this->getInput('name', ''),
-			'label'    => $this->getInput('label', ''),
-			'max_val'  => $this->getInput('max_val', '100'),
-			'agg_func' => (int) $this->getInput('agg_func', CWidgetFieldItems::AGG_LAST),
-			'edit'     => $this->hasInput('edit') ? 1 : null,
-			'user'     => ['debug_mode' => $this->getDebugMode()],
+			'action'    => $this->getAction(),
+			'itemid'    => (int) $this->getInput('itemid', 0),
+			'name'      => $this->getInput('name', ''),
+			'label'     => $this->getInput('label', ''),
+			'min_val'   => $this->getInput('min_val', '0'),
+			'max_val'   => $this->getInput('max_val', '100'),
+			'direction' => (int) $this->getInput('direction', CWidgetFieldItems::DIR_NORMAL),
+			'agg_func'  => (int) $this->getInput('agg_func', CWidgetFieldItems::AGG_LAST),
+			'edit'      => $this->hasInput('edit') ? 1 : null,
+			'user'      => ['debug_mode' => $this->getDebugMode()],
 		]));
 	}
 }

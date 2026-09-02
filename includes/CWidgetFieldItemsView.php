@@ -22,7 +22,7 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 		$items = $this->field->getValue();
 
 		// 最低 MIN_ITEMS 行を常に表示
-		$empty = ['itemid' => 0, 'name' => '', 'label' => '', 'max_val' => '100', 'agg_func' => 0];
+		$empty = ['itemid' => 0, 'name' => '', 'label' => '', 'min_val' => '0', 'max_val' => '100', 'direction' => 0, 'agg_func' => 0];
 		while (count($items) < CWidgetFieldItems::MIN_ITEMS) {
 			$items[] = $empty;
 		}
@@ -34,14 +34,20 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 			CWidgetFieldItems::AGG_AVG  => _holoztek_rc('Avg'),
 		];
 
+		$dir_labels = [
+			CWidgetFieldItems::DIR_NORMAL   => _holoztek_rc('Normal'),
+			CWidgetFieldItems::DIR_REVERSED => _holoztek_rc('Reversed'),
+		];
+
 		$view = (new CTable())
 			->setId('list_' . $this->field->getName())
 			->setHeader([
 				'',
-				(new CColHeader(_holoztek_rc('Item')))->addStyle('width: 28%'),
-				(new CColHeader(_holoztek_rc('Label')))->addStyle('width: 18%'),
-				(new CColHeader(_holoztek_rc('Max value')))->addStyle('width: 13%'),
-				(new CColHeader(_holoztek_rc('Aggregation')))->addStyle('width: 13%'),
+				(new CColHeader(_holoztek_rc('Item')))->addStyle('width: 26%'),
+				(new CColHeader(_holoztek_rc('Label')))->addStyle('width: 16%'),
+				(new CColHeader(_holoztek_rc('Range')))->addStyle('width: 13%'),
+				(new CColHeader(_holoztek_rc('Direction')))->addStyle('width: 12%'),
+				(new CColHeader(_holoztek_rc('Aggregation')))->addStyle('width: 12%'),
 				_holoztek_rc('Action'),
 			]);
 
@@ -49,12 +55,14 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 			$can_remove = count($items) > CWidgetFieldItems::MIN_ITEMS;
 
 			$column_data = [
-				new CVar('sort_order[items][]',          $i),
-				new CVar('items[' . $i . '][itemid]',   $item['itemid']),
-				new CVar('items[' . $i . '][name]',     $item['name']),
-				new CVar('items[' . $i . '][label]',    $item['label']),
-				new CVar('items[' . $i . '][max_val]',  $item['max_val']),
-				new CVar('items[' . $i . '][agg_func]', $item['agg_func']),
+				new CVar('sort_order[items][]',           $i),
+				new CVar('items[' . $i . '][itemid]',    $item['itemid']),
+				new CVar('items[' . $i . '][name]',      $item['name']),
+				new CVar('items[' . $i . '][label]',     $item['label']),
+				new CVar('items[' . $i . '][min_val]',   $item['min_val']),
+				new CVar('items[' . $i . '][max_val]',   $item['max_val']),
+				new CVar('items[' . $i . '][direction]', $item['direction']),
+				new CVar('items[' . $i . '][agg_func]',  $item['agg_func']),
 			];
 
 			$view->addRow([
@@ -63,7 +71,8 @@ class CWidgetFieldItemsView extends CWidgetFieldView {
 					->setTitle($item['name'])
 					->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CDiv($item['label']))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
-				(new CDiv($item['max_val']))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
+				(new CDiv($item['min_val'] . ' – ' . $item['max_val']))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
+				(new CDiv($dir_labels[$item['direction']] ?? ''))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CDiv($agg_labels[$item['agg_func']] ?? ''))->addClass(ZBX_STYLE_OVERFLOW_ELLIPSIS),
 				(new CList([
 					(new CButton('edit', _holoztek_rc('Edit')))

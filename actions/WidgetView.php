@@ -403,10 +403,12 @@ class WidgetView extends CControllerDashboardWidgetView {
 		foreach ($items_cfg as $ic) {
 			$ref = $ref_by_id[$ic['itemid']] ?? null;
 			$indicators[] = [
-				'label'   => $ic['label'] ?: ($ic['name'] ?: $ic['item_name']),
-				'max_val' => (float) ($ic['max_val'] ?: 100),
-				'units'   => $ref ? (string) $ref['units'] : '',
-				'agg'     => (int) $ic['agg_func'],
+				'label'     => $ic['label'] ?: ($ic['name'] ?: $ic['item_name']),
+				'min_val'   => (float) ($ic['min_val'] ?? 0),
+				'max_val'   => (float) ($ic['max_val'] ?: 100),
+				'direction' => (int) ($ic['direction'] ?? 0),
+				'units'     => $ref ? (string) $ref['units'] : '',
+				'agg'       => (int) $ic['agg_func'],
 			];
 		}
 
