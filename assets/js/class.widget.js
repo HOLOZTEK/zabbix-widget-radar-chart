@@ -141,15 +141,15 @@ class CWidgetHoloztekRadarChart extends CWidget {
 		}
 
 		// ─── グリッド構築 ──────────────────────────────────────────────
-		const count    = page_hosts.length;
-		const eff_cols = count <= 1 ? 1 : Math.min(count, grid_columns);
-		const eff_rows = count <= 1 ? 1 : Math.ceil(count / eff_cols);
-		this.#effective_grid = {columns: eff_cols, rows: eff_rows};
+		// ページ内のホスト数に関わらず、設定されたグリッド（列×行）でセルサイズを固定する。
+		// 最終ページでホストがグリッドに満たない場合、余ったセルは空トラックとして残し、
+		// レーダーチャートのサイズ・軸ラベル位置・タイトルサイズがページ切替で変化しないようにする。
+		this.#effective_grid = {columns: grid_columns, rows: grid_rows};
 
 		const grid = document.createElement('div');
 		grid.className = 'rc-grid';
-		grid.style.gridTemplateColumns = `repeat(${eff_cols}, 1fr)`;
-		grid.style.gridTemplateRows    = `repeat(${eff_rows}, 1fr)`;
+		grid.style.gridTemplateColumns = `repeat(${grid_columns}, 1fr)`;
+		grid.style.gridTemplateRows    = `repeat(${grid_rows}, 1fr)`;
 		this._body.appendChild(grid);
 
 		const cell_size = this.#computeCellSize();
@@ -262,6 +262,24 @@ class CWidgetHoloztekRadarChart extends CWidget {
 
 		const {period_from, period_to} = this.#data;
 
+		// ─── チャート描画位置の正規化 ─────────────────────────────────
+		// 各軸を (value - min) / (max - min) で 0.0〜1.0 に正規化し、範囲外は 0/1 にクリップする。
+		// direction=1（反転）の軸は 1 - n として「min→外周 / max→中心」に描画する。
+		// ここで変換するのは描画位置だけで、ツールチップの値・単位・収集時刻・集計結果は
+		// すべて host.values（実値）をそのまま使う。データなしの軸は方向に関わらず中心(0)。
+		const no_data     = host.no_data_indices ?? [];
+		const plot_values = (host.values ?? []).map((v, i) => {
+			if (no_data.includes(i)) return 0;
+			const ind  = indicators[i] ?? {};
+			const min  = ind.min_val ?? 0;
+			const max  = ind.max_val ?? 1;
+			const span = max - min;
+			let n = span > 0 ? (v - min) / span : 0;
+			n = Math.max(0, Math.min(1, n));
+			if (ind.direction === 1) n = 1 - n;
+			return n;
+		});
+
 		return {
 			backgroundColor: 'transparent',
 			title: {
@@ -307,9 +325,11 @@ class CWidgetHoloztekRadarChart extends CWidget {
 				},
 			},
 			radar: {
+				// 実値の正規化・反転・クリップは plot_values 側で行うため、軸スケールは 0〜1 に固定する
 				indicator: indicators.map((ind, i) => ({
 					name:  CWidgetHoloztekRadarChart.#wrapLabel(ind.label, 8),
-					max:   ind.max_val,
+					min:   0,
+					max:   1,
 					color: (host.no_data_indices ?? []).includes(i) ? '#e53935' : undefined,
 				})),
 				radius:    '58%',
@@ -326,7 +346,7 @@ class CWidgetHoloztekRadarChart extends CWidget {
 			series: [{
 				type: 'radar',
 				data: [{
-					value:      host.values,
+					value:      plot_values,
 					name:       host.name,
 					areaStyle:  {color: fill_color, opacity: fill_opacity},
 					lineStyle:  {width: line_width, color: line_color},

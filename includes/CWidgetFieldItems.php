@@ -13,6 +13,9 @@ class CWidgetFieldItems extends CWidgetField {
 	public const AGG_MIN  = 2;
 	public const AGG_AVG  = 3;
 
+	public const DIR_NORMAL   = 0;
+	public const DIR_REVERSED = 1;
+
 	public const MIN_ITEMS = 3;
 	public const MAX_ITEMS = 8;
 
@@ -29,11 +32,13 @@ class CWidgetFieldItems extends CWidgetField {
 		$this->value = array_values(array_filter(array_map(static function ($item) {
 			if (!is_array($item)) return null;
 			return [
-				'itemid'   => (int) ($item['itemid'] ?? 0),
-				'name'     => (string) ($item['name'] ?? ''),
-				'label'    => (string) ($item['label'] ?? ''),
-				'max_val'  => (string) ($item['max_val'] ?? '100'),
-				'agg_func' => (int) ($item['agg_func'] ?? self::AGG_LAST),
+				'itemid'    => (int) ($item['itemid'] ?? 0),
+				'name'      => (string) ($item['name'] ?? ''),
+				'label'     => (string) ($item['label'] ?? ''),
+				'min_val'   => (string) ($item['min_val'] ?? '0'),
+				'max_val'   => (string) ($item['max_val'] ?? '100'),
+				'direction' => (int) ($item['direction'] ?? self::DIR_NORMAL),
+				'agg_func'  => (int) ($item['agg_func'] ?? self::AGG_LAST),
 			];
 		}, $items)));
 
@@ -44,7 +49,7 @@ class CWidgetFieldItems extends CWidgetField {
 		$items = [];
 
 		foreach ($values as $name => $value) {
-			if (preg_match('/^items\.(\d+)\.(itemid|name|label|max_val|agg_func)$/', $name, $m)) {
+			if (preg_match('/^items\.(\d+)\.(itemid|name|label|min_val|max_val|direction|agg_func)$/', $name, $m)) {
 				$items[(int) $m[1]][$m[2]] = $value;
 			}
 		}
@@ -55,21 +60,25 @@ class CWidgetFieldItems extends CWidgetField {
 
 	protected function getValidationRules(bool $strict = false): array {
 		return ['type' => API_OBJECTS, 'fields' => [
-			'itemid'   => ['type' => API_INT32],
-			'name'     => ['type' => API_STRING_UTF8, 'length' => 255],
-			'label'    => ['type' => API_STRING_UTF8, 'length' => 255],
-			'max_val'  => ['type' => API_STRING_UTF8, 'length' => 64],
-			'agg_func' => ['type' => API_INT32, 'in' => '0:3'],
+			'itemid'    => ['type' => API_INT32],
+			'name'      => ['type' => API_STRING_UTF8, 'length' => 255],
+			'label'     => ['type' => API_STRING_UTF8, 'length' => 255],
+			'min_val'   => ['type' => API_STRING_UTF8, 'length' => 64],
+			'max_val'   => ['type' => API_STRING_UTF8, 'length' => 64],
+			'direction' => ['type' => API_INT32, 'in' => '0:1'],
+			'agg_func'  => ['type' => API_INT32, 'in' => '0:3'],
 		]];
 	}
 
 	public function toApi(array &$widget_fields = []): void {
 		foreach ($this->getValue() as $i => $item) {
-			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_STR,   'name' => 'items.'.$i.'.itemid',   'value' => (string) $item['itemid']];
-			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_STR,   'name' => 'items.'.$i.'.name',     'value' => $item['name']];
-			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_STR,   'name' => 'items.'.$i.'.label',    'value' => $item['label']];
-			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_STR,   'name' => 'items.'.$i.'.max_val',  'value' => $item['max_val']];
-			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_INT32, 'name' => 'items.'.$i.'.agg_func', 'value' => $item['agg_func']];
+			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_STR,   'name' => 'items.'.$i.'.itemid',    'value' => (string) $item['itemid']];
+			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_STR,   'name' => 'items.'.$i.'.name',      'value' => $item['name']];
+			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_STR,   'name' => 'items.'.$i.'.label',     'value' => $item['label']];
+			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_STR,   'name' => 'items.'.$i.'.min_val',   'value' => $item['min_val']];
+			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_STR,   'name' => 'items.'.$i.'.max_val',   'value' => $item['max_val']];
+			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_INT32, 'name' => 'items.'.$i.'.direction', 'value' => $item['direction']];
+			$widget_fields[] = ['type' => ZBX_WIDGET_FIELD_TYPE_INT32, 'name' => 'items.'.$i.'.agg_func',  'value' => $item['agg_func']];
 		}
 	}
 }

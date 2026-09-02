@@ -61,8 +61,23 @@ msgstr "最小"
 msgid "Avg"
 msgstr "平均"
 
+msgid "Min value"
+msgstr "最小値"
+
 msgid "Max value"
 msgstr "最大値"
+
+msgid "Range"
+msgstr "範囲"
+
+msgid "Direction"
+msgstr "方向"
+
+msgid "Normal"
+msgstr "通常"
+
+msgid "Reversed"
+msgstr "反転"
 
 msgid "Select item..."
 msgstr "アイテムを選択..."
@@ -91,8 +106,14 @@ msgstr "アイテムを保存できません"
 msgid "Item is required."
 msgstr "アイテムは必須です。"
 
-msgid "Max value must be a positive number."
-msgstr "最大値には正の数を入力してください。"
+msgid "Max value must be a number."
+msgstr "最大値には数値を入力してください。"
+
+msgid "Min value must be a number."
+msgstr "最小値には数値を入力してください。"
+
+msgid "Minimum value must be less than maximum value."
+msgstr "最小値は最大値より小さい値にしてください。"
 
 msgid "Only numeric (float or unsigned integer) items are supported."
 msgstr "数値アイテム（float または unsigned integer）のみ選択できます。"

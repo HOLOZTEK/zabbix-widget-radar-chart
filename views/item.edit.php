@@ -35,6 +35,19 @@ foreach ($agg_options as $val => $label) {
 	$agg_select->addOption(new CSelectOption($val, $label));
 }
 
+$dir_options = [
+	CWidgetFieldItems::DIR_NORMAL   => _holoztek_rc('Normal'),
+	CWidgetFieldItems::DIR_REVERSED => _holoztek_rc('Reversed'),
+];
+
+$dir_select = (new CSelect('direction'))
+	->setId('rc_direction')
+	->setValue($data['direction']);
+
+foreach ($dir_options as $val => $label) {
+	$dir_select->addOption(new CSelectOption($val, $label));
+}
+
 $form->addItem(
 	(new CFormGrid())
 		->addItem([
@@ -62,6 +75,15 @@ $form->addItem(
 			),
 		])
 		->addItem([
+			(new CLabel(_holoztek_rc('Min value'), 'rc_min_val'))->setAsteriskMark(),
+			new CFormField(
+				(new CTextBox('min_val', $data['min_val']))
+					->setId('rc_min_val')
+					->setWidth(ZBX_TEXTAREA_TINY_WIDTH)
+					->setAttribute('placeholder', '0')
+			),
+		])
+		->addItem([
 			(new CLabel(_holoztek_rc('Max value'), 'rc_max_val'))->setAsteriskMark(),
 			new CFormField(
 				(new CTextBox('max_val', $data['max_val']))
@@ -69,6 +91,10 @@ $form->addItem(
 					->setWidth(ZBX_TEXTAREA_TINY_WIDTH)
 					->setAttribute('placeholder', '100')
 			),
+		])
+		->addItem([
+			new CLabel(_holoztek_rc('Direction'), 'rc_direction'),
+			new CFormField($dir_select),
 		])
 		->addItem([
 			new CLabel(_holoztek_rc('Aggregation'), 'rc_agg_func'),

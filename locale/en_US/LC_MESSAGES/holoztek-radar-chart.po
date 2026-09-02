@@ -58,7 +58,22 @@ msgstr ""
 msgid "Avg"
 msgstr ""
 
+msgid "Min value"
+msgstr ""
+
 msgid "Max value"
+msgstr ""
+
+msgid "Range"
+msgstr ""
+
+msgid "Direction"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Reversed"
 msgstr ""
 
 msgid "Select item..."
@@ -88,7 +103,13 @@ msgstr ""
 msgid "Item is required."
 msgstr ""
 
-msgid "Max value must be a positive number."
+msgid "Max value must be a number."
+msgstr ""
+
+msgid "Min value must be a number."
+msgstr ""
+
+msgid "Minimum value must be less than maximum value."
 msgstr ""
 
 msgid "Only numeric (float or unsigned integer) items are supported."

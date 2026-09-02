@@ -1,3 +1,20 @@
+zabbix-widget-radar-chart (1.0.7) unstable; urgency=medium
+
+  * リリース前の機能改善3点。(1) アイテムごとに最小値を設定可能にし、
+    描画位置を (value-min)/(max-min) で 0〜1 に正規化・クリップする。
+    min>=max は保存不可、負数レンジ可、max の正数制約は撤去。
+    (2) アイテムごとに軸方向（通常／反転）を選択可能にした。反転は
+    描画位置のみで、ツールチップの値・単位・集計結果・時刻は実値のまま。
+    (3) 最終ページでホストがグリッドに満たない場合もセルサイズを固定
+    （従来は残チャートが空き領域まで拡大していた）。
+    includes/CWidgetFieldItems.php にフィールド min_val/direction を追加、
+    views/item.edit.php に入力欄追加、一覧は Range 列＋Direction 列へ。
+    正規化・反転は assets/js/class.widget.js 側で実施。locale ja_JP に
+    Min value/Range/Direction/Normal/Reversed とエラー文言を追加。
+    既存設定は min=0 / direction=通常 補完で従来と同じ描画。README 更新。
+
+ -- claude <noreply@example.com>  Wed, 02 Sep 2026 12:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.6) unstable; urgency=medium
 
   * History 集計の取得件数上限（従来ハードコード 50,000）と Latest 個別取得の
