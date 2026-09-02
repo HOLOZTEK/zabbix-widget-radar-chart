@@ -37,6 +37,15 @@ msgstr "チャート"
 msgid "Title"
 msgstr "タイトル"
 
+msgid "Data limits"
+msgstr "データ上限"
+
+msgid "History rows"
+msgstr "ヒストリー件数上限"
+
+msgid "Latest fetch warning"
+msgstr "最新値取得の警告閾値"
+
 msgid "Aggregation"
 msgstr "集計方法"
 

@@ -34,6 +34,15 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+msgid "Data limits"
+msgstr ""
+
+msgid "History rows"
+msgstr ""
+
+msgid "Latest fetch warning"
+msgstr ""
+
 msgid "Aggregation"
 msgstr ""
 

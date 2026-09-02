@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.5
+Version:        1.0.6
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -25,6 +25,8 @@ Features:
 - Hover tooltip showing value, unit, and collection time (or aggregation period)
 - Toggle button to hide hosts where all items are missing
 - Warning banner when History data limit is reached during aggregation
+  (History row limit and Latest-fetch warning threshold are configurable
+  from the widget settings)
 - Pagination when displayed hosts exceed the grid capacity
 - Customizable style: line, point, fill, chart, and title color/size
 - Japanese and English locale support
@@ -125,6 +127,21 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Tue Sep 01 2026 claude <noreply> - 1.0.6-0
+- History 集計の取得件数上限（従来ハードコード 50,000）と、Latest 個別取得の
+  描画遅延警告の閾値（従来ハードコード 500）をウィジェット設定画面から変更
+  できるようにした。
+  includes/WidgetForm.php に IntegerBox フィールド hist_limit（範囲
+  1,000〜1,000,000・既定 50,000）と latest_warn_threshold（範囲
+  10〜100,000・既定 500）を追加。views/widget.edit.php の Style ブロック直後に
+  「Data limits」セクション（History rows / Latest fetch warning）を追加。
+  actions/WidgetView.php は両値をフィールドから読み、未設定時は従来の既定値に
+  フォールバック（$hist_limit は下限 1,000、$latest_fetch_warn_threshold は
+  下限 10 でクランプ）。
+  locale ja_JP に「Data limits」「History rows」「Latest fetch warning」の
+  訳を追加（en_US は msgid フォールバック）。README.md の機能・制約・設定項目
+  表を更新。
+
 * Mon Aug 31 2026 claude <noreply> - 1.0.5-0
 - コードレビュー issue #6 対応（5件）。
   README.md の RPM インストール例を 1.0.3 固定から <version> プレースホルダへ。
