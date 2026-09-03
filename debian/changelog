@@ -12,8 +12,13 @@ zabbix-widget-radar-chart (1.0.7) unstable; urgency=medium
     正規化・反転は assets/js/class.widget.js 側で実施。locale ja_JP に
     Min value/Range/Direction/Normal/Reversed とエラー文言を追加。
     既存設定は min=0 / direction=通常 補完で従来と同じ描画。README 更新。
+  * (2026-09-03 資材差し替え・バージョン据え置き) actions/WidgetView.php の
+    max_val 補完を `?:` から `??` へ変更。min=-50 / max=0 のように max が 0 の
+    負数レンジで描画側 max が 100 に化ける不具合を修正。max_val 未設定の旧設定は
+    従来どおり 100 補完。scripts/test-normalization.js を追加。tag v1.0.7 を
+    本コミットへ移動し配布資材を再ビルド。
 
- -- claude <noreply@example.com>  Wed, 02 Sep 2026 12:00:00 +0000
+ -- claude <noreply@example.com>  Thu, 03 Sep 2026 12:00:00 +0000
 
 zabbix-widget-radar-chart (1.0.6) unstable; urgency=medium
 
