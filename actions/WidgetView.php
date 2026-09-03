@@ -405,7 +405,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 			$indicators[] = [
 				'label'     => $ic['label'] ?: ($ic['name'] ?: $ic['item_name']),
 				'min_val'   => (float) ($ic['min_val'] ?? 0),
-				'max_val'   => (float) ($ic['max_val'] ?: 100),
+				'max_val'   => (float) ($ic['max_val'] ?? 100),
 				'direction' => (int) ($ic['direction'] ?? 0),
 				'units'     => $ref ? (string) $ref['units'] : '',
 				'agg'       => (int) $ic['agg_func'],

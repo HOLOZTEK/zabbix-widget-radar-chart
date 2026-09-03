@@ -267,6 +267,7 @@ class CWidgetHoloztekRadarChart extends CWidget {
 		// direction=1（反転）の軸は 1 - n として「min→外周 / max→中心」に描画する。
 		// ここで変換するのは描画位置だけで、ツールチップの値・単位・収集時刻・集計結果は
 		// すべて host.values（実値）をそのまま使う。データなしの軸は方向に関わらず中心(0)。
+		// この式を変更した場合は scripts/test-normalization.js の normalize() も更新すること。
 		const no_data     = host.no_data_indices ?? [];
 		const plot_values = (host.values ?? []).map((v, i) => {
 			if (no_data.includes(i)) return 0;

@@ -151,6 +151,12 @@ fi
   正規化・反転・クリップは assets/js/class.widget.js 側で実施し、各軸 indicator
   を min:0/max:1 に統一。locale ja_JP に Min value/Range/Direction/Normal/
   Reversed とエラー文言を追加（en_US は msgid フォールバック）。README 更新。
+- （2026-09-03 資材差し替え・バージョン据え置き）actions/WidgetView.php で
+  max_val の補完を PHP falsy 演算子 `?:` から null 合体 `??` へ変更。min=-50 /
+  max=0 のように max がちょうど 0 の負数レンジで、描画側 indicator の max が
+  100 に化けて正規化がずれる不具合を修正。旧設定で max_val キー未設定時は
+  従来どおり 100 へ補完。回帰確認スクリプト scripts/test-normalization.js を
+  追加（node 実行）。tag v1.0.7 を本修正コミットへ移動し配布資材を再ビルド。
 
 * Tue Sep 01 2026 claude <noreply> - 1.0.6-0
 - History 集計の取得件数上限（従来ハードコード 50,000）と、Latest 個別取得の
