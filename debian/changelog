@@ -1,3 +1,18 @@
+zabbix-widget-radar-chart (1.0.8) unstable; urgency=medium
+
+  * コードレビュー issue #13 対応（[P2] 1件）。アイテムごとの min_val /
+    max_val の数値性と min < max を、ウィジェット保存／API 経路
+    (includes/CWidgetFieldItems.php::validate()) でも検証するようにした。
+    従来はアイテム編集モーダル (actions/ItemEdit.php) の AJAX 保存経路
+    でしか検証しておらず、Zabbix API・dashboard.update・hidden field 改変・
+    移行データ経由で min >= max や非数値が保存されうる状態だった。
+    min_val 未設定は互換目的で 0 扱い、max_val は必須かつ数値、direction の
+    0/1 は既存の getValidationRules() 側で担保。既存設定 (max_val のみ・
+    min_val / direction 未設定) は従来どおり保存・表示できる。
+    scripts/test-normalization.js に保存バリデーションのケースを追加。
+
+ -- claude <noreply@example.com>  Thu, 03 Sep 2026 15:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.7) unstable; urgency=medium
 
   * リリース前の機能改善3点。(1) アイテムごとに最小値を設定可能にし、

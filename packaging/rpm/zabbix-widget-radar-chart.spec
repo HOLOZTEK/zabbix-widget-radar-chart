@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.7
+Version:        1.0.8
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -130,6 +130,19 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Thu Sep 03 2026 claude <noreply> - 1.0.8-0
+- コードレビュー issue #13 対応（[P2] 1件）。アイテムごとの
+  min_val / max_val の数値性と min < max を、ウィジェット保存／API 経路
+  （includes/CWidgetFieldItems.php::validate()）でも検証するようにした。
+  従来はアイテム編集モーダル（actions/ItemEdit.php）の AJAX 保存経路
+  でしか検証しておらず、Zabbix API・dashboard.update・hidden field 改変・
+  移行データ経由で min >= max や非数値が保存されうる状態だった。保存時に
+  エラーにならず描画側で「全軸が中心に寄る」形で顕在化していた。
+  min_val 未設定は互換目的で 0 扱い、max_val は必須かつ数値、direction の
+  0/1 は既存の getValidationRules() 側で担保。既存設定（max_val のみ・
+  min_val / direction 未設定）は従来どおり保存・表示できる。
+  scripts/test-normalization.js に保存バリデーションのケースを追加。
+
 * Wed Sep 02 2026 claude <noreply> - 1.0.7-0
 - リリース前の機能改善3点。
   1. アイテムごとに最小値を設定可能にした（従来は最大値のみ）。描画位置を
