@@ -55,6 +55,46 @@ function buildIndicator(ic) {
 	};
 }
 
+// ─── includes/CWidgetFieldItems.php::validate() の追加検証と同一ロジック ───
+// ウィジェット保存／API 経路で各アイテムの min_val / max_val を検証する。
+// PHP 実装:
+//   $min_val = ($item['min_val'] === '') ? '0' : $item['min_val'];
+//   $max_val = $item['max_val'];
+//   max_val が '' または非数値 → エラー
+//   min_val が非数値 → エラー
+//   (float) min_val >= (float) max_val → エラー
+// direction（0/1）は getValidationRules() 側で担保するため、ここでは検証しない。
+// 戻り値: エラーメッセージ配列（空なら保存 OK）
+function validateItems(items) {
+	const isNumeric = (s) => s !== '' && s !== null && s !== undefined
+		&& !Number.isNaN(parseFloat(s)) && isFinite(Number(s));
+	const errors = [];
+
+	items.forEach((item, index) => {
+		const min_val = (item.min_val === '' || item.min_val === undefined || item.min_val === null)
+			? '0' : String(item.min_val);
+		const max_val = (item.max_val === undefined || item.max_val === null)
+			? '' : String(item.max_val);
+
+		let e = null;
+		if (max_val === '' || !isNumeric(max_val)) {
+			e = 'Max value must be a number.';
+		}
+		else if (!isNumeric(min_val)) {
+			e = 'Min value must be a number.';
+		}
+		else if (parseFloat(min_val) >= parseFloat(max_val)) {
+			e = 'Minimum value must be less than maximum value.';
+		}
+
+		if (e !== null) {
+			errors.push(`Item ${index + 1}: ${e}`);
+		}
+	});
+
+	return errors;
+}
+
 let failures = 0;
 
 function approx(a, b) {
@@ -150,6 +190,50 @@ check('min=-50/max=0 設定, value=-25, 反転 → 0.5',
 const ind_z_buggy = {min_val: -50, max_val: 100, direction: 0};
 check('（退行例示）?: のままなら 0.5 にならない',
 	approx(normalize(-25, ind_z_buggy, false), 0.5) ? 1 : 0, 0);
+
+// ══════════════════════════════════════════════════════════════════════
+// 4. 保存バリデーション（CWidgetFieldItems::validate() 相当・issue #13）
+// ══════════════════════════════════════════════════════════════════════
+console.log('\nvalidateItems() — ウィジェット保存／API 経路の min/max 検証');
+
+function checkSave(name, items, shouldPass) {
+	const errors = validateItems(items);
+	const ok = (errors.length === 0) === shouldPass;
+	if (!ok) {
+		failures++;
+	}
+	const mark = ok ? 'PASS' : 'FAIL';
+	const detail = shouldPass
+		? (errors.length ? `expected OK, got: ${errors.join(' / ')}` : 'OK')
+		: (errors.length ? `rejected: ${errors.join(' / ')}` : 'expected rejection, got OK');
+	console.log(`  [${mark}] ${name}: ${detail}`);
+}
+
+// --- 受け入れ条件: 不正値は保存拒否 ---
+checkSave('min=100 / max=100（span=0）→ 拒否',
+	[{min_val: '100', max_val: '100', direction: 0}], false);
+checkSave('min=abc / max=100（非数値）→ 拒否',
+	[{min_val: 'abc', max_val: '100', direction: 0}], false);
+checkSave('max="" （空文字）→ 拒否',
+	[{min_val: '0', max_val: '', direction: 0}], false);
+checkSave('min=50 / max=10（逆転）→ 拒否',
+	[{min_val: '50', max_val: '10', direction: 0}], false);
+checkSave('3 アイテム中 2 番目だけ不正 → 拒否',
+	[{min_val: '0', max_val: '100'}, {min_val: '5', max_val: '5'}, {min_val: '0', max_val: '1'}], false);
+
+// --- 受け入れ条件: 正当値・互換ケースは保存可 ---
+checkSave('通常レンジ min=0 / max=100 → 可',
+	[{min_val: '0', max_val: '100', direction: 0}], true);
+checkSave('負数レンジ min=-50 / max=0（max がちょうど 0）→ 可',
+	[{min_val: '-50', max_val: '0', direction: 0}], true);
+checkSave('負数レンジ min=-100 / max=-30 → 可',
+	[{min_val: '-100', max_val: '-30', direction: 1}], true);
+checkSave('旧設定: max_val のみ・min_val/direction 未設定 → 可（min=0 互換）',
+	[{max_val: '100'}], true);
+checkSave('旧設定: min_val 空文字 → 0 扱いで可',
+	[{min_val: '', max_val: '100'}], true);
+checkSave('小数レンジ min=0.5 / max=1.5 → 可',
+	[{min_val: '0.5', max_val: '1.5', direction: 0}], true);
 
 // ══════════════════════════════════════════════════════════════════════
 console.log('');

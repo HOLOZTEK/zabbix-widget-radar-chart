@@ -4,6 +4,8 @@ namespace Modules\HoloztekRadarChart\Includes;
 
 use Zabbix\Widgets\CWidgetField;
 
+require_once __DIR__ . '/helpers.php';
+
 class CWidgetFieldItems extends CWidgetField {
 
 	public const DEFAULT_VIEW = CWidgetFieldItemsView::class;
@@ -68,6 +70,46 @@ class CWidgetFieldItems extends CWidgetField {
 			'direction' => ['type' => API_INT32, 'in' => '0:1'],
 			'agg_func'  => ['type' => API_INT32, 'in' => '0:3'],
 		]];
+	}
+
+	/**
+	 * min_val / max_val の数値性と min < max を、ウィジェット保存／API 経路でも検証する。
+	 *
+	 * getValidationRules() は min_val / max_val を文字列長でしか見ないため、
+	 * アイテム編集モーダル（actions/ItemEdit.php）を通らない経路
+	 * （Zabbix API、dashboard.update、hidden field 改変、移行データ）では
+	 * min >= max や非数値が保存されうる。ここで同じ制約を担保する。
+	 * direction（0/1）と agg_func（0:3）は getValidationRules() 側で担保済み。
+	 */
+	public function validate(bool $strict = false): array {
+		$errors = parent::validate($strict);
+
+		if ($errors) {
+			return $errors;
+		}
+
+		foreach ($this->getValue() as $index => $item) {
+			// 最小値の空欄は 0 として扱う（旧設定・未入力互換）
+			$min_val = ($item['min_val'] === '') ? '0' : $item['min_val'];
+			$max_val = $item['max_val'];
+
+			$item_error = null;
+			if ($max_val === '' || !is_numeric($max_val)) {
+				$item_error = _holoztek_rc('Max value must be a number.');
+			}
+			elseif (!is_numeric($min_val)) {
+				$item_error = _holoztek_rc('Min value must be a number.');
+			}
+			elseif ((float) $min_val >= (float) $max_val) {
+				$item_error = _holoztek_rc('Minimum value must be less than maximum value.');
+			}
+
+			if ($item_error !== null) {
+				$errors[] = _holoztek_rc('Item').' '.($index + 1).': '.$item_error;
+			}
+		}
+
+		return $errors;
 	}
 
 	public function toApi(array &$widget_fields = []): void {
