@@ -1,11 +1,11 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.8
+Version:        1.0.9
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
 BuildArch:      noarch
-Requires:       php >= 8.1
+Requires:       (php >= 8.1 or php-common >= 8.1)
 Requires:       php-fpm >= 8.1
 
 %description
@@ -130,6 +130,18 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Thu Sep 03 2026 claude <noreply> - 1.0.9-0
+- RPM の PHP 依存 Requires: php >= 8.1 を
+  Requires: (php >= 8.1 or php-common >= 8.1) へ OR 化。
+  Rocky Linux 10 等で PHP を php8.4-* パッケージ群で導入している環境では
+  php8.4-common が無印 php の Provides を持たず（php(language) /
+  php-common = 8.4.x のみ提供）、rpm -ivh が「php >= 8.1 は必要」で
+  失敗していた。php-common >= 8.1 を代替条件に加えることで、無印 php
+  パッケージ運用のホスト（従来どおり php >= 8.1 で充足）と
+  php8.4-common 運用のホストの両方でインストールできる。
+  php-fpm >= 8.1 側はエラー未発生のため据え置き。コード変更なし。
+  .deb 側（debian/control）は今回対象環境に影響しないため変更しない。
+
 * Thu Sep 03 2026 claude <noreply> - 1.0.8-0
 - コードレビュー issue #13 対応（[P2] 1件）。アイテムごとの
   min_val / max_val の数値性と min < max を、ウィジェット保存／API 経路
