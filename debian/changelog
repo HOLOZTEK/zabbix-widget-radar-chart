@@ -1,3 +1,17 @@
+zabbix-widget-radar-chart (1.0.9) unstable; urgency=medium
+
+  * RPM の PHP 依存を Requires: php >= 8.1 から
+    Requires: (php >= 8.1 or php-common >= 8.1) へ OR 化。Rocky Linux 10 等で
+    PHP を php8.4-* パッケージ群で導入している環境では php8.4-common が
+    無印 php の Provides を持たず（php(language) / php-common = 8.4.x のみ）、
+    rpm -ivh が「php >= 8.1 は必要」で失敗していた。php-common >= 8.1 を
+    代替条件に加え、無印 php 運用ホストと php8.4-common 運用ホストの
+    双方でインストール可能にした。php-fpm >= 8.1 側は据え置き。
+    コード変更なし。.deb 側 (debian/control) は今回対象環境に影響しないため
+    変更していない（バージョン整合のためスタンザのみ追加）。
+
+ -- claude <noreply@example.com>  Thu, 03 Sep 2026 18:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.8) unstable; urgency=medium
 
   * コードレビュー issue #13 対応（[P2] 1件）。アイテムごとの min_val /
