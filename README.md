@@ -2,6 +2,40 @@
 
 複数のホストのアイテム値をレーダーチャートで並べて可視化するウィジェットです。ホストグループナビゲーターと連携し、任意のアイテムを3〜8つ軸として設定できます。
 
+## スクリーンショット
+
+### ダッシュボード
+
+単一ホストの詳細確認から、複数ホストを並べた比較まで対応します。
+
+![単一ホストのレーダーチャート](screenshots/radar-chart-dashboard-single.png)
+
+![複数ホストのレーダーチャート](screenshots/radar-chart-dashboard-multiple.png)
+
+### 設定画面
+
+ホストの指定、表示するアイテム、グリッド、スタイル、データ取得上限を設定できます。英語・日本語の両ロケールに対応しています。
+
+![Widget settings in English](screenshots/radar-chart-settings-en.png)
+
+![ウィジェット設定（日本語）](screenshots/radar-chart-settings-ja.png)
+
+各アイテムでは、最小値・最大値、軸方向、集計方法を個別に設定できます。
+
+![Item settings in English](screenshots/radar-chart-item-settings-en.png)
+
+![アイテム設定（日本語）](screenshots/radar-chart-item-settings-ja.png)
+
+### 連携・詳細表示
+
+ホストグループナビゲーターとの連携、軸ごとの詳細ツールチップ、データ欠損・ページング時の挙動を確認できます。
+
+![ナビゲーター連携](screenshots/radar-chart-navigator-integration.png)
+
+![値の詳細を表示するツールチップ](screenshots/radar-chart-tooltip.png)
+
+![データ欠損とページング](screenshots/radar-chart-missing-data-pagination.png)
+
 ## 機能
 
 - **複数ホストの並列表示**: グリッドレイアウト（最大 6×6）で複数ホストを一覧表示
