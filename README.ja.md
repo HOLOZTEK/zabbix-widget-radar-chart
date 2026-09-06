@@ -32,35 +32,13 @@ CPU、メモリ、ストレージ、遅延などの値を個別のウィジェ�
 
 ホストの指定、表示するアイテム、グリッド、スタイル、データ取得上限を設定できます。英語・日本語の両ロケールに対応しています。
 
-<table>
-  <tr>
-    <td align="center" valign="top" width="50%">
-      <strong>Widget settings — English</strong><br>
-      <img src="screenshots/radar-chart-settings-en.png" width="380" alt="Radar Chart widget settings in English" />
-    </td>
-    <td align="center" valign="top" width="50%">
-      <strong>ウィジェット設定 — 日本語</strong><br>
-      <img src="screenshots/radar-chart-settings-ja.png" width="380" alt="Radar Chart ウィジェット設定（日本語）" />
-    </td>
-  </tr>
-</table>
+<a href="screenshots/radar-chart-settings-ja.png" target="_blank"><img src="screenshots/radar-chart-settings-ja.png" width="620" alt="Radar Chart ウィジェット設定（日本語）" /></a>
 
 ### アイテム設定
 
 各アイテムでは、最小値・最大値、軸方向、集計方法を個別に設定できます。
 
-<table>
-  <tr>
-    <td align="center" valign="top" width="50%">
-      <strong>Item settings — English</strong><br>
-      <img src="screenshots/radar-chart-item-settings-en.png" width="400" alt="Radar Chart item settings in English" />
-    </td>
-    <td align="center" valign="top" width="50%">
-      <strong>アイテム設定 — 日本語</strong><br>
-      <img src="screenshots/radar-chart-item-settings-ja.png" width="400" alt="Radar Chart アイテム設定（日本語）" />
-    </td>
-  </tr>
-</table>
+<a href="screenshots/radar-chart-item-settings-ja.png" target="_blank"><img src="screenshots/radar-chart-item-settings-ja.png" width="620" alt="Radar Chart アイテム設定（日本語）" /></a>
 
 ### 連携・詳細表示
 
