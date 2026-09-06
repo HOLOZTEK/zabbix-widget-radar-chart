@@ -6,35 +6,73 @@
 
 ### ダッシュボード
 
-単一ホストの詳細確認から、複数ホストを並べた比較まで対応します。
+複数ホストを比較する主画面と、単一ホストを詳細に確認する画面です。
 
-![単一ホストのレーダーチャート](screenshots/radar-chart-dashboard-single.png)
+<p align="center">
+  <strong>複数ホストの比較</strong><br>
+  <img src="screenshots/radar-chart-dashboard-multiple.png" width="760" alt="複数ホストのレーダーチャート" />
+</p>
 
-![複数ホストのレーダーチャート](screenshots/radar-chart-dashboard-multiple.png)
+<p align="center">
+  <strong>単一ホストの詳細確認</strong><br>
+  <img src="screenshots/radar-chart-dashboard-single.png" width="460" alt="単一ホストのレーダーチャート" />
+</p>
 
 ### 設定画面
 
 ホストの指定、表示するアイテム、グリッド、スタイル、データ取得上限を設定できます。英語・日本語の両ロケールに対応しています。
 
-![Widget settings in English](screenshots/radar-chart-settings-en.png)
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <strong>Widget settings — English</strong><br>
+      <img src="screenshots/radar-chart-settings-en.png" width="380" alt="Radar Chart widget settings in English" />
+    </td>
+    <td align="center" valign="top" width="50%">
+      <strong>ウィジェット設定 — 日本語</strong><br>
+      <img src="screenshots/radar-chart-settings-ja.png" width="380" alt="Radar Chart ウィジェット設定（日本語）" />
+    </td>
+  </tr>
+</table>
 
-![ウィジェット設定（日本語）](screenshots/radar-chart-settings-ja.png)
+### アイテム設定
 
 各アイテムでは、最小値・最大値、軸方向、集計方法を個別に設定できます。
 
-![Item settings in English](screenshots/radar-chart-item-settings-en.png)
-
-![アイテム設定（日本語）](screenshots/radar-chart-item-settings-ja.png)
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <strong>Item settings — English</strong><br>
+      <img src="screenshots/radar-chart-item-settings-en.png" width="400" alt="Radar Chart item settings in English" />
+    </td>
+    <td align="center" valign="top" width="50%">
+      <strong>アイテム設定 — 日本語</strong><br>
+      <img src="screenshots/radar-chart-item-settings-ja.png" width="400" alt="Radar Chart アイテム設定（日本語）" />
+    </td>
+  </tr>
+</table>
 
 ### 連携・詳細表示
 
 ホストグループナビゲーターとの連携、軸ごとの詳細ツールチップ、データ欠損・ページング時の挙動を確認できます。
 
-![ナビゲーター連携](screenshots/radar-chart-navigator-integration.png)
+<p align="center">
+  <strong>ホストグループナビゲーターとの連携</strong><br>
+  <img src="screenshots/radar-chart-navigator-integration.png" width="820" alt="ホストグループナビゲーターとRadar Chartの連携" />
+</p>
 
-![値の詳細を表示するツールチップ](screenshots/radar-chart-tooltip.png)
-
-![データ欠損とページング](screenshots/radar-chart-missing-data-pagination.png)
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <strong>値の詳細を表示するツールチップ</strong><br>
+      <img src="screenshots/radar-chart-tooltip.png" width="360" alt="値の詳細を表示するツールチップ" />
+    </td>
+    <td align="center" valign="top" width="50%">
+      <strong>データ欠損とページング</strong><br>
+      <img src="screenshots/radar-chart-missing-data-pagination.png" width="360" alt="データ欠損とページング" />
+    </td>
+  </tr>
+</table>
 
 ## 機能
 
