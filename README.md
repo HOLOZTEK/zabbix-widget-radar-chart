@@ -72,6 +72,7 @@ Tooltips retain the collected values, units, and timestamps, so a dashboard can 
   <tr><td nowrap>Data limits › History rows</td><td>Set the History row limit from 1,000 to 1,000,000 (default: 50,000).</td></tr>
   <tr><td nowrap>Data limits › Latest fetch warning</td><td>Set the warning threshold from 10 to 100,000 Latest fetches (default: 500).</td></tr>
   <tr><td nowrap>Time period</td><td>Set the required aggregation period; it uses the dashboard time period by default.</td></tr>
+</table>
 
 The widget settings select the scope, items, layout, and appearance.
 
