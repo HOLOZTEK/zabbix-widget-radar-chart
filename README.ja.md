@@ -6,7 +6,18 @@
 
 Radar Chart は、複数ホストの数値アイテムをレーダーチャートで比較する Zabbix ダッシュボードウィジェットです。3〜8 個のアイテムを軸として表示し、Tree Navigator、Topology Navigator、または互換ウィジェットからホストグループ・ホストのコンテキストを受け取れます。
 
-<a href="screenshots/radar-chart-dashboard-multiple.png" target="_blank"><img src="screenshots/radar-chart-dashboard-multiple.png" width="750" alt="複数ホストを比較する Radar Chart" /></a>
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <strong>単一ホストの表示</strong><br>
+      <a href="screenshots/radar-chart-dashboard-single.png" target="_blank"><img src="screenshots/radar-chart-dashboard-single.png" height="280" alt="単一ホストの Radar Chart" /></a>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <strong>複数ホストの表示</strong><br>
+      <a href="screenshots/radar-chart-dashboard-multiple.png" target="_blank"><img src="screenshots/radar-chart-dashboard-multiple.png" height="280" alt="複数ホストを比較する Radar Chart" /></a>
+    </td>
+  </tr>
+</table>
 
 ## Radar Chart を使う理由
 
@@ -28,17 +39,13 @@ CPU、メモリ、ストレージ、遅延などの値は、共通のスケー�
 
 <table>
   <tr>
-    <td align="center" valign="top" width="33%">
-      <strong>単一ホストの詳細</strong><br>
-      <a href="screenshots/radar-chart-dashboard-single.png" target="_blank"><img src="screenshots/radar-chart-dashboard-single.png" width="240" alt="単一ホストの Radar Chart" /></a>
-    </td>
-    <td align="center" valign="top" width="33%">
+    <td align="center" valign="top" width="50%">
       <strong>値の詳細</strong><br>
-      <a href="screenshots/radar-chart-tooltip.png" target="_blank"><img src="screenshots/radar-chart-tooltip.png" width="240" alt="Radar Chart のツールチップ" /></a>
+      <a href="screenshots/radar-chart-tooltip.png" target="_blank"><img src="screenshots/radar-chart-tooltip.png" width="300" alt="Radar Chart のツールチップ" /></a>
     </td>
-    <td align="center" valign="top" width="33%">
+    <td align="center" valign="top" width="50%">
       <strong>データ欠損とページング</strong><br>
-      <a href="screenshots/radar-chart-missing-data-pagination.png" target="_blank"><img src="screenshots/radar-chart-missing-data-pagination.png" width="240" alt="データ欠損とページング" /></a>
+      <a href="screenshots/radar-chart-missing-data-pagination.png" target="_blank"><img src="screenshots/radar-chart-missing-data-pagination.png" width="300" alt="データ欠損とページング" /></a>
     </td>
   </tr>
 </table>
@@ -47,13 +54,24 @@ CPU、メモリ、ストレージ、遅延などの値は、共通のスケー�
 
 <table>
   <tr><th align="left" nowrap>項目</th><th align="left">説明</th></tr>
-  <tr><td nowrap>Host groups / Hosts / Host patterns</td><td>対象ホストを直接選択するか、他のウィジェットから受け取ります。</td></tr>
-  <tr><td nowrap>Items</td><td>数値アイテムを 3〜8 個設定します。各アイテムにラベル、最小値、最大値、方向、集計方法を設定します。</td></tr>
-  <tr><td nowrap>Grid</td><td>列数と行数を 1〜6 の範囲で設定します。</td></tr>
-  <tr><td nowrap>Style</td><td>線、点、塗りつぶし、チャート、タイトルの色とサイズを設定します。</td></tr>
-  <tr><td nowrap>Data limits</td><td>History の取得件数上限と Latest 取得時の警告しきい値を設定します。</td></tr>
-  <tr><td nowrap>Time period</td><td>ダッシュボードの期間を集計に使用します。</td></tr>
-</table>
+  <tr><td nowrap>ホストグループ</td><td>対象ホストグループを直接選択するか、他のウィジェットから受け取ります。</td></tr>
+  <tr><td nowrap>ホスト</td><td>対象ホストを直接選択するか、他のウィジェットから受け取ります。</td></tr>
+  <tr><td nowrap>ホストパターン</td><td>ワイルドカードを使ってホスト名を絞り込みます。ホストグループも指定した場合は、そのグループ内が対象です。</td></tr>
+  <tr><td nowrap>アイテム</td><td>数値アイテムを 3〜8 個、レーダーチャートの軸として追加します。</td></tr>
+  <tr><td nowrap>└ アイテム</td><td>軸に使用する数値アイテムを選択します。</td></tr>
+  <tr><td nowrap>└ ラベル</td><td>軸のラベルを設定します。未指定時はアイテム名を表示します。</td></tr>
+  <tr><td nowrap>└ 範囲（最小値 / 最大値）</td><td>正規化に使う範囲を設定します。最小値は最大値より小さくする必要があります。</td></tr>
+  <tr><td nowrap>└ 軸方向</td><td>通常または反転を選択します。</td></tr>
+  <tr><td nowrap>└ 集計方法</td><td>最新値、最大値、最小値、平均値を選択します。</td></tr>
+  <tr><td nowrap>グリッド</td><td>列数と行数をそれぞれ 1〜6 の範囲で設定します。</td></tr>
+  <tr><td nowrap>スタイル › 線</td><td>線の色と太さ（1〜10）を設定します。</td></tr>
+  <tr><td nowrap>スタイル › 点</td><td>点の色と大きさ（1〜20）を設定します。</td></tr>
+  <tr><td nowrap>スタイル › 塗りつぶし</td><td>塗りつぶしの色と不透明度（0〜100%）を設定します。</td></tr>
+  <tr><td nowrap>スタイル › チャート</td><td>チャートの色と線の太さ（1〜5）を設定します。</td></tr>
+  <tr><td nowrap>スタイル › タイトル</td><td>タイトルの色とサイズ（8〜24）を設定します。</td></tr>
+  <tr><td nowrap>データ上限 › History 行数</td><td>History の取得件数上限を 1,000〜1,000,000（既定 50,000）の範囲で設定します。</td></tr>
+  <tr><td nowrap>データ上限 › Latest 取得警告</td><td>Latest の取得回数に対する警告しきい値を 10〜100,000（既定 500）の範囲で設定します。</td></tr>
+  <tr><td nowrap>期間</td><td>必須の集計期間を設定します。既定ではダッシュボードの期間を使用します。</td></tr>
 
 ウィジェット設定では、対象範囲、アイテム、レイアウト、表示スタイルを選択します。
 

@@ -6,7 +6,18 @@ English | [日本語](README.ja.md)
 
 Radar Chart is a Zabbix dashboard widget for comparing numeric item values across one or many hosts. It renders three to eight selected metrics as a radar chart for each host and can receive host-group context from Tree Navigator, Topology Navigator, or another compatible widget.
 
-<a href="screenshots/radar-chart-dashboard-multiple.png" target="_blank"><img src="screenshots/radar-chart-dashboard-multiple.png" width="750" alt="Radar Chart comparing multiple hosts" /></a>
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <strong>Single-host view</strong><br>
+      <a href="screenshots/radar-chart-dashboard-single.png" target="_blank"><img src="screenshots/radar-chart-dashboard-single.png" height="280" alt="Radar Chart for a single host" /></a>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <strong>Multi-host view</strong><br>
+      <a href="screenshots/radar-chart-dashboard-multiple.png" target="_blank"><img src="screenshots/radar-chart-dashboard-multiple.png" height="280" alt="Radar Chart comparing multiple hosts" /></a>
+    </td>
+  </tr>
+</table>
 
 ## Why Radar Chart?
 
@@ -28,17 +39,13 @@ Tooltips retain the collected values, units, and timestamps, so a dashboard can 
 
 <table>
   <tr>
-    <td align="center" valign="top" width="33%">
-      <strong>Single-host detail</strong><br>
-      <a href="screenshots/radar-chart-dashboard-single.png" target="_blank"><img src="screenshots/radar-chart-dashboard-single.png" width="240" alt="Single-host Radar Chart" /></a>
-    </td>
-    <td align="center" valign="top" width="33%">
+    <td align="center" valign="top" width="50%">
       <strong>Value details</strong><br>
-      <a href="screenshots/radar-chart-tooltip.png" target="_blank"><img src="screenshots/radar-chart-tooltip.png" width="240" alt="Radar Chart tooltip" /></a>
+      <a href="screenshots/radar-chart-tooltip.png" target="_blank"><img src="screenshots/radar-chart-tooltip.png" width="300" alt="Radar Chart tooltip" /></a>
     </td>
-    <td align="center" valign="top" width="33%">
+    <td align="center" valign="top" width="50%">
       <strong>Missing data and pages</strong><br>
-      <a href="screenshots/radar-chart-missing-data-pagination.png" target="_blank"><img src="screenshots/radar-chart-missing-data-pagination.png" width="240" alt="Missing data and pagination" /></a>
+      <a href="screenshots/radar-chart-missing-data-pagination.png" target="_blank"><img src="screenshots/radar-chart-missing-data-pagination.png" width="300" alt="Missing data and pagination" /></a>
     </td>
   </tr>
 </table>
@@ -47,13 +54,24 @@ Tooltips retain the collected values, units, and timestamps, so a dashboard can 
 
 <table>
   <tr><th align="left" nowrap>Setting</th><th align="left">Description</th></tr>
-  <tr><td nowrap>Host groups / Hosts / Host patterns</td><td>Choose target hosts directly or receive them from another widget.</td></tr>
-  <tr><td nowrap>Items</td><td>Configure three to eight numeric items. Each item has a label, minimum, maximum, direction, and aggregation method.</td></tr>
-  <tr><td nowrap>Grid</td><td>Set the number of columns and rows from 1 to 6.</td></tr>
-  <tr><td nowrap>Style</td><td>Control line, point, fill, chart, and title colors and sizes.</td></tr>
-  <tr><td nowrap>Data limits</td><td>Set the History row limit and the warning threshold for Latest fetches.</td></tr>
-  <tr><td nowrap>Time period</td><td>Use the dashboard time period for aggregation.</td></tr>
-</table>
+  <tr><td nowrap>Host groups</td><td>Select one or more target host groups directly or receive them from another widget.</td></tr>
+  <tr><td nowrap>Hosts</td><td>Select one or more target hosts directly or receive them from another widget.</td></tr>
+  <tr><td nowrap>Host patterns</td><td>Filter hosts by wildcard pattern. When host groups are also set, the pattern is scoped to those groups.</td></tr>
+  <tr><td nowrap>Items</td><td>Add three to eight numeric items as radar-chart axes.</td></tr>
+  <tr><td nowrap>└ Item</td><td>Select the numeric item for the axis.</td></tr>
+  <tr><td nowrap>└ Label</td><td>Set the axis label; it defaults to the item name.</td></tr>
+  <tr><td nowrap>└ Range (Minimum / Maximum)</td><td>Set the normalization range. The minimum must be lower than the maximum.</td></tr>
+  <tr><td nowrap>└ Direction</td><td>Select Normal or Reversed plotting direction.</td></tr>
+  <tr><td nowrap>└ Aggregation</td><td>Select Latest, Max, Min, or Avg.</td></tr>
+  <tr><td nowrap>Grid</td><td>Set columns and rows independently from 1 to 6.</td></tr>
+  <tr><td nowrap>Style › Line</td><td>Set the line color and width (1–10).</td></tr>
+  <tr><td nowrap>Style › Point</td><td>Set the point color and size (1–20).</td></tr>
+  <tr><td nowrap>Style › Fill</td><td>Set the fill color and opacity (0–100%).</td></tr>
+  <tr><td nowrap>Style › Chart</td><td>Set the chart color and line width (1–5).</td></tr>
+  <tr><td nowrap>Style › Title</td><td>Set the title color and size (8–24).</td></tr>
+  <tr><td nowrap>Data limits › History rows</td><td>Set the History row limit from 1,000 to 1,000,000 (default: 50,000).</td></tr>
+  <tr><td nowrap>Data limits › Latest fetch warning</td><td>Set the warning threshold from 10 to 100,000 Latest fetches (default: 500).</td></tr>
+  <tr><td nowrap>Time period</td><td>Set the required aggregation period; it uses the dashboard time period by default.</td></tr>
 
 The widget settings select the scope, items, layout, and appearance.
 
