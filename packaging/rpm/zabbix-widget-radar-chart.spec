@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.9
+Version:        1.0.10
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -130,6 +130,17 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Wed Sep 09 2026 claude <noreply> - 1.0.10-0
+- 設定画面「アイテムの追加／更新」ダイアログおよびアイテム一覧の一部
+  ラベルが日本語化されずに英語のまま表示されていた不具合を修正。
+  v1.0.7 で追加した「Min value」「Range」「Direction」「Normal」
+  「Reversed」および検証エラー3件（Min value must be a number. /
+  Max value must be a number. / Minimum value must be less than
+  maximum value.）の訳語は .po には存在したが、コンパイル済み .mo
+  （locale/ja_JP/LC_MESSAGES/holoztek-radar-chart.mo）に反映されて
+  いなかった。.po から .mo を再生成して解消。
+- コード・.po・仕様に変更なし（.mo の再コンパイルのみ）。
+
 * Thu Sep 03 2026 claude <noreply> - 1.0.9-0
 - RPM の PHP 依存 Requires: php >= 8.1 を
   Requires: (php >= 8.1 or php-common >= 8.1) へ OR 化。
