@@ -1,3 +1,14 @@
+zabbix-widget-radar-chart (1.0.10) unstable; urgency=medium
+
+  * 設定画面「アイテムの追加／更新」ダイアログおよびアイテム一覧の一部
+    ラベルが日本語化されず英語のまま表示されていた不具合を修正。v1.0.7 で
+    追加した "Min value" / "Range" / "Direction" / "Normal" / "Reversed" と
+    検証エラー3件の訳語は .po には存在したが、コンパイル済み .mo
+    (locale/ja_JP/LC_MESSAGES/holoztek-radar-chart.mo) に反映されていな
+    かった。.po から .mo を再生成して解消。コード・.po に変更はない。
+
+ -- claude <noreply@example.com>  Wed, 09 Sep 2026 09:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.9) unstable; urgency=medium
 
   * RPM の PHP 依存を Requires: php >= 8.1 から
