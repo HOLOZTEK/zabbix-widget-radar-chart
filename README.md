@@ -6,18 +6,7 @@ English | [日本語](README.ja.md)
 
 Radar Chart is a Zabbix dashboard widget for comparing numeric item values across one or many hosts. It renders three to eight selected metrics as a radar chart for each host and can receive host-group context from Tree Navigator, Topology Navigator, or another compatible widget.
 
-<table>
-  <tr>
-    <td align="center" valign="top" width="50%">
-      <strong>Single-host view</strong><br>
-      <a href="screenshots/radar-chart-dashboard-single.png" target="_blank"><img src="screenshots/radar-chart-dashboard-single.png" height="280" alt="Radar Chart for a single host" /></a>
-    </td>
-    <td align="center" valign="top" width="50%">
-      <strong>Multi-host view</strong><br>
-      <a href="screenshots/radar-chart-dashboard-multiple.png" target="_blank"><img src="screenshots/radar-chart-dashboard-multiple.png" height="280" alt="Radar Chart comparing multiple hosts" /></a>
-    </td>
-  </tr>
-</table>
+<a href="screenshots/radar-chart-dashboard-navigator-integration.png" target="_blank"><img src="screenshots/radar-chart-dashboard-navigator-integration.png" width="750" alt="Radar Chart dashboard integrated with a Navigator" /></a>
 
 [Latest release](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/releases/tag/v1.0.10) | [RPM](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/releases/download/v1.0.10/zabbix-widget-radar-chart-1.0.10.noarch.rpm) | [DEB](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/releases/download/v1.0.10/zabbix-widget-radar-chart_1.0.10_all.deb) | [Source](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/archive/v1.0.10.tar.gz)
 
@@ -41,13 +30,17 @@ Tooltips retain the collected values, units, and timestamps, so a dashboard can 
 
 <table>
   <tr>
-    <td align="center" valign="top" width="50%">
-      <strong>Value details</strong><br>
-      <a href="screenshots/radar-chart-tooltip.png" target="_blank"><img src="screenshots/radar-chart-tooltip.png" width="300" alt="Radar Chart tooltip" /></a>
+    <td align="center" valign="top" width="33%">
+      <strong>Single-host view</strong><br>
+      <a href="screenshots/radar-chart-tooltip.png" target="_blank"><img src="screenshots/radar-chart-tooltip.png" width="220" alt="Single-host value details" /></a>
     </td>
-    <td align="center" valign="top" width="50%">
-      <strong>Missing data and pages</strong><br>
-      <a href="screenshots/radar-chart-missing-data-pagination.png" target="_blank"><img src="screenshots/radar-chart-missing-data-pagination.png" width="300" alt="Missing data and pagination" /></a>
+    <td align="center" valign="top" width="33%">
+      <strong>Multi-host view</strong><br>
+      <a href="screenshots/radar-chart-dashboard-multiple.png" target="_blank"><img src="screenshots/radar-chart-dashboard-multiple.png" width="220" alt="Radar Chart comparing multiple hosts" /></a>
+    </td>
+    <td align="center" valign="top" width="33%">
+      <strong>Display patterns</strong><br>
+      <a href="screenshots/radar-chart-missing-data-pagination.png" target="_blank"><img src="screenshots/radar-chart-missing-data-pagination.png" width="220" alt="Missing data and pagination" /></a>
     </td>
   </tr>
 </table>

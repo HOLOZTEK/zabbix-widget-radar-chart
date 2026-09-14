@@ -6,18 +6,7 @@
 
 Radar Chart は、複数ホストの数値アイテムをレーダーチャートで比較する Zabbix ダッシュボードウィジェットです。3〜8 個のアイテムを軸として表示し、Tree Navigator、Topology Navigator、または互換ウィジェットからホストグループ・ホストのコンテキストを受け取れます。
 
-<table>
-  <tr>
-    <td align="center" valign="top" width="50%">
-      <strong>単一ホストの表示</strong><br>
-      <a href="screenshots/radar-chart-dashboard-single.png" target="_blank"><img src="screenshots/radar-chart-dashboard-single.png" height="280" alt="単一ホストの Radar Chart" /></a>
-    </td>
-    <td align="center" valign="top" width="50%">
-      <strong>複数ホストの表示</strong><br>
-      <a href="screenshots/radar-chart-dashboard-multiple.png" target="_blank"><img src="screenshots/radar-chart-dashboard-multiple.png" height="280" alt="複数ホストを比較する Radar Chart" /></a>
-    </td>
-  </tr>
-</table>
+<a href="screenshots/radar-chart-dashboard-navigator-integration.png" target="_blank"><img src="screenshots/radar-chart-dashboard-navigator-integration.png" width="750" alt="Navigator と連携して複数ホストを表示する Radar Chart ダッシュボード" /></a>
 
 [最新リリース](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/releases/tag/v1.0.10) | [RPM](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/releases/download/v1.0.10/zabbix-widget-radar-chart-1.0.10.noarch.rpm) | [DEB](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/releases/download/v1.0.10/zabbix-widget-radar-chart_1.0.10_all.deb) | [ソース](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/archive/v1.0.10.tar.gz)
 
@@ -41,13 +30,17 @@ CPU、メモリ、ストレージ、遅延などの値は、共通のスケー�
 
 <table>
   <tr>
-    <td align="center" valign="top" width="50%">
-      <strong>値の詳細</strong><br>
-      <a href="screenshots/radar-chart-tooltip.png" target="_blank"><img src="screenshots/radar-chart-tooltip.png" width="300" alt="Radar Chart のツールチップ" /></a>
+    <td align="center" valign="top" width="33%">
+      <strong>単一表示</strong><br>
+      <a href="screenshots/radar-chart-tooltip.png" target="_blank"><img src="screenshots/radar-chart-tooltip.png" width="220" alt="単一ホストの値の詳細" /></a>
     </td>
-    <td align="center" valign="top" width="50%">
-      <strong>データ欠損とページング</strong><br>
-      <a href="screenshots/radar-chart-missing-data-pagination.png" target="_blank"><img src="screenshots/radar-chart-missing-data-pagination.png" width="300" alt="データ欠損とページング" /></a>
+    <td align="center" valign="top" width="33%">
+      <strong>複数表示</strong><br>
+      <a href="screenshots/radar-chart-dashboard-multiple.png" target="_blank"><img src="screenshots/radar-chart-dashboard-multiple.png" width="220" alt="複数ホストを比較する Radar Chart" /></a>
+    </td>
+    <td align="center" valign="top" width="33%">
+      <strong>表示パターン</strong><br>
+      <a href="screenshots/radar-chart-missing-data-pagination.png" target="_blank"><img src="screenshots/radar-chart-missing-data-pagination.png" width="220" alt="データ欠損とページング" /></a>
     </td>
   </tr>
 </table>
