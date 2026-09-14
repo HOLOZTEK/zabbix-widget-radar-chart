@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.0.10
+Version:        1.1.0
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -130,6 +130,10 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Mon Sep 14 2026 claude <noreply> - 1.1.0-0
+- リリース管理上の区切りとしてバージョンを1.1.0へ更新（コード変更なし。
+  内容は1.0.10と同一）。
+
 * Wed Sep 09 2026 claude <noreply> - 1.0.10-0
 - 設定画面「アイテムの追加／更新」ダイアログおよびアイテム一覧の一部
   ラベルが日本語化されずに英語のまま表示されていた不具合を修正。
