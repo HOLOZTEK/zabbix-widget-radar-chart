@@ -137,10 +137,15 @@ v1.0.0 以前から更新する場合は、モジュール ID が `radar-chart` 
 - スクリーンショット: `screenshots/`
 - チェック・テスト: `scripts/`
 
+## 同梱依存ライブラリ
+
+`assets/js/echarts.min.js` は Apache ECharts 6.1.0（ZRenderを含む）のminified buildです。
+Apache License 2.0 の条件に基づいて配布されています。詳細は [NOTICE](NOTICE) と [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を参照してください。
+
 ## メンテナ
 
 HOLOZTEK が開発・保守しています。
 
 ## ライセンス
 
-本プロジェクトは [MIT License](LICENSE) の下で提供されています。Apache License 2.0 の Apache ECharts を同梱しています。詳細は [NOTICE](NOTICE) と [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を参照してください。
+本プロジェクトは [MIT License](LICENSE) の下で提供されています。

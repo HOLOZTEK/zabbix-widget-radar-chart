@@ -138,10 +138,15 @@ When upgrading from v1.0.0 or earlier, the module ID changes from `radar-chart` 
 - Screenshots: `screenshots/`
 - Checks and tests: `scripts/`
 
+## Bundled dependencies
+
+`assets/js/echarts.min.js` is a minified build of Apache ECharts 6.1.0, including ZRender.
+It is distributed under the Apache License 2.0. See [NOTICE](NOTICE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for details.
+
 ## Maintainer
 
 Developed and maintained by HOLOZTEK.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE). It bundles Apache ECharts under the Apache License 2.0; see [NOTICE](NOTICE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+This project is licensed under the [MIT License](LICENSE).
