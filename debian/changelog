@@ -1,3 +1,10 @@
+zabbix-widget-radar-chart (1.1.0) unstable; urgency=medium
+
+  * リリース管理上の区切りとしてバージョンを1.1.0へ更新（コード変更なし。
+    内容は1.0.10と同一）。
+
+ -- claude <noreply@example.com>  Mon, 14 Sep 2026 09:00:00 +0000
+
 zabbix-widget-radar-chart (1.0.10) unstable; urgency=medium
 
   * 設定画面「アイテムの追加／更新」ダイアログおよびアイテム一覧の一部
