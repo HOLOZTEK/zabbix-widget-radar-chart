@@ -1,3 +1,11 @@
+zabbix-widget-radar-chart (1.1.1) unstable; urgency=medium
+
+  * 公開メタデータを整備（実行コード変更なし）。Debian Source URL、
+    Package Maintainer、MIT License本文、Sourceインストール手順を更新。
+
+ -- HOLOZTEK <ttake-55@users.noreply.github.com>  Tue, 15 Sep 2026 09:00:00 +0000
+
+
 zabbix-widget-radar-chart (1.1.0) unstable; urgency=medium
 
   * リリース管理上の区切りとしてバージョンを1.1.0へ更新（コード変更なし。
