@@ -19,6 +19,8 @@ Radar Chart is a Zabbix dashboard widget for comparing numeric item values acros
   </tr>
 </table>
 
+[Latest release](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/releases/tag/v1.0.10) | [RPM](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/releases/download/v1.0.10/zabbix-widget-radar-chart-1.0.10.noarch.rpm) | [DEB](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/releases/download/v1.0.10/zabbix-widget-radar-chart_1.0.10_all.deb) | [Source](http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart/archive/v1.0.10.tar.gz)
+
 ## Why Radar Chart?
 
 CPU, memory, storage, latency, and other metrics are easier to compare when they share a common visual scale. Radar Chart normalizes selected values against their configured ranges, making imbalances and outliers apparent across hosts.
