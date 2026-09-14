@@ -8,7 +8,7 @@ Radar Chart は、複数ホストの数値アイテムをレーダーチャー�
 
 <a href="screenshots/radar-chart-dashboard-navigator-integration.png" target="_blank"><img src="screenshots/radar-chart-dashboard-navigator-integration.png" width="750" alt="Navigator と連携して複数ホストを表示する Radar Chart ダッシュボード" /></a>
 
-[最新リリース](http://172.16.4.190:3000/public-staging/zabbix-widget-radar-chart/releases/tag/v1.1.0) | [RPM](http://172.16.4.190:3000/public-staging/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.noarch.rpm) | [DEB](http://172.16.4.190:3000/public-staging/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart_1.1.0_all.deb) | [ソース](http://172.16.4.190:3000/public-staging/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz)
+[最新リリース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.0) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart_1.1.0_all.deb) | [ソース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz)
 
 ## Radar Chart を使う理由
 

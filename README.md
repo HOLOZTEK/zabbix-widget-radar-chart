@@ -8,7 +8,7 @@ Radar Chart is a Zabbix dashboard widget for comparing numeric item values acros
 
 <a href="screenshots/radar-chart-dashboard-navigator-integration.png" target="_blank"><img src="screenshots/radar-chart-dashboard-navigator-integration.png" width="750" alt="Radar Chart dashboard integrated with a Navigator" /></a>
 
-[Latest release](http://172.16.4.190:3000/public-staging/zabbix-widget-radar-chart/releases/tag/v1.1.0) | [RPM](http://172.16.4.190:3000/public-staging/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.noarch.rpm) | [DEB](http://172.16.4.190:3000/public-staging/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart_1.1.0_all.deb) | [Source](http://172.16.4.190:3000/public-staging/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz)
+[Latest release](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.0) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart_1.1.0_all.deb) | [Source](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz)
 
 ## Why Radar Chart?
 
