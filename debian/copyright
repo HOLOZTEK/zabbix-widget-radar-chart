@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: zabbix-widget-radar-chart
-Source: https://github.com/HOLOZTEK/zabbix-widget-radar-chart
+Source: http://172.16.4.190:3000/zabbix-widgets/zabbix-widget-radar-chart
 
 Files: *
 Copyright: 2026 ttake-55 (HOLOZTEK)

@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.1.1
+Version:        1.1.0
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT

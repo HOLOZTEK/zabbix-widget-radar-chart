@@ -8,7 +8,7 @@ Radar Chart は、複数ホストの数値アイテムをレーダーチャー�
 
 <a href="screenshots/radar-chart-dashboard-navigator-integration.png" target="_blank"><img src="screenshots/radar-chart-dashboard-navigator-integration.png" width="750" alt="Navigator と連携して複数ホストを表示する Radar Chart ダッシュボード" /></a>
 
-[最新リリース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.1) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.1/zabbix-widget-radar-chart-1.1.1.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.1/zabbix-widget-radar-chart_1.1.1_all.deb) | [ソース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.1/zabbix-widget-radar-chart-1.1.1.tar.gz)
+[最新リリース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.0) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart_1.1.0_all.deb) | [ソース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz)
 
 ## Radar Chart を使う理由
 
@@ -111,14 +111,14 @@ Debian パッケージは PHP 8.1 以上を必要とします。
 
 ### ソースからのインストール
 
-通常は RPM または DEB でのインストールを推奨します。ソースから配置する場合:
+モジュールをフロントエンドのモジュールディレクトリへコピーし、**管理 → モジュール** でスキャンして有効化します。
 
 ```bash
-curl -L -o zabbix-widget-radar-chart-1.1.1.tar.gz https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.1/zabbix-widget-radar-chart-1.1.1.tar.gz
-tar -xzf zabbix-widget-radar-chart-1.1.1.tar.gz
-install -d /usr/share/zabbix/ui/modules/holoztek_radar_chart
-cd zabbix-widget-radar-chart-1.1.1
-cp -a manifest.json Module.php Widget.php actions assets includes locale views /usr/share/zabbix/ui/modules/holoztek_radar_chart/
+# Zabbix 7.x
+cp -r zabbix-widget-radar-chart /usr/share/zabbix/modules/holoztek_radar_chart
+
+# Zabbix 8.x
+cp -r zabbix-widget-radar-chart /usr/share/zabbix/ui/modules/holoztek_radar_chart
 ```
 
 v1.0.0 以前から更新する場合は、モジュール ID が `radar-chart` から `holoztek_radar_chart` に変わります。所有元を確認してから旧モジュールを停止し、新しいモジュールを再スキャン・有効化したうえで、既存のダッシュボードウィジェット type を新 ID に更新してください。既存の設定フィールドと参照は保持されます。
