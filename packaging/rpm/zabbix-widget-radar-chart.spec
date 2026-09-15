@@ -15,7 +15,7 @@ as radar charts arranged in a grid layout.
 Features:
 - Grid layout (up to 6x6) for displaying multiple hosts simultaneously
 - Flexible host selection: host groups, individual hosts, or host patterns (wildcard)
-- Integration with Tree Navigator / Topology Navigator via host group linkage
+- Integration with Tree Navigator or compatible widgets via host group linkage
 - Per-item aggregation: latest value (within the dashboard time period), max, min,
   or average over time period; Max/Min/Avg automatically switch between History
   (under 2 hours) and Trend (2 hours or more, falling back to History per item/host

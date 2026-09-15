@@ -4,11 +4,11 @@
 
 ## 概要
 
-Radar Chart は、複数ホストの数値アイテムをレーダーチャートで比較する Zabbix ダッシュボードウィジェットです。3〜8 個のアイテムを軸として表示し、Tree Navigator、Topology Navigator、または互換ウィジェットからホストグループ・ホストのコンテキストを受け取れます。
+Radar Chart は、複数ホストの数値アイテムをレーダーチャートで比較する Zabbix ダッシュボードウィジェットです。3〜8 個のアイテムを軸として表示し、Tree Navigator または互換ウィジェットからホストグループ・ホストのコンテキストを受け取れます。
 
 <a href="screenshots/radar-chart-dashboard-navigator-integration.png" target="_blank"><img src="screenshots/radar-chart-dashboard-navigator-integration.png" width="750" alt="Navigator と連携して複数ホストを表示する Radar Chart ダッシュボード" /></a>
 
-[最新リリース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.0) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart_1.1.0_all.deb) | [ソース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz)
+[最新リリース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.0) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart_1.1.0_all.deb) | [Source](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz)
 
 ## Radar Chart を使う理由
 
@@ -22,7 +22,7 @@ CPU、メモリ、ストレージ、遅延などの値は、共通のスケー�
   <tr><th align="left" nowrap>機能</th><th align="left">説明</th></tr>
   <tr><td nowrap>複数ホストのグリッド表示</td><td>最大 6 × 6 のグリッドにホストごとのレーダーチャートを表示します。ページを切り替えてもセルサイズは固定です。</td></tr>
   <tr><td nowrap>ホスト指定</td><td>ホストグループ、個別ホスト、ワイルドカードを使ったホストパターンを指定できます。ホストグループとパターンを併用した場合、パターンはそのグループ内に限定されます。</td></tr>
-  <tr><td nowrap>ウィジェット連携</td><td>Tree Navigator、Topology Navigator、または互換ウィジェットからホストグループ・ホストを受け取れます。</td></tr>
+  <tr><td nowrap>ウィジェット連携</td><td>Tree Navigator または互換ウィジェットからホストグループ・ホストを受け取れます。</td></tr>
   <tr><td nowrap>アイテムごとの集計</td><td>最新値、最大値、最小値、平均値を選択できます。最大値・最小値・平均値は 2 時間未満では History を使い、それより長い期間では Trend を優先し、必要に応じて History にフォールバックします。</td></tr>
   <tr><td nowrap>アイテムごとのスケール</td><td>最小値・最大値で値を正規化します。負数レンジと軸方向の反転に対応しています。</td></tr>
   <tr><td nowrap>運用時のフィードバック</td><td>詳細ツールチップ、データ欠損表示、全欠損ホストの非表示、ページング、集計警告を提供します。</td></tr>
@@ -76,7 +76,7 @@ CPU、メモリ、ストレージ、遅延などの値は、共通のスケー�
 
 <a href="screenshots/radar-chart-item-settings-ja.png" target="_blank"><img src="screenshots/radar-chart-item-settings-ja.png" width="620" alt="Radar Chart アイテム設定（日本語）" /></a>
 
-## 動作
+## ダッシュボード連携
 
 ホストグループまたはホストを選択するナビゲーターと Radar Chart を同じダッシュボードページに追加し、Radar Chart の Host groups および Hosts 入力を連携元のウィジェットに接続します。ナビゲーターでグループまたはホストを選択すると、チャートの対象範囲が更新されます。
 
@@ -86,9 +86,9 @@ CPU、メモリ、ストレージ、遅延などの値は、共通のスケー�
 
 ## 動作要件
 
-- Zabbix 7.0 以上
+- 対応バージョン: Zabbix 7.0
 - PHP 8.1 以上
-- RPM パッケージは Rocky Linux 9 または 10 を対象とします。互換する PHP と Zabbix パッケージがあれば、他の RHEL 互換ディストリビューションでも動作が見込まれます
+- RPM パッケージ: Rocky Linux 9 / 10
 - Zabbix フロントエンドがサポートするブラウザ
 
 ## インストール
@@ -123,6 +123,8 @@ cp -a manifest.json Module.php Widget.php actions assets includes locale views /
 
 v1.0.0 以前から更新する場合は、モジュール ID が `radar-chart` から `holoztek_radar_chart` に変わります。所有元を確認してから旧モジュールを停止し、新しいモジュールを再スキャン・有効化したうえで、既存のダッシュボードウィジェット type を新 ID に更新してください。既存の設定フィールドと参照は保持されます。
 
+パッケージのインストールまたはソースの配置後、Zabbix の **管理 → モジュール** でモジュールを再スキャンし、Radar Chart を有効化してからダッシュボードへウィジェットを追加してください。
+
 ## ドキュメント
 
 - [パッケージ変更履歴](debian/changelog)
@@ -144,7 +146,7 @@ Apache License 2.0 の条件に基づいて配布されています。詳細は 
 
 ## メンテナ
 
-HOLOZTEK が開発・保守しています。
+[HOLOZTEK](https://github.com/HOLOZTEK) が開発・保守しています。
 
 ## ライセンス
 
