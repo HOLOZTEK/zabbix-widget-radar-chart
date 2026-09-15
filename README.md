@@ -4,7 +4,7 @@ English | [日本語](README.ja.md)
 
 ## Overview
 
-Radar Chart is a Zabbix dashboard widget for comparing numeric item values across one or many hosts. It renders three to eight selected metrics as a radar chart for each host and can receive host-group context from Tree Navigator, Topology Navigator, or another compatible widget.
+Radar Chart is a Zabbix dashboard widget for comparing numeric item values across one or many hosts. It renders three to eight selected metrics as a radar chart for each host and can receive host-group context from Tree Navigator or another compatible widget.
 
 <a href="screenshots/radar-chart-dashboard-navigator-integration.png" target="_blank"><img src="screenshots/radar-chart-dashboard-navigator-integration.png" width="750" alt="Radar Chart dashboard integrated with a Navigator" /></a>
 
@@ -22,7 +22,7 @@ Tooltips retain the collected values, units, and timestamps, so a dashboard can 
   <tr><th align="left" nowrap>Function</th><th align="left">Description</th></tr>
   <tr><td nowrap>Multi-host grid</td><td>Displays up to a 6 × 6 grid of host radar charts with stable cell sizes across pages.</td></tr>
   <tr><td nowrap>Host selection</td><td>Selects hosts by host group, individual host, or wildcard host pattern. A host group scopes the pattern when both are configured.</td></tr>
-  <tr><td nowrap>Widget integration</td><td>Receives host groups and hosts from Tree Navigator, Topology Navigator, or another compatible widget.</td></tr>
+  <tr><td nowrap>Widget integration</td><td>Receives host groups and hosts from Tree Navigator or another compatible widget.</td></tr>
   <tr><td nowrap>Per-item aggregation</td><td>Uses Latest, Max, Min, or Avg. Max, Min, and Avg use History for periods under two hours and prefer Trends for longer periods, with a History fallback.</td></tr>
   <tr><td nowrap>Per-item scale</td><td>Normalizes each value against its configured minimum and maximum. Negative ranges and reversed axes are supported.</td></tr>
   <tr><td nowrap>Operational feedback</td><td>Shows detailed tooltips, missing-data labels, all-missing host filtering, pagination, and aggregation warnings.</td></tr>
@@ -77,7 +77,7 @@ For every item, set the minimum and maximum values, axis direction, and aggregat
 
 <a href="screenshots/radar-chart-item-settings-en.png" target="_blank"><img src="screenshots/radar-chart-item-settings-en.png" width="620" alt="Radar Chart item settings in English" /></a>
 
-## Behavior
+## Dashboard Integration
 
 Add a host-group or host navigator and Radar Chart to the same dashboard page, then connect the Radar Chart host-group and/or host input to the source widget. Selecting a group or host updates the chart scope.
 
@@ -87,9 +87,9 @@ Values are calculated for the dashboard time period. Latest uses the most recent
 
 ## Requirements
 
-- Zabbix 7.0 or later
+- Supported version: Zabbix 7.0
 - PHP 8.1 or later
-- Rocky Linux 9 or 10 for the RPM package; other RHEL-compatible distributions are expected to work with compatible PHP and Zabbix packages
+- RPM package: Rocky Linux 9 / 10
 - A browser supported by the Zabbix frontend
 
 ## Installation
@@ -124,6 +124,8 @@ cp -a manifest.json Module.php Widget.php actions assets includes locale views /
 
 When upgrading from v1.0.0 or earlier, the module ID changes from `radar-chart` to `holoztek_radar_chart`. Rescan and enable the new module, retire the old module after verifying its ownership, and update existing dashboard widget types to the new ID. Existing field settings and references are preserved.
 
+After installation, rescan the modules from **Administration → Modules**, enable Radar Chart, and add the widget to a dashboard.
+
 ## Documentation
 
 - [Package changelog](debian/changelog)
@@ -145,7 +147,7 @@ It is distributed under the Apache License 2.0. See [NOTICE](NOTICE) and [THIRD_
 
 ## Maintainer
 
-Developed and maintained by HOLOZTEK.
+Developed and maintained by [HOLOZTEK](https://github.com/HOLOZTEK).
 
 ## License
 
