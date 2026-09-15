@@ -65,24 +65,6 @@ cp -r zabbix-widget-radar-chart /usr/share/zabbix/modules/holoztek_radar_chart
 cp -r zabbix-widget-radar-chart /usr/share/zabbix/ui/modules/holoztek_radar_chart
 ```
 
-## RPM ビルド手順
-
-```bash
-# ソースを SOURCES に配置
-mkdir -p ~/rpmbuild/SOURCES ~/rpmbuild/SPECS
-cp -r zabbix-widget-radar-chart ~/rpmbuild/SOURCES/
-cp zabbix-widget-radar-chart/packaging/rpm/zabbix-widget-radar-chart.spec ~/rpmbuild/SPECS/
-
-# .mo ファイルのコンパイル（msgfmt が必要）
-msgfmt ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/ja_JP/LC_MESSAGES/holoztek-radar-chart.po \
-  -o ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/ja_JP/LC_MESSAGES/holoztek-radar-chart.mo
-msgfmt ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/en_US/LC_MESSAGES/holoztek-radar-chart.po \
-  -o ~/rpmbuild/SOURCES/zabbix-widget-radar-chart/locale/en_US/LC_MESSAGES/holoztek-radar-chart.mo
-
-# RPM ビルド
-rpmbuild -bb ~/rpmbuild/SPECS/zabbix-widget-radar-chart.spec
-```
-
 ## 設定項目
 
 | 項目 | 説明 |
