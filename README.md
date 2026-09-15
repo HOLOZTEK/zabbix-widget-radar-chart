@@ -112,14 +112,14 @@ The Debian package requires PHP 8.1 or later.
 
 ### From source
 
-Copy the module into the frontend module directory, then scan and enable it from **Administration → Modules**.
+RPM or DEB installation is recommended. For a source installation:
 
 ```bash
-# Zabbix 7.x
-cp -r zabbix-widget-radar-chart /usr/share/zabbix/modules/holoztek_radar_chart
-
-# Zabbix 8.x
-cp -r zabbix-widget-radar-chart /usr/share/zabbix/ui/modules/holoztek_radar_chart
+curl -L -o zabbix-widget-radar-chart-1.1.0.tar.gz https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz
+tar -xzf zabbix-widget-radar-chart-1.1.0.tar.gz
+install -d /usr/share/zabbix/ui/modules/holoztek_radar_chart
+cd zabbix-widget-radar-chart-1.1.0
+cp -a manifest.json Module.php Widget.php actions assets includes locale views /usr/share/zabbix/ui/modules/holoztek_radar_chart/
 ```
 
 When upgrading from v1.0.0 or earlier, the module ID changes from `radar-chart` to `holoztek_radar_chart`. Rescan and enable the new module, retire the old module after verifying its ownership, and update existing dashboard widget types to the new ID. Existing field settings and references are preserved.
