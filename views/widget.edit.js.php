@@ -7,11 +7,17 @@ window.holoztek_radar_chart_form = new class {
 	#item_index;
 
 	init() {
-		this.#form       = document.getElementById('widget-dialogue-form');
+		// フォームIDは Zabbix 7.0 では 'widget-dialogue-form'、8.0以降では 'widget-form'。
+		this.#form       = document.getElementById('widget-dialogue-form') ?? document.getElementById('widget-form');
 		this.#list_items = document.getElementById('list_items');
 
-		for (const cp of this.#form.querySelectorAll('.color-picker input')) {
-			$(cp).colorpicker({appendTo: '.overlay-dialogue-body', use_default: false});
+		// Zabbix 7.0: CColor（.color-picker 内の input）は jQuery colorpicker による初期化が必要。
+		// Zabbix 8.0以降: <z-color-picker> が自己初期化し、jQuery colorpicker は存在しない。
+		// PHP定数 ZBX_STYLE_COLOR_PICKER は8.0で廃止されたため使わない（クラス名 'color-picker' は両バージョン共通）。
+		if (typeof jQuery.fn.colorpicker === 'function') {
+			for (const cp of this.#form.querySelectorAll('.color-picker input')) {
+				$(cp).colorpicker({appendTo: '.overlay-dialogue-body', use_default: false});
+			}
 		}
 
 		// host_patterns フィールドで * や Server* 等を直接タグとして入力できるよう addNew を有効化する。
