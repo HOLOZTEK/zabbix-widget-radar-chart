@@ -7,6 +7,13 @@
 
 use Modules\HoloztekRadarChart\Includes\CWidgetFieldItemsView;
 
+// カラーピッカー: Zabbix 7.0 は CColor、8.0以降は CColorPicker（CColor は8.0で廃止）。
+$color_picker = static function(string $name, $value) {
+	return class_exists('CColor')
+		? new CColor($name, $value)
+		: (new CColorPicker($name))->setColor($value);
+};
+
 (new CWidgetFormView($data))
 	->addField(
 		new CWidgetFieldMultiSelectGroupView($data['fields']['groupids'])
@@ -37,28 +44,28 @@ use Modules\HoloztekRadarChart\Includes\CWidgetFieldItemsView;
 			(new CDiv([
 				(new CDiv([
 					(new CTag('span', true, _holoztek_rc('Line')))->addClass('rc-style-label'),
-					(new CColor('line_color',  $data['fields']['line_color']->getValue())),
+					($color_picker('line_color', $data['fields']['line_color']->getValue())),
 					(new CNumericBox('line_width', $data['fields']['line_width']->getValue(), 2)),
 				]))->addClass('rc-style-row'),
 				(new CDiv([
 					(new CTag('span', true, _holoztek_rc('Point')))->addClass('rc-style-label'),
-					(new CColor('point_color', $data['fields']['point_color']->getValue())),
+					($color_picker('point_color', $data['fields']['point_color']->getValue())),
 					(new CNumericBox('point_size', $data['fields']['point_size']->getValue(), 2)),
 				]))->addClass('rc-style-row'),
 				(new CDiv([
 					(new CTag('span', true, _holoztek_rc('Fill')))->addClass('rc-style-label'),
-					(new CColor('fill_color',  $data['fields']['fill_color']->getValue())),
+					($color_picker('fill_color', $data['fields']['fill_color']->getValue())),
 					(new CNumericBox('fill_opacity', $data['fields']['fill_opacity']->getValue(), 3)),
 					(new CTag('span', true, '%')),
 				]))->addClass('rc-style-row'),
 				(new CDiv([
 					(new CTag('span', true, _holoztek_rc('Chart')))->addClass('rc-style-label'),
-					(new CColor('chart_color', $data['fields']['chart_color']->getValue())),
+					($color_picker('chart_color', $data['fields']['chart_color']->getValue())),
 					(new CNumericBox('chart_line_width', $data['fields']['chart_line_width']->getValue(), 2)),
 				]))->addClass('rc-style-row'),
 				(new CDiv([
 					(new CTag('span', true, _holoztek_rc('Title')))->addClass('rc-style-label'),
-					(new CColor('title_color', $data['fields']['title_color']->getValue())),
+					($color_picker('title_color', $data['fields']['title_color']->getValue())),
 					(new CNumericBox('title_size', $data['fields']['title_size']->getValue(), 2)),
 				]))->addClass('rc-style-row'),
 			]))->addClass('rc-style-block')
