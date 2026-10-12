@@ -1,3 +1,10 @@
+zabbix-widget-radar-chart (1.1.2) unstable; urgency=medium
+
+  * パッケージのメンテナー表記を公開用（HOLOZTEK）に統一（RPM changelog・
+    DEB の Maintainer）。ウィジェット本体の変更はなし。
+
+ -- HOLOZTEK <ttake-55@users.noreply.github.com>  Mon, 12 Oct 2026 09:00:00 +0900
+
 zabbix-widget-radar-chart (1.1.1) unstable; urgency=medium
 
   * Zabbix 8.0（8.0.0rc1以降）対応: ウィジェット設定画面がHTTP 500（8.0で廃止された
