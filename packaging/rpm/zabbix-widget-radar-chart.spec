@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.1.1
+Version:        1.1.2
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -130,6 +130,11 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Mon Oct 12 2026 HOLOZTEK <ttake-55@users.noreply.github.com> - 1.1.2-0
+- パッケージのメンテナー表記を公開用（HOLOZTEK）に統一（RPM changelog・
+  DEB の Maintainer）。過去の changelog エントリは履歴として変更しない。
+  ウィジェット本体の変更はなし。
+
 * Sat Oct 03 2026 claude <noreply> - 1.1.1-0
 - Zabbix 8.0（8.0.0rc1以降）対応: ウィジェット設定画面がHTTP 500（8.0で廃止された
   PHP定数 ZBX_STYLE_COLOR_PICKER / クラス CColor の参照）やJSエラー（jQuery colorpicker の廃止、
