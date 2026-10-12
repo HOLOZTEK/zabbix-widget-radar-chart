@@ -8,7 +8,7 @@ Radar Chart は、複数ホストの数値アイテムをレーダーチャー�
 
 <a href="screenshots/radar-chart-dashboard-navigator-integration.png" target="_blank"><img src="screenshots/radar-chart-dashboard-navigator-integration.png" width="750" alt="Navigator と連携して複数ホストを表示する Radar Chart ダッシュボード" /></a>
 
-[最新リリース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.0) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart_1.1.0_all.deb) | [Source](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz)
+[最新リリース](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.2) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.2/zabbix-widget-radar-chart-1.1.2.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.2/zabbix-widget-radar-chart_1.1.2_all.deb) | [Source](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.2/zabbix-widget-radar-chart-1.1.2.tar.gz)
 
 ## Radar Chart を使う理由
 
@@ -86,7 +86,8 @@ CPU、メモリ、ストレージ、遅延などの値は、共通のスケー�
 
 ## 動作要件
 
-- 対応バージョン: Zabbix 7.0
+- 対応バージョン: Zabbix 7.0／8.0
+- 動作確認済み: Zabbix 7.0.31／8.0.0rc1
 - PHP 8.1 以上
 - RPM パッケージ: Rocky Linux 9 / 10
 - Zabbix フロントエンドがサポートするブラウザ
@@ -114,10 +115,10 @@ Debian パッケージは PHP 8.1 以上を必要とします。
 通常は RPM または DEB でのインストールを推奨します。ソースから配置する場合:
 
 ```bash
-curl -L -o zabbix-widget-radar-chart-1.1.0.tar.gz https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.0/zabbix-widget-radar-chart-1.1.0.tar.gz
-tar -xzf zabbix-widget-radar-chart-1.1.0.tar.gz
+curl -L -o zabbix-widget-radar-chart-1.1.2.tar.gz https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.2/zabbix-widget-radar-chart-1.1.2.tar.gz
+tar -xzf zabbix-widget-radar-chart-1.1.2.tar.gz
 install -d /usr/share/zabbix/ui/modules/holoztek_radar_chart
-cd zabbix-widget-radar-chart-1.1.0
+cd zabbix-widget-radar-chart-1.1.2
 cp -a manifest.json Module.php Widget.php actions assets includes locale views /usr/share/zabbix/ui/modules/holoztek_radar_chart/
 ```
 
