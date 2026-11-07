@@ -88,7 +88,7 @@ Values are calculated for the dashboard time period. Latest uses the most recent
 ## Requirements
 
 - Supported versions: Zabbix 7.0 and 8.0
-- Tested versions: Zabbix 7.0.31 and 8.0.0rc1
+- Tested versions: Zabbix 7.0.31 and 8.0.0
 - PHP 8.1 or later
 - RPM package: Rocky Linux 9 / 10
 - A browser supported by the Zabbix frontend
