@@ -8,7 +8,7 @@ Radar Chart is a Zabbix dashboard widget for comparing numeric item values acros
 
 <a href="screenshots/radar-chart-dashboard-navigator-integration.png" target="_blank"><img src="screenshots/radar-chart-dashboard-navigator-integration.png" width="750" alt="Radar Chart dashboard integrated with a Navigator" /></a>
 
-[Latest release](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.2) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.2/zabbix-widget-radar-chart-1.1.2.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.2/zabbix-widget-radar-chart_1.1.2_all.deb) | [Source](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.2/zabbix-widget-radar-chart-1.1.2.tar.gz)
+[Latest release](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/tag/v1.1.3) | [RPM](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.3/zabbix-widget-radar-chart-1.1.3.noarch.rpm) | [DEB](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.3/zabbix-widget-radar-chart_1.1.3_all.deb) | [Source](https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.3/zabbix-widget-radar-chart-1.1.3.tar.gz)
 
 ## Why Radar Chart?
 
@@ -116,10 +116,10 @@ The Debian package requires PHP 8.1 or later.
 RPM or DEB installation is recommended. For a source installation:
 
 ```bash
-curl -L -o zabbix-widget-radar-chart-1.1.2.tar.gz https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.2/zabbix-widget-radar-chart-1.1.2.tar.gz
-tar -xzf zabbix-widget-radar-chart-1.1.2.tar.gz
+curl -L -o zabbix-widget-radar-chart-1.1.3.tar.gz https://github.com/HOLOZTEK/zabbix-widget-radar-chart/releases/download/v1.1.3/zabbix-widget-radar-chart-1.1.3.tar.gz
+tar -xzf zabbix-widget-radar-chart-1.1.3.tar.gz
 install -d /usr/share/zabbix/ui/modules/holoztek_radar_chart
-cd zabbix-widget-radar-chart-1.1.2
+cd zabbix-widget-radar-chart-1.1.3
 cp -a manifest.json Module.php Widget.php actions assets includes locale views /usr/share/zabbix/ui/modules/holoztek_radar_chart/
 ```
 
