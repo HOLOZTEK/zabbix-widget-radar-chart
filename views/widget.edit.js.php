@@ -47,7 +47,7 @@ window.holoztek_radar_chart_form = new class {
 			freeze_end: 1
 		}).on(CSortable.EVENT_SORT, () => {
 			this.#renumber();
-			ZABBIX.Dashboard.reloadWidgetProperties();
+			this.#reloadForm();
 		});
 
 		this.#list_items.addEventListener('click', (e) => this.#processAction(e));
@@ -97,7 +97,7 @@ window.holoztek_radar_chart_form = new class {
 				target.closest('tr').remove();
 				this.#renumber();
 				this.#updateButtons();
-				ZABBIX.Dashboard.reloadWidgetProperties();
+				this.#reloadForm();
 				break;
 		}
 	}
@@ -121,7 +121,24 @@ window.holoztek_radar_chart_form = new class {
 		}
 
 		this.#updateButtons();
-		ZABBIX.Dashboard.reloadWidgetProperties();
+		this.#reloadForm();
+	}
+
+	// アイテム一覧はサーバー側で描画するため、変更後はフォームを再読み込みしてプレビューにも反映する。
+	// Zabbix 7.0: ZABBIX.Dashboard.reloadWidgetProperties() を使う。
+	// Zabbix 8.0以降: 同メソッドは廃止されたため、標準ウィジェット（Item history 等の this.reload()）と同じく
+	// ダイアログに CWidgetForm.EVENT_RELOAD_REQUEST を送る。
+	#reloadForm() {
+		if (typeof ZABBIX.Dashboard.reloadWidgetProperties === 'function') {
+			ZABBIX.Dashboard.reloadWidgetProperties();
+			return;
+		}
+
+		const overlay = overlays_stack.getById(CWidgetForm.FORM_NAME_PRIMARY);
+
+		overlay.$dialogue[0].dispatchEvent(
+			new CustomEvent(CWidgetForm.EVENT_RELOAD_REQUEST, {detail: {overlay}})
+		);
 	}
 
 	#renumber() {

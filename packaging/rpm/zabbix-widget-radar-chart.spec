@@ -1,6 +1,6 @@
 %define _rpmfilename %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 Name:           zabbix-widget-radar-chart
-Version:        1.1.2
+Version:        1.1.3
 Release:        0
 Summary:        Radar Chart widget for Zabbix dashboard
 License:        MIT
@@ -130,6 +130,12 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Fri Nov 13 2026 HOLOZTEK <ttake-55@users.noreply.github.com> - 1.1.3-0
+- Zabbix 8.0 の設定画面でアイテムの追加・編集・削除・並べ替えが
+  一覧とプレビューに即時反映されない不具合を修正（8.0 で廃止された
+  ZABBIX.Dashboard.reloadWidgetProperties() の代わりに
+  CWidgetForm の再読み込み要求を使う。7.0 の動作は従来どおり）。
+
 * Mon Oct 12 2026 HOLOZTEK <ttake-55@users.noreply.github.com> - 1.1.2-0
 - パッケージのメンテナー表記を公開用（HOLOZTEK）に統一（RPM changelog・
   DEB の Maintainer）。過去の changelog エントリは履歴として変更しない。
